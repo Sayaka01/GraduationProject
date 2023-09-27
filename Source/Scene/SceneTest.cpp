@@ -25,8 +25,6 @@ void SceneTest::Finalize()
 void SceneTest::Update(float elapsedTime)
 {
 	gameObject->Update();
-
-	gameObject->DebugDraw();
 }
 
 void SceneTest::Draw(ID3D11DeviceContext* dc)

@@ -43,6 +43,16 @@ void GameObject::Update()
 	{
 		component->Update();
 	}
+
+	//ImGui
+	DebugGui();
+
+	//子オブジェクトの更新
+	for(GameObject* childObj : children)
+	{
+		childObj->Update();
+	}
+
 }
 
 //描画
@@ -55,15 +65,15 @@ void GameObject::Draw()
 	}
 }
 
-//デバッグ描画
-void GameObject::DebugDraw()
+//ImGui
+void GameObject::DebugGui()
 {
 #ifdef USE_IMGUI
 	ImGui::Begin(name.c_str());
 	//各コンポーネントのデバッグ描画
 	for (Component* component : components)
 	{
-		component->DebugDraw();
+		component->DebugGui();
 	}
 	ImGui::End();
 #endif

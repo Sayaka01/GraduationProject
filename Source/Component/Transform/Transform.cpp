@@ -21,8 +21,8 @@ void Transform::Draw()
 	
 }
 
-//デバッグ描画
-void Transform::DebugDraw()
+//ImGui
+void Transform::DebugGui()
 {
 	if(ImGui::TreeNode(name.c_str()))
 	{

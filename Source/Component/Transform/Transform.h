@@ -18,8 +18,8 @@ public:
 	void Update() override;
 	//描画
 	void Draw() override;
-	//デバッグ描画
-	void DebugDraw() override;
+	//ImGui
+	void DebugGui() override;
 
 	//-----< Getter, Setter >-----//
 	

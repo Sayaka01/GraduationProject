@@ -34,8 +34,8 @@ public:
 	virtual void Update();
 	//描画
 	virtual void Draw();
-	//デバッグ描画
-	virtual void DebugDraw();
+	//ImGui
+	virtual void DebugGui();
 
 
 	//コンポーネントの追加（1つずつ）
