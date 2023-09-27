@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{5d2ed881-4062-49d0-a1ce-86240074d016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{9f64f4ff-d9e0-43d7-88e1-13e6d3656a89}</UniqueIdentifier>
+      <Extensions>hlsl;hlsli</Extensions>
+    </Filter>
+    <Filter Include="HLSL\SkinnedMesh">
+      <UniqueIdentifier>{3aac3ad0-3f4d-45cb-8e62-090c6def2e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\DebugPrimitive">
+      <UniqueIdentifier>{ab70409f-d16a-47df-b32d-e578def26a98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Font">
+      <UniqueIdentifier>{fb12541d-828b-4a91-b4c2-f59460602240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\2D">
+      <UniqueIdentifier>{63752506-20f8-4f13-b370-da9b92c997bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\2D\Default2D">
+      <UniqueIdentifier>{40b0c6b0-97ac-420c-8514-a9213060ab07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Scene">
+      <UniqueIdentifier>{0bc8458c-424b-4575-9b04-40524334c3b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\System">
+      <UniqueIdentifier>{e484b136-68b7-42c0-aacb-f54dbab8e295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObject">
+      <UniqueIdentifier>{51eb0806-e50e-4fcd-ab1b-3c4d1dcd9e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component">
+      <UniqueIdentifier>{f29bc641-50e2-4ae9-90d2-0e7279947007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component\Transform">
+      <UniqueIdentifier>{1a291602-27ed-4b83-b9e9-dce39d11a13e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imgui\GraphEditor.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImCurveEdit.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImGradient.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_ja_gryph_ranges.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImGuizmo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImSequencer.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneLoading.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneManager.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneTest.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\GameObject.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Component.cpp">
+      <Filter>Sources\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Transform\Transform.cpp">
+      <Filter>Sources\Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Other\Framework.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Other\Main.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Other\Stdafx.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imgui\GraphEditor.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImCurveEdit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImGradient.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx11.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImGuizmo.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImSequencer.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImZoomSlider.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Scene.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneLoading.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneManager.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneTest.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject\GameObject.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Component.h">
+      <Filter>Sources\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform\Transform.h">
+      <Filter>Sources\Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\Common.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\Framework.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\HighResolutionTimer.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\Misc.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\PoolAllocator.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\Stdafx.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Other\UserFunction.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="hlsl\2D_PS.hlsl">
+      <Filter>HLSL\2D\Default2D</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\2D_VS.hlsl">
+      <Filter>HLSL\2D\Default2D</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\SkinnedMesh_PS.hlsl">
+      <Filter>HLSL\SkinnedMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="hlsl\SkinnedMesh_VS.hlsl">
+      <Filter>HLSL\SkinnedMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DebugPrimitive_PS.hlsl">
+      <Filter>HLSL\DebugPrimitive</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\DebugPrimitive_VS.hlsl">
+      <Filter>HLSL\DebugPrimitive</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\Font_PS.hlsl">
+      <Filter>HLSL\Font</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\Font_VS.hlsl">
+      <Filter>HLSL\Font</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="hlsl\2D.hlsli">
+      <Filter>HLSL\2D\Default2D</Filter>
+    </None>
+    <None Include="hlsl\SkinnedMesh.hlsli">
+      <Filter>HLSL\SkinnedMesh</Filter>
+    </None>
+    <None Include="hlsl\ShadingFunctions.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="HLSL\Light.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="HLSL\ConstantBuffers.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="HLSL\DebugPrimitive.hlsli">
+      <Filter>HLSL\DebugPrimitive</Filter>
+    </None>
+    <None Include="HLSL\Font.hlsli">
+      <Filter>HLSL\Font</Filter>
+    </None>
+  </ItemGroup>
+</Project>
