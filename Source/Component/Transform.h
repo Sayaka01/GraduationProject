@@ -2,7 +2,7 @@
 
 #include <DirectXMath.h>
 
-#include "../Component.h"
+#include "Component.h"
 
 class Transform : public Component
 {

@@ -3,10 +3,14 @@
 #include "GameObject.h"
 #include "../Component/Component.h"
 
+#include "Component/Transform.h"
 
 //‰Šú‰»
 void GameObject::Initialize()
 {
+	//Transform Component‚Ì’Ç‰Á
+	auto* transform = new Transform();
+	AddComponent(transform);
 }
 
 //I—¹ˆ—

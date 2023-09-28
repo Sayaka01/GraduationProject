@@ -42,6 +42,9 @@
     <Filter Include="Sources\Component\Transform">
       <UniqueIdentifier>{1a291602-27ed-4b83-b9e9-dce39d11a13e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Component\Renderer">
+      <UniqueIdentifier>{6d769bf5-6e38-4961-aabb-e3b41a4bf188}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\SceneLoading.cpp">
@@ -58,9 +61,6 @@
     </ClCompile>
     <ClCompile Include="Source\Component\Component.cpp">
       <Filter>Sources\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Transform\Transform.cpp">
-      <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
     <ClCompile Include="Source\System\Framework.cpp">
       <Filter>Sources\System</Filter>
@@ -95,6 +95,15 @@
     <ClCompile Include="Lib\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Transform.cpp">
+      <Filter>Sources\Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\MeshRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\Player.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -114,9 +123,6 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Component.h">
       <Filter>Sources\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Transform\Transform.h">
-      <Filter>Sources\Component\Transform</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\Common.h">
       <Filter>Sources\System</Filter>
@@ -162,6 +168,15 @@
     </ClInclude>
     <ClInclude Include="Lib\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Transform.h">
+      <Filter>Sources\Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\MeshRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject\Player.h">
+      <Filter>Sources\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

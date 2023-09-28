@@ -228,8 +228,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Component\Component.cpp" />
-    <ClCompile Include="Source\Component\Transform\Transform.cpp" />
+    <ClCompile Include="Source\Component\MeshRenderer.cpp" />
+    <ClCompile Include="Source\Component\Transform.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
+    <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\SceneTest.cpp" />
@@ -250,8 +252,10 @@
     <ClInclude Include="Lib\imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Component\Component.h" />
-    <ClInclude Include="Source\Component\Transform\Transform.h" />
+    <ClInclude Include="Source\Component\MeshRenderer.h" />
+    <ClInclude Include="Source\Component\Transform.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
+    <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />

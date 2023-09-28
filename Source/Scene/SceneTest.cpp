@@ -6,14 +6,11 @@
 
 #include "../GameObject/GameObject.h"
 
-#include "../Component/Transform/Transform.h"
 
 
 void SceneTest::Initialize(ID3D11Device* device)
 {
 	gameObject = new GameObject("test");
-	auto* transform = new Transform();
-	gameObject->AddComponent(transform);
 }
 
 void SceneTest::Finalize()
