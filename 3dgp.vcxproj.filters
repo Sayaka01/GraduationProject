@@ -62,14 +62,14 @@
     <ClCompile Include="Source\Component\Transform\Transform.cpp">
       <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Lib\imgui\GraphEditor.cpp">
-      <Filter>imgui</Filter>
+    <ClCompile Include="Source\System\Framework.cpp">
+      <Filter>Sources\System</Filter>
     </ClCompile>
-    <ClCompile Include="Lib\imgui\ImCurveEdit.cpp">
-      <Filter>imgui</Filter>
+    <ClCompile Include="Source\System\Main.cpp">
+      <Filter>Sources\System</Filter>
     </ClCompile>
-    <ClCompile Include="Lib\imgui\ImGradient.cpp">
-      <Filter>imgui</Filter>
+    <ClCompile Include="Source\Stdafx.cpp">
+      <Filter>Sources\System</Filter>
     </ClCompile>
     <ClCompile Include="Lib\imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -95,21 +95,6 @@
     <ClCompile Include="Lib\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Lib\imgui\ImGuizmo.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Lib\imgui\ImSequencer.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Framework.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Main.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Stdafx.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -133,48 +118,6 @@
     <ClInclude Include="Source\Component\Transform\Transform.h">
       <Filter>Sources\Component\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="Lib\imgui\GraphEditor.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imconfig.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\ImCurveEdit.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\ImGradient.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imgui.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imgui_impl_dx11.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\ImGuizmo.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\ImSequencer.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Lib\imgui\ImZoomSlider.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\Common.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
@@ -195,6 +138,30 @@
     </ClInclude>
     <ClInclude Include="Source\Stdafx.h">
       <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imgui_impl_dx11.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
