@@ -62,15 +62,6 @@
     <ClCompile Include="Source\Component\Transform\Transform.cpp">
       <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Other\Framework.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Other\Main.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Other\Stdafx.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
     <ClCompile Include="Lib\imgui\GraphEditor.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -110,6 +101,15 @@
     <ClCompile Include="Lib\imgui\ImSequencer.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\Framework.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Main.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stdafx.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -132,27 +132,6 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Transform\Transform.h">
       <Filter>Sources\Component\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\Common.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\Framework.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\HighResolutionTimer.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\Misc.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\PoolAllocator.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\Stdafx.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Other\UserFunction.h">
-      <Filter>Sources\System</Filter>
     </ClInclude>
     <ClInclude Include="Lib\imgui\GraphEditor.h">
       <Filter>imgui</Filter>
@@ -195,6 +174,27 @@
     </ClInclude>
     <ClInclude Include="Lib\imgui\ImZoomSlider.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Common.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Framework.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\HighResolutionTimer.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Misc.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\PoolAllocator.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\UserFunction.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stdafx.h">
+      <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

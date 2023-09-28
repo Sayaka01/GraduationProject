@@ -1,9 +1,7 @@
 
+#include <Stdafx.h>
 #include "GameObject.h"
-
 #include "../Component/Component.h"
-
-#include "../../imgui/imgui.h"
 
 
 //‰Šú‰»

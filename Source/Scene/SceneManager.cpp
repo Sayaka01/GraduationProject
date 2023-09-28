@@ -1,5 +1,5 @@
 
-#include "../System/Other/Stdafx.h"
+#include "Stdafx.h"
 
 #include "sceneManager.h"
 

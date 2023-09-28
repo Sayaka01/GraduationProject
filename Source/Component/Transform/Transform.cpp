@@ -1,7 +1,6 @@
 
+#include <Stdafx.h>
 #include "Transform.h"
-
-#include "../../../imgui/imgui.h"
 
 //‰Šú‰»
 void Transform::Initialize()

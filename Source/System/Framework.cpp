@@ -2,8 +2,8 @@
 
 #include "Framework.h"
 
-#include "../../Scene/SceneManager.h"
-#include "../../Scene/SceneTest.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/SceneTest.h"
 
 #include "Common.h"
 #include "Misc.h"
