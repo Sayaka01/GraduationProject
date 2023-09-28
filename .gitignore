@@ -24,7 +24,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -37,4 +36,5 @@
 *.vs
 *.cso
 *.cod
+*.cereal
 *imgui.ini
