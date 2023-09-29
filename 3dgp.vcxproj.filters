@@ -164,6 +164,9 @@
     <ClCompile Include="Source\System\Console.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\SceneCommunicate.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\Console.h">
       <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneCommunicate.h">
+      <Filter>Sources\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
