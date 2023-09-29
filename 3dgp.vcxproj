@@ -245,6 +245,7 @@
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
     <ClCompile Include="Source\Manager\Manager.cpp" />
+    <ClCompile Include="Source\Scene\SceneCommunicate.cpp" />
     <ClCompile Include="Source\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\SceneTest.cpp" />
@@ -285,6 +286,7 @@
     <ClInclude Include="Source\GameObject\Player.h" />
     <ClInclude Include="Source\Manager\Manager.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
+    <ClInclude Include="Source\Scene\SceneCommunicate.h" />
     <ClInclude Include="Source\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\SceneTest.h" />
