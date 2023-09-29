@@ -5,6 +5,17 @@
 
 #include "Component/Transform.h"
 
+//コンストラクタ
+GameObject::GameObject()
+{
+	Initialize();
+}
+GameObject::GameObject(std::string name) : name(std::move(name))
+{
+	Initialize();
+}
+
+
 //初期化
 void GameObject::Initialize()
 {
@@ -16,13 +27,82 @@ void GameObject::Initialize()
 //終了処理
 void GameObject::Finalize()
 {
-	//各コンポーネントの削除
+	//コンポーネントの削除
+	ClearComponent();
+
+	//子オブジェクト全削除
+	AllDeleteChildren();
+}
+
+//更新
+void GameObject::Update()
+{
+	//各コンポーネントの更新
+	for(Component* component : components)
+	{
+		if (component->GetEnable())
+			component->Update();
+	}
+
+	//ImGui
+	DebugGui();
+
+	//子オブジェクトの更新
+	for(GameObject* childObj : children)
+	{
+		childObj->Update();
+	}
+
+	//子オブジェクトの削除
+	DeleteChildren();
+}
+
+//描画
+void GameObject::Draw()
+{
+	//各コンポーネントの描画
+	for (Component* component : components)
+	{
+		if (component->GetEnable())
+			component->Draw();
+	}
+
+	//子オブジェクトの描画
+	for (GameObject* childObj : children)
+	{
+		childObj->Draw();
+	}
+}
+
+//ImGui
+void GameObject::DebugGui()
+{
+#ifdef USE_IMGUI
+	ImGui::Begin(name.c_str());
+	//各コンポーネントのデバッグ描画
+	for (Component* component : components)
+	{
+		if (component->GetEnable())
+			component->DebugGui();
+	}
+	//子オブジェクトのデバッグ描画
+	for (GameObject* childObj : children)
+	{
+		childObj->DebugGui();
+	}
+	ImGui::End();
+#endif
+}
+
+//コンポーネントの削除
+void GameObject::ClearComponent()
+{
 	std::vector<Component*> removes;
 	for (Component* component : components)
 	{
 		removes.emplace_back(component);
 	}
-	for(Component* component : removes)
+	for (Component* component : removes)
 	{
 		std::vector<Component*>::iterator it = std::find(components.begin(), components.end(), component);
 
@@ -37,47 +117,76 @@ void GameObject::Finalize()
 	components.clear();
 }
 
-//更新
-void GameObject::Update()
+
+//子オブジェクトの追加
+void GameObject::AddChild(GameObject* childObj)
 {
-	//各コンポーネントの更新
-	for(Component* component : components)
-	{
-		component->Update();
-	}
-
-	//ImGui
-	DebugGui();
-
-	//子オブジェクトの更新
-	for(GameObject* childObj : children)
-	{
-		childObj->Update();
-	}
-
+	childObj->SetParent(this);
+	children.emplace_back(childObj);
 }
-
-//描画
-void GameObject::Draw()
+//子オブジェクトの取得(名前検索）
+GameObject* GameObject::GetChild(std::string name)
 {
-	//各コンポーネントの描画
-	for (Component* component : components)
+	for (GameObject* child : children)
 	{
-		component->Draw();
+		if (child->name == name)
+		{
+			return child;
+		}
 	}
+	return nullptr;
 }
-
-//ImGui
-void GameObject::DebugGui()
+//子オブジェクトの取得（インデックス）
+[[nodiscard]] GameObject* GameObject::GetGameObj(size_t index)const
 {
-#ifdef USE_IMGUI
-	ImGui::Begin(name.c_str());
-	//各コンポーネントのデバッグ描画
-	for (Component* component : components)
-	{
-		component->DebugGui();
-	}
-	ImGui::End();
-#endif
+	return children.at(index);
 }
+//子オブジェクトの削除準備(名前検索）
+void GameObject::RemoveChild(std::string name)
+{
+	for (GameObject* child : children)
+	{
+		if (child->name == name)
+		{
+			removeChildren.emplace_back(child);
+		}
+	}
+}
+//子オブジェクトの削除準備
+void GameObject::RemoveChild(GameObject* obj)
+{
+	removeChildren.emplace_back(obj);
+}
+//子オブジェクトの削除
+void GameObject::DeleteChildren()
+{
+	for (GameObject* child : removeChildren)
+	{
+		//std::vectorから要素を削除するときはイテレーターで削除しなければならない
+		std::vector<GameObject*>::iterator it = std::find(children.begin(), children.end(), child);
 
+		if (it != children.end())
+		{
+			child->Finalize();
+			children.erase(it);
+		}
+		delete child;
+		child = nullptr;
+	}
+	removeChildren.clear();
+}
+//子オブジェクトの全削除
+void GameObject::AllDeleteChildren()
+{
+	for (GameObject* child : children)
+	{
+		removeChildren.emplace_back(child);
+	}
+
+	DeleteChildren();
+}
+//子オブジェクト数の取得
+[[nodiscard]] size_t GameObject::GetChildrenCount()const
+{
+	return static_cast<int>(children.size());
+}
