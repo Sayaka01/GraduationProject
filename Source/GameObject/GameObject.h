@@ -75,7 +75,7 @@ public:
 	//子オブジェクトの追加
 	void AddChild(GameObject* childObj);
 	//子オブジェクトの取得(名前検索）
-	GameObject* GetChild(std::string name);
+	GameObject* GetChild(std::string name) const;
 	//子オブジェクトの取得（インデックス）
 	[[nodiscard]] GameObject* GetGameObj(size_t index)const;
 	//子オブジェクトの削除準備(名前検索）

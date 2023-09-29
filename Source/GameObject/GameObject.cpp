@@ -125,7 +125,7 @@ void GameObject::AddChild(GameObject* childObj)
 	children.emplace_back(childObj);
 }
 //子オブジェクトの取得(名前検索）
-GameObject* GameObject::GetChild(std::string name)
+GameObject* GameObject::GetChild(std::string name) const
 {
 	for (GameObject* child : children)
 	{
