@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Winsock2.h>
+
 #include <algorithm>
 
 #include "../../imgui/imgui.h"

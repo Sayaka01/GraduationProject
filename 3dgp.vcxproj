@@ -227,6 +227,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Communication\client.cpp" />
+    <ClCompile Include="Source\Communication\client_multicast.cpp" />
+    <ClCompile Include="Source\Communication\client_server_structure.cpp" />
+    <ClCompile Include="Source\Communication\client_tcp.cpp" />
+    <ClCompile Include="Source\Communication\client_udp.cpp" />
+    <ClCompile Include="Source\Communication\p2p_structure.cpp" />
+    <ClCompile Include="Source\Communication\server.cpp" />
+    <ClCompile Include="Source\Communication\server_multicast.cpp" />
+    <ClCompile Include="Source\Communication\server_tcp.cpp" />
+    <ClCompile Include="Source\Communication\server_udp.cpp" />
     <ClCompile Include="Source\Component\Camera.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\MeshRenderer.cpp" />
@@ -242,6 +252,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\System\Console.cpp" />
     <ClCompile Include="Source\System\Framework.cpp" />
     <ClCompile Include="Source\System\Main.cpp" />
   </ItemGroup>
@@ -254,6 +265,17 @@
     <ClInclude Include="Lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="Lib\imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Communication\client.h" />
+    <ClInclude Include="Source\Communication\client_multicast.h" />
+    <ClInclude Include="Source\Communication\client_server_structure.h" />
+    <ClInclude Include="Source\Communication\client_tcp.h" />
+    <ClInclude Include="Source\Communication\client_udp.h" />
+    <ClInclude Include="Source\Communication\network_function.h" />
+    <ClInclude Include="Source\Communication\p2p_structure.h" />
+    <ClInclude Include="Source\Communication\server.h" />
+    <ClInclude Include="Source\Communication\server_multicast.h" />
+    <ClInclude Include="Source\Communication\server_tcp.h" />
+    <ClInclude Include="Source\Communication\server_udp.h" />
     <ClInclude Include="Source\Component\Camera.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\MeshRenderer.h" />
@@ -268,6 +290,7 @@
     <ClInclude Include="Source\Scene\SceneTest.h" />
     <ClInclude Include="Source\Stdafx.h" />
     <ClInclude Include="Source\System\Common.h" />
+    <ClInclude Include="Source\System\Console.h" />
     <ClInclude Include="Source\System\ConstantBuffer.h" />
     <ClInclude Include="Source\System\Framework.h" />
     <ClInclude Include="Source\System\HighResolutionTimer.h" />
