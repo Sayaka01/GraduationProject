@@ -19,8 +19,8 @@ enum class Layer
 class GameObject
 {
 public:
-	GameObject() = default; //コンストラクタ
-	GameObject(std::string name):name(std::move(name)){}
+	GameObject();
+	GameObject(std::string name);
 	virtual ~GameObject() = default; //デストラクタ
 
 
@@ -68,27 +68,28 @@ public:
 
 		return nullptr;//"componentName"という名前のコンポーネントはこのオブジェクトにはなかった
 	}
+	//コンポーネントの削除
+	void ClearComponent();
+
 
 	//子オブジェクトの追加
-	void AddChild(GameObject* childObj)
-	{
-		childObj->SetParent(this);
-		children.emplace_back(childObj);
-	}
-
+	void AddChild(GameObject* childObj);
 	//子オブジェクトの取得(名前検索）
-	GameObject* GetChild(std::string name)
-	{
-		for (GameObject* child : children)
-		{
-			if(child->name == name)
-			{
-				return child;
-			}
-		}
-	}
+	GameObject* GetChild(std::string name);
+	//子オブジェクトの取得（インデックス）
+	[[nodiscard]] GameObject* GetGameObj(size_t index)const;
+	//子オブジェクトの削除準備(名前検索）
+	void RemoveChild(std::string name);
+	//子オブジェクトの削除準備
+	void RemoveChild(GameObject* obj);
+	//子オブジェクトの削除
+	void DeleteChildren();
+	//子オブジェクトの全削除
+	void AllDeleteChildren();
+	//子オブジェクト数の取得
+	[[nodiscard]] size_t GetChildrenCount()const;
 
-	//-----< Getter, Setter >-----//
+	
 
 	//オブジェクトの名前の取得
 	std::string GetName() { return name; }
@@ -101,17 +102,18 @@ public:
 
 
 protected:
-	std::string name;//オブジェクトの名前
+	std::string name{};//オブジェクトの名前
 	Tag tag = Tag::Untagged;//タグ（当たり判定などオブジェクトを特定するために使用）
 	Layer layer = Layer::Default;//レイヤー（Rendering設定のグループ分けに使用）
 
 	bool active = true;//オブジェクトのアクティブ状態
 	//bool static = false;//オブジェクトの静的状態
 
-	std::vector<Component*> components;
+	std::vector<Component*> components{};
 
 	GameObject* parent = nullptr;//親オブジェクト
-	std::vector<GameObject*> children;//子オブジェクト
+	std::vector<GameObject*> children{};//子オブジェクト
+	std::vector<GameObject*> removeChildren{};//子オブジェクト削除用
 };
 
 

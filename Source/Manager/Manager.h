@@ -5,19 +5,19 @@
 #include "GameObject/GameObject.h"
 
 
-class Manager : public GameObject
+class SingletonObject : public GameObject
 {
 private:
 	//コンストラクタ
-	Manager() = default;
+	SingletonObject() = default;
 	//デストラクタ
-	virtual ~Manager() = default;
+	~SingletonObject() override = default;
 
 public:
 	//インスタンス取得
-	static Manager& Instance()
+	static SingletonObject& Instance()
 	{
-		static Manager instance;
+		static SingletonObject instance;
 		return instance;
 	}
 
@@ -29,21 +29,6 @@ public:
 	void Draw() override;
 	//ImGui
 	void DebugGui() override;
-
-	//登録
-	void Register(GameObject* obj);
-	//削除
-	void Remove(GameObject* obj);
-	//全削除
-	void Clear();
-
-	//ゲームオブジェクト数を取得
-	[[nodiscard]] int GetGameObjCount()const { return static_cast<int>(gameObjects.size()); }
-	//ゲームオブジェクトを取得
-	[[nodiscard]] GameObject* GetGameObj(size_t index)const { return gameObjects.at(index); }
-
-protected:
-	std::vector<GameObject*> gameObjects;
-	std::vector<GameObject*> removes;
+	
 
 };
