@@ -227,11 +227,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Component\Camera.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
     <ClCompile Include="Source\Component\MeshRenderer.cpp" />
     <ClCompile Include="Source\Component\Transform.cpp" />
+    <ClCompile Include="Source\GameObject\CameraController.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
+    <ClCompile Include="Source\Manager\Manager.cpp" />
     <ClCompile Include="Source\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\SceneTest.cpp" />
@@ -251,17 +254,21 @@
     <ClInclude Include="Lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="Lib\imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="Source\Component\Camera.h" />
     <ClInclude Include="Source\Component\Component.h" />
     <ClInclude Include="Source\Component\MeshRenderer.h" />
     <ClInclude Include="Source\Component\Transform.h" />
+    <ClInclude Include="Source\GameObject\CameraController.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
+    <ClInclude Include="Source\Manager\Manager.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\SceneTest.h" />
     <ClInclude Include="Source\Stdafx.h" />
     <ClInclude Include="Source\System\Common.h" />
+    <ClInclude Include="Source\System\ConstantBuffer.h" />
     <ClInclude Include="Source\System\Framework.h" />
     <ClInclude Include="Source\System\HighResolutionTimer.h" />
     <ClInclude Include="Source\System\Misc.h" />

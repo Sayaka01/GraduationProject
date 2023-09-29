@@ -45,6 +45,15 @@
     <Filter Include="Sources\Component\Renderer">
       <UniqueIdentifier>{6d769bf5-6e38-4961-aabb-e3b41a4bf188}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Component\Character">
+      <UniqueIdentifier>{c8c278e5-2c5c-4611-b1b1-b37e14a06a67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Component\Camera">
+      <UniqueIdentifier>{b1820c31-106f-49e7-b4f9-c481fdcd9e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Manager">
+      <UniqueIdentifier>{8e69c1be-a054-4120-a368-24c161ea4fa2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\SceneLoading.cpp">
@@ -102,7 +111,16 @@
       <Filter>Sources\Component\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Source\GameObject\Player.cpp">
+      <Filter>Sources\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Camera.cpp">
+      <Filter>Sources\Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObject\CameraController.cpp">
       <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\Manager.cpp">
+      <Filter>Sources\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -176,7 +194,19 @@
       <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\GameObject\Player.h">
+      <Filter>Sources\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Camera.h">
+      <Filter>Sources\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObject\CameraController.h">
       <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\ConstantBuffer.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\Manager.h">
+      <Filter>Sources\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

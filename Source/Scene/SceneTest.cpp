@@ -7,7 +7,6 @@
 #include "../GameObject/GameObject.h"
 
 
-
 void SceneTest::Initialize(ID3D11Device* device)
 {
 	gameObject = new GameObject("test");

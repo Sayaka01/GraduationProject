@@ -21,7 +21,7 @@ class GameObject
 public:
 	GameObject() = default; //コンストラクタ
 	GameObject(std::string name):name(std::move(name)){}
-	~GameObject() = default; //デストラクタ
+	virtual ~GameObject() = default; //デストラクタ
 
 
 	//-----< 関数 >-----//
