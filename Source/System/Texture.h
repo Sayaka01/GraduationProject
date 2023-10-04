@@ -37,9 +37,9 @@ public:
 	//Texture(ID3D11Device* device, const wchar_t* texturePath, ShaderType textureType);
 	~Texture() = default;
 	
-	void Initialize(ID3D11Device* device, const wchar_t* texturePath, Type textureType, int slot);
+	void Initialize(const wchar_t* texturePath, Type textureType, int slot);
 
-	void SetPixelShader(ID3D11DeviceContext* dc);
+	void SetPixelShader();
 
 
 	//Getter
@@ -49,12 +49,12 @@ public:
 
 
 private:
-	HRESULT LoadTextureFromFile(ID3D11Device* device,
-		const wchar_t* filename,
-		ID3D11ShaderResourceView** shader_resource_view,
-		D3D11_TEXTURE2D_DESC* texture2d_desc) const;
+	HRESULT LoadTextureFromFile(
+		const wchar_t* filePath,
+		ID3D11ShaderResourceView** shaderResourceView,
+		D3D11_TEXTURE2D_DESC* texture2dDesc) const;
 
-	HRESULT MakeDummyTexture(ID3D11Device* device, ID3D11ShaderResourceView** shader_resource_view,
+	HRESULT MakeDummyTexture(ID3D11ShaderResourceView** shaderResourceView,
 		DWORD value/*0xAABBGGRR*/, UINT dimension) const;
 	
 

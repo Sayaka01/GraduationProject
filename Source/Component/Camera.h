@@ -12,7 +12,7 @@ class Camera : public Component
 {
 public:
 	Camera() = default;
-	~Camera() = default;
+	~Camera() override = default;
 
 	//-----< ŠÖ” >-----//
 

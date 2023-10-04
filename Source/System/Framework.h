@@ -80,7 +80,7 @@ public:
 				tictoc.Tick();
 				CalculateFrameStats();
 				Update(tictoc.time_interval());
-				Draw(tictoc.time_interval());
+				Draw();
 			}
 		}
 
@@ -144,7 +144,7 @@ public:
 private:
 	bool Initialize();
 	void Update(float elapsedTime/*Elapsed seconds from last frame*/);
-	void Draw(float elapsedTime/*Elapsed seconds from last frame*/);
+	void Draw();
 	bool Uninitialize();
 
 private:

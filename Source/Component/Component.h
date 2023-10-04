@@ -8,7 +8,7 @@ class Component
 {
 public:
 	Component() = default;
-	~Component() = default;
+	virtual ~Component() = default;
 
 
 	//-----< ŠÖ” >-----//

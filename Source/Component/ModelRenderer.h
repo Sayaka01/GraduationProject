@@ -4,11 +4,11 @@
 
 #include "Component.h"
 
-class Transform : public Component
+class ModelRenderer : public Component
 {
 public:
-	Transform() = default;
-	~Transform() override = default;
+	ModelRenderer() = default;
+	~ModelRenderer() override = default;
 
 	//-----< 関数 >-----//
 
@@ -22,14 +22,11 @@ public:
 	void DebugGui() override;
 
 	//-----< Getter, Setter >-----//
-	
+
 
 
 	//-----< 変数 >-----//
 
-	DirectX::XMFLOAT3 pos = { 0.0f, 0.0f, 0.0f };//位置
-	DirectX::XMFLOAT3 scale = { 1.0f, 1.0f, 1.0f };//スケール
-	DirectX::XMFLOAT4 orientation = { 0.0f,0.0f,0.0f,1.0f };//回転
 
 
 };

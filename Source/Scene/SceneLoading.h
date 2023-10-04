@@ -8,10 +8,10 @@ public:
 	SceneLoading(Scene* nextScene);
 	~SceneLoading()override {}
 
-	void Initialize(ID3D11Device* device)override;
+	void Initialize()override;
 	void Finalize()override;
-	void Update(float elapsedTime)override;
-	void Draw(ID3D11DeviceContext* dc)override;
+	void Update()override;
+	void Draw()override;
 private:
 	static void LoadingThread(SceneLoading* scene);
 private:

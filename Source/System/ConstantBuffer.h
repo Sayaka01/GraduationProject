@@ -20,7 +20,7 @@ public:
 		bufferDesc.MiscFlags = 0;
 		bufferDesc.StructureByteStride = 0;
 		hr = d->CreateBuffer(&bufferDesc, nullptr, constantBuffer.GetAddressOf());
-		_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+		_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	}
 
 	enum class ShaderType

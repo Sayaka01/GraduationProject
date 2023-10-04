@@ -8,20 +8,20 @@ void SceneManager::Initialize()
 
 }
 
-void SceneManager::Update(float elapsedTime)
+void SceneManager::Update()
 {
 
 	if (currentScene != nullptr)
 	{
-		currentScene->Update(elapsedTime);
+		currentScene->Update();
 	}
 	
 }
-void SceneManager::Draw(ID3D11DeviceContext* dc)
+void SceneManager::Draw()
 {
 	if (currentScene != nullptr)
 	{
-		currentScene->Draw(dc);
+		currentScene->Draw();
 	}
 }
 void SceneManager::Clear()
@@ -43,7 +43,7 @@ void SceneManager::ChangeScene(Scene* scene, bool loading)
 	//ƒV[ƒ“‰Šú‰»ˆ—
 	if (!scene->IsReady())
 	{
-		currentScene->Initialize(device);
+		currentScene->Initialize();
 	}
 
 }

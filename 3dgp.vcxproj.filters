@@ -51,9 +51,6 @@
     <Filter Include="Sources\Component\Camera">
       <UniqueIdentifier>{b1820c31-106f-49e7-b4f9-c481fdcd9e5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Manager">
-      <UniqueIdentifier>{8e69c1be-a054-4120-a368-24c161ea4fa2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Communicate">
       <UniqueIdentifier>{73ae351a-8c6e-4ce6-896b-2b491aeb7b5d}</UniqueIdentifier>
     </Filter>
@@ -62,6 +59,9 @@
     </Filter>
     <Filter Include="Sources\Communicate\Client">
       <UniqueIdentifier>{53ca930b-e9ec-4aae-85ca-16f572ad1627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Manager">
+      <UniqueIdentifier>{8e69c1be-a054-4120-a368-24c161ea4fa2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +116,6 @@
     <ClCompile Include="Source\Component\Transform.cpp">
       <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\MeshRenderer.cpp">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GameObject\Player.cpp">
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
@@ -127,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="Source\GameObject\CameraController.cpp">
       <Filter>Sources\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Manager\Manager.cpp">
-      <Filter>Sources\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Communication\client.cpp">
       <Filter>Sources\Communicate\Client</Filter>
@@ -166,6 +160,24 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneCommunicate.cpp">
       <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\ModelRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\SpriteRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\SpriteData.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\CreateShader.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Texture.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\SystemManager.cpp">
+      <Filter>Sources\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +247,6 @@
     <ClInclude Include="Source\Component\Transform.h">
       <Filter>Sources\Component\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\MeshRenderer.h">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GameObject\Player.h">
       <Filter>Sources\Component\Character</Filter>
     </ClInclude>
@@ -250,7 +259,7 @@
     <ClInclude Include="Source\System\ConstantBuffer.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\Manager.h">
+    <ClInclude Include="Source\Manager\SingletonObject.h">
       <Filter>Sources\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Communication\client.h">
@@ -291,6 +300,24 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneCommunicate.h">
       <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ModelRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\SpriteRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\SystemManager.h">
+      <Filter>Sources\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\SpriteData.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\CreateShader.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Texture.h">
+      <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

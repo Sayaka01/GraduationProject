@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "GameObject/GameObject.h"
 
 
@@ -11,7 +9,7 @@ private:
 	//コンストラクタ
 	SingletonObject() = default;
 	//デストラクタ
-	~SingletonObject() override = default;
+	virtual ~SingletonObject() override = default;
 
 public:
 	//インスタンス取得
@@ -20,15 +18,4 @@ public:
 		static SingletonObject instance;
 		return instance;
 	}
-
-	//初期化
-	void Initialize() override;
-	//更新
-	void Update() override;
-	//描画
-	void Draw() override;
-	//ImGui
-	void DebugGui() override;
-	
-
 };

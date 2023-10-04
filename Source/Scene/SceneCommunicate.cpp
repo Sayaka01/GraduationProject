@@ -7,7 +7,7 @@
 #include "../GameObject/GameObject.h"
 
 
-void SceneCommunicate::Initialize(ID3D11Device* device)
+void SceneCommunicate::Initialize()
 {
 	gameObject = new GameObject("test");
 }
@@ -18,12 +18,12 @@ void SceneCommunicate::Finalize()
 	delete gameObject;
 }
 
-void SceneCommunicate::Update(float elapsedTime)
+void SceneCommunicate::Update()
 {
 	gameObject->Update();
 }
 
-void SceneCommunicate::Draw(ID3D11DeviceContext* dc)
+void SceneCommunicate::Draw()
 {
 	gameObject->Draw();
 }

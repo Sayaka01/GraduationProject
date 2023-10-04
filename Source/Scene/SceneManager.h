@@ -19,20 +19,15 @@ public:
 	}
 
 	void Initialize();
-	void Update(float elapsedTime);
-	void Draw(ID3D11DeviceContext* dc);
+	void Update();
+	void Draw();
 
 	void Clear();
 	void ChangeScene(Scene* scene, bool loading = false);
 
-	ID3D11Device* GetDevice() const { return device; }
-	void SetDevice(ID3D11Device* d) { device = d; }
-
 	std::mutex& GetMutex() { return mutex; }
 
 private:
-	ID3D11Device* device = nullptr;
-
 	std::unique_ptr<Scene> currentScene = nullptr;
 
 	std::mutex mutex;

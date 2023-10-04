@@ -6,10 +6,13 @@
 
 #include "../GameObject/GameObject.h"
 
+#include "Component/SpriteRenderer.h"
 
-void SceneTest::Initialize(ID3D11Device* device)
+
+void SceneTest::Initialize()
 {
 	gameObject = new GameObject("test");
+	gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
 }
 
 void SceneTest::Finalize()
@@ -18,12 +21,12 @@ void SceneTest::Finalize()
 	delete gameObject;
 }
 
-void SceneTest::Update(float elapsedTime)
+void SceneTest::Update()
 {
 	gameObject->Update();
 }
 
-void SceneTest::Draw(ID3D11DeviceContext* dc)
+void SceneTest::Draw()
 {
 	gameObject->Draw();
 }

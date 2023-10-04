@@ -5,6 +5,8 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneTest.h"
 
+#include "Manager/SystemManager.h"
+
 #include "Common.h"
 #include "Misc.h"
 
@@ -43,7 +45,7 @@ bool Framework::Initialize()
 	swapChainDesc.Windowed = !FULLSCREEN; //フルスクリーンかどうか
 	hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, createDeviceFlags, &featureLevels, 1, D3D11_SDK_VERSION, &swapChainDesc,
 		swapChain.GetAddressOf(), device.GetAddressOf(), NULL, dc.GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 
 	//****************************************************************
 	// 
@@ -53,10 +55,10 @@ bool Framework::Initialize()
 
 	Microsoft::WRL::ComPtr <ID3D11Texture2D> backBuffer{};
 	hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<LPVOID*>(backBuffer.GetAddressOf()));
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 
 	hr = device->CreateRenderTargetView(backBuffer.Get(), NULL, renderTargetView.GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 
 	//****************************************************************
 	// 
@@ -78,14 +80,14 @@ bool Framework::Initialize()
 	texture2dDesc.CPUAccessFlags = 0;
 	texture2dDesc.MiscFlags = 0;
 	hr = device->CreateTexture2D(&texture2dDesc, NULL, depthStencilBuffer.GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc{};
 	depthStencilViewDesc.Format = texture2dDesc.Format;
 	depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencilViewDesc.Texture2D.MipSlice = 0;
 	hr = device->CreateDepthStencilView(depthStencilBuffer.Get(), &depthStencilViewDesc, depthStencilView.GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	
 	//****************************************************************
 	//  
@@ -123,46 +125,33 @@ bool Framework::Initialize()
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	hr = device->CreateSamplerState(&samplerDesc, samplerStates[0].GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	hr = device->CreateSamplerState(&samplerDesc, samplerStates[1].GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	
 	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 	hr = device->CreateSamplerState(&samplerDesc, samplerStates[2].GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.MinLOD = -D3D11_FLOAT32_MAX;
 	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	samplerDesc.MaxAnisotropy = 1;
 	hr = device->CreateSamplerState(&samplerDesc, samplerStates[3].GetAddressOf());
-	_ASSERT_EXPR(SUCCEEDED(hr), hr_trace(hr));
+	_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 
 
 	//****************************************************************
 	// 
-	// 深度ステンシルステートオブジェクトを作成
+	// システムマネージャー初期化
 	// 
 	//****************************************************************
+	SystemManager::Instance().SetDevice(device.Get());
+	SystemManager::Instance().SetDeviceContext(dc.Get());
+	SystemManager::Instance().Initialize();
 
-	//DepthStencilState::Instance().Initialize(device.Get());
-
-	//****************************************************************
-	// 
-	// ブレンディングステートオブジェクトを作成
-	// 
-	//****************************************************************
-
-	//BlendState::Instance().Initialize(device.Get());
-
-	//****************************************************************
-	// 
-	// ラスタライザステートオブジェクトを生成
-	// 
-	//****************************************************************
-	//RasterizerState::Instance().Initialize(device.Get());
 
 	//****************************************************************
 	// 
@@ -177,9 +166,9 @@ bool Framework::Initialize()
 	// シーンマネージャー初期化
 	// 
 	//****************************************************************
-	SceneManager::Instance().SetDevice(device.Get());
 	SceneManager::Instance().Initialize();
 	SceneManager::Instance().ChangeScene(new SceneTest);
+
 
 	return true;
 }
@@ -192,11 +181,13 @@ void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 	ImGui::NewFrame();
 #endif
 
-	SceneManager::Instance().Update(elapsedTime);
+	SystemManager::Instance().SetElapsedTime(elapsedTime);
+
+	SceneManager::Instance().Update();
 	
 }
 
-void Framework::Draw(float elapsedTime/*Elapsed seconds from last frame*/)
+void Framework::Draw()
 {
 	std::lock_guard<std::mutex> lock(SceneManager::Instance().GetMutex());
 
@@ -226,7 +217,7 @@ void Framework::Draw(float elapsedTime/*Elapsed seconds from last frame*/)
 	dc->PSSetSamplers(3, 1, samplerStates[3].GetAddressOf());
 
 
-	SceneManager::Instance().Draw(dc.Get());
+	SceneManager::Instance().Draw();
 
 
 #ifdef USE_IMGUI
