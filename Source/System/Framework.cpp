@@ -239,6 +239,8 @@ void Framework::Draw()
 bool Framework::Uninitialize()
 {
 	SceneManager::Instance().Clear();
+	SystemManager::Instance().Finalize();
+
 	return true;
 }
 

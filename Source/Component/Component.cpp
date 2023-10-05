@@ -1,10 +1,11 @@
 
-#include <Stdafx.h>
+#include "Stdafx.h"
 #include "Component.h"
-#include "../GameObject/GameObject.h"
 
-//親オブジェクトの名前取得
-std::string Component::GetParentName() const
+#include "GameObject/GameObject.h"
+
+//このコンポーネントの親オブジェクトの名前の取得
+[[nodiscard]] std::string Component::GetParentName() const
 {
 	return parent->GetName();
 }

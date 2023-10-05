@@ -39,34 +39,22 @@ public:
 
 
 	//コンポーネントの追加（1つずつ）
-	template<class T>
-	T* AddComponent(T* newComponent)
-	{
-		//追加予定のコンポーネントがnullptrならreturn
-		if (newComponent == nullptr) return nullptr;
-
-		newComponent->SetParent(this);
-		components.emplace_back(newComponent);
-		newComponent->Initialize();
-		return newComponent;
-	}
+	void AddComponent(Component* newComponent);
 	//コンポーネントの取得（1つずつ）
 	template<class T>
-	T* GetComponent(const std::string& componentName)
+	T* GetComponent()
 	{
-		//名前がないならreturn
-		if (componentName == "") return nullptr;
-
+		const std::string compName = typeid(T).name();
 		for (Component* component : components)
 		{
-			if (component->GetName() == componentName)
+			if (typeid(*component).name() == compName)
 			{
 				T* com = dynamic_cast<T*>(component);
 				if (com != nullptr) return com;
 			}
 		}
 
-		return nullptr;//"componentName"という名前のコンポーネントはこのオブジェクトにはなかった
+		return nullptr;
 	}
 	//コンポーネントの削除
 	void ClearComponent();
@@ -75,7 +63,7 @@ public:
 	//子オブジェクトの追加
 	void AddChild(GameObject* childObj);
 	//子オブジェクトの取得(名前検索）
-	GameObject* GetChild(std::string name) const;
+	[[nodiscard]] GameObject* GetChild(std::string name) const;
 	//子オブジェクトの取得（インデックス）
 	[[nodiscard]] GameObject* GetGameObj(size_t index)const;
 	//子オブジェクトの削除準備(名前検索）
