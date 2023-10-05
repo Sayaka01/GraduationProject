@@ -328,7 +328,7 @@
     <ClInclude Include="Source\System\Texture.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\SceneTitile.h">
+    <ClInclude Include="Source\Scene\SceneTitle.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\ModelData.h">

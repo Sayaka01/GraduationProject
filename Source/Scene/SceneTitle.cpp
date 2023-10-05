@@ -1,6 +1,6 @@
 #include "Stdafx.h"
 
-#include "SceneTitile.h"
+#include "SceneTitle.h"
 
 #include "SceneManager.h"
 
@@ -8,25 +8,39 @@
 
 #include "Component/SpriteRenderer.h"
 
+#include <magic_enum.hpp>
 
 void SceneTitle::Initialize()
 {
-	gameObject = new GameObject("test");
-	gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
+	for (int i = 0; i < 3; i++)
+	{
+		menuTextName[i] = std::to_string(i) + magic_enum::enum_name((MenuTextString)i).data();
+	}
+
+	menuText.emplace(menuTextName[MenuTextString::Tutorial],new GameObject("tutorialPlay"));
+	menuText[menuTextName[MenuTextString::Tutorial]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
 }
 
 void SceneTitle::Finalize()
 {
-	gameObject->Finalize();
-	delete gameObject;
+	for (auto& textes : menuText)
+	{
+		textes.second->Finalize();
+	}
 }
 
 void SceneTitle::Update()
 {
-	gameObject->Update();
+	for (auto& textes : menuText)
+	{
+		textes.second->Update();
+	}
 }
 
 void SceneTitle::Draw()
 {
-	gameObject->Draw();
+	for (auto& textes : menuText)
+	{
+		textes.second->Draw();
+	}
 }
