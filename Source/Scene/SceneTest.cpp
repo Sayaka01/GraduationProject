@@ -7,6 +7,7 @@
 #include "../GameObject/GameObject.h"
 
 #include "Component/SpriteRenderer.h"
+#include "Manager/SystemManager.h"
 
 
 void SceneTest::Initialize()
@@ -24,6 +25,8 @@ void SceneTest::Finalize()
 void SceneTest::Update()
 {
 	gameObject->Update();
+	SpriteRenderer* sprite = gameObject->GetComponent<SpriteRenderer>();
+	sprite->pos.x += 10.0f * SystemManager::Instance().GetElapsedTime();
 }
 
 void SceneTest::Draw()

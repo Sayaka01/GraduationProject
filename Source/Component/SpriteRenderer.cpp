@@ -41,26 +41,6 @@ void SpriteRenderer::Draw()
 	SystemManager::Instance().SetRasterizerState(SystemManager::RasterizerState::SolidCullingOn);
 
 }
-void SpriteRenderer::Draw(ID3D11PixelShader* replacedPixelShader, ID3D11VertexShader* replacedVertexShader)
-{
-	SystemManager::Instance().SetBlendState(SystemManager::BlendState::Alpha);
-	SystemManager::Instance().SetDepthStencilState(SystemManager::DepthStencilState::SortOffWriteOff);
-	SystemManager::Instance().SetRasterizerState(SystemManager::RasterizerState::SolidCullingOff);
-
-	if (positions.size() <= 1)
-		positions.at(0) = pos;
-
-	spriteData->Begin(replacedPixelShader, replacedVertexShader);
-	for (const auto& p : positions)
-	{
-		spriteData->Draw(p, scale, pivot, texPos, texSize, degree, color);
-	}
-	spriteData->End();
-
-	SystemManager::Instance().SetDepthStencilState(SystemManager::DepthStencilState::SortOnWriteOn);
-	SystemManager::Instance().SetRasterizerState(SystemManager::RasterizerState::SolidCullingOn);
-
-}
 
 //ImGui
 void SpriteRenderer::DebugGui()

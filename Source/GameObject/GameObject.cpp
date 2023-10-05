@@ -1,7 +1,7 @@
 
 #include <Stdafx.h>
 #include "GameObject.h"
-#include "../Component/Component.h"
+#include "Component/Component.h"
 
 #include "Component/Transform.h"
 
@@ -20,8 +20,7 @@ GameObject::GameObject(std::string name) : name(std::move(name))
 void GameObject::Initialize()
 {
 	//Transform Componentの追加
-	auto* transform = new Transform();
-	AddComponent(transform);
+	AddComponent(new Transform());
 }
 
 //終了処理
@@ -92,6 +91,17 @@ void GameObject::DebugGui()
 	}
 	ImGui::End();
 #endif
+}
+
+//コンポーネントの追加（1つずつ）
+void GameObject::AddComponent(Component* newComponent)
+{
+	//追加予定のコンポーネントがnullptrならreturn
+	if (newComponent == nullptr) return;
+
+	newComponent->SetParent(this);
+	components.emplace_back(newComponent);
+	newComponent->Initialize();
 }
 
 //コンポーネントの削除

@@ -77,9 +77,6 @@
     <ClCompile Include="Source\GameObject\GameObject.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Component.cpp">
-      <Filter>Sources\Component</Filter>
-    </ClCompile>
     <ClCompile Include="Source\System\Framework.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
@@ -178,6 +175,9 @@
     </ClCompile>
     <ClCompile Include="Source\Manager\SystemManager.cpp">
       <Filter>Sources\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\Component.cpp">
+      <Filter>Sources\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

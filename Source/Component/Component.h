@@ -25,9 +25,6 @@ public:
 
 	//-----< Getter, Setter >-----//
 
-	//コンポーネント名の取得
-	std::string GetName() { return name; }
-
 	//このコンポーネントの親オブジェクトの設定
 	void SetParent(GameObject* parent) { this->parent = parent; }
 	//このコンポーネントの親オブジェクトの取得
@@ -41,7 +38,8 @@ public:
 	void SetEnable(bool flag) { enable = flag; }
 
 protected:
-	std::string name;//コンポーネントの名前
+	std::string name = "";
+
 	GameObject* parent = nullptr;//このコンポーネントの親オブジェクト
 
 	bool enable = true;//このコンポーネントが有効かどうか
