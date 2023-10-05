@@ -27,8 +27,12 @@ void SceneTest::Finalize()
 void SceneTest::Update()
 {
 	gameObject->Update();
-	SpriteRenderer* sprite = gameObject->GetComponent<SpriteRenderer>();
-	sprite->pos.x += 10.0f * SystemManager::Instance().GetElapsedTime();
+
+	if (SystemManager::Instance().GetGamePad().GetAxisLX() > 0)
+	{
+		SpriteRenderer* sprite = gameObject->GetComponent<SpriteRenderer>();
+		sprite->pos.x += 50.0f * SystemManager::Instance().GetElapsedTime();
+	}
 }
 
 void SceneTest::Draw()

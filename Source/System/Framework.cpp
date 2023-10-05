@@ -182,6 +182,7 @@ void Framework::Update(float elapsedTime/*Elapsed seconds from last frame*/)
 #endif
 
 	SystemManager::Instance().SetElapsedTime(elapsedTime);
+	SystemManager::Instance().Update();
 
 	SceneManager::Instance().Update();
 	

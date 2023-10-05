@@ -191,6 +191,9 @@
     <ClCompile Include="Source\System\SystemManager.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\GamePad.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -338,6 +341,9 @@
       <Filter>Sources\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\System\SystemManager.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\GamePad.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>

@@ -260,6 +260,7 @@
     <ClCompile Include="Source\System\Console.cpp" />
     <ClCompile Include="Source\System\CreateShader.cpp" />
     <ClCompile Include="Source\System\Framework.cpp" />
+    <ClCompile Include="Source\System\GamePad.cpp" />
     <ClCompile Include="Source\System\Main.cpp" />
     <ClCompile Include="Source\System\ResourceManager.cpp" />
     <ClCompile Include="Source\System\SystemManager.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Source\System\ConstantBuffer.h" />
     <ClInclude Include="Source\System\CreateShader.h" />
     <ClInclude Include="Source\System\Framework.h" />
+    <ClInclude Include="Source\System\GamePad.h" />
     <ClInclude Include="Source\System\HighResolutionTimer.h" />
     <ClInclude Include="Source\System\Misc.h" />
     <ClInclude Include="Source\System\PoolAllocator.h" />

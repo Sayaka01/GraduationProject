@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 
+#include "GamePad.h"
 
 class SystemManager final
 {
@@ -19,7 +20,11 @@ public:
 		return instance;
 	}
 
+	//‰Šú‰»
 	void Initialize();
+
+	//XV
+	void Update();
 
 	//-----< State >-----//
 	enum class BlendState
@@ -106,7 +111,8 @@ public:
 		dc->RSSetState(rasterizerStates[static_cast<int>(state)].Get());
 	}
 
-
+	//GamePadæ“¾
+	GamePad& GetGamePad() { return gamePad; }
 
 private:
 
@@ -120,4 +126,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState[static_cast<int>(DepthStencilState::StateNum)];
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerStates[static_cast<int>(RasterizerState::StateNum)];
 
+
+	GamePad gamePad;
 };

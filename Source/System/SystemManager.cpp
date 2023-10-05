@@ -221,3 +221,8 @@ void SystemManager::Initialize()
 		_ASSERT_EXPR(SUCCEEDED(hr), HrTrace(hr));
 	}
 }
+
+void SystemManager::Update()
+{
+	gamePad.Update(elapsedTime);
+}
