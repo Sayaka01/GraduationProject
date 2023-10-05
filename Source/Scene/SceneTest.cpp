@@ -15,7 +15,7 @@ void SceneTest::Initialize()
 {
 	gameObject = new GameObject("test");
 	gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
-	//gameObject->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
+	gameObject->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
 }
 
 void SceneTest::Finalize()

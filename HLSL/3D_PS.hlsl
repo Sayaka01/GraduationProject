@@ -1,5 +1,5 @@
 #include "ShadingFunctions.hlsli"
-#include "SkinnedMesh.hlsli"
+#include "3D.hlsli"
 
 #define POINT 0
 #define LINEAR 1

@@ -316,17 +316,13 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> defaultVertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> defaultPixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> defaultInputLayout;
-	//インスタンス描画用シェーダー
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> instancingVertexShader;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> instancingPixelShader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> instancingInputLayout;
 	//置き換え用シェーダー
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> replacedVertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> replacedPixelShader;
 	ConstantBuffer defaultConstantBuffer;
 	ConstantBuffer instancingConstantBuffer;
 public:
-	ModelData(const char* fbxFileParh, bool pbr = false, float samplingRate = 0.0f, bool trianglate = true);
+	ModelData(const char* fbxFileParh, float samplingRate = 0.0f, bool trianglate = true);
 	virtual ~ModelData() = default;
 
 	void Draw(const DirectX::XMFLOAT4X4& world, Animation::Keyframe* keyframe, /*Frustum* frustum, */DirectX::XMFLOAT4 materialColor = { 1.0f,1.0f,1.0f,1.0f });
@@ -379,7 +375,5 @@ public:
 	std::vector<Animation> animationClips;
 
 private:
-	bool pbr = false;
-
 	Animation::Keyframe* currentKeyframe;
 };

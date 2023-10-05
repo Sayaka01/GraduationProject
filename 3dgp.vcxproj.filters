@@ -12,9 +12,6 @@
       <UniqueIdentifier>{9f64f4ff-d9e0-43d7-88e1-13e6d3656a89}</UniqueIdentifier>
       <Extensions>hlsl;hlsli</Extensions>
     </Filter>
-    <Filter Include="HLSL\SkinnedMesh">
-      <UniqueIdentifier>{3aac3ad0-3f4d-45cb-8e62-090c6def2e11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL\DebugPrimitive">
       <UniqueIdentifier>{ab70409f-d16a-47df-b32d-e578def26a98}</UniqueIdentifier>
     </Filter>
@@ -62,6 +59,12 @@
     </Filter>
     <Filter Include="Sources\Manager">
       <UniqueIdentifier>{8e69c1be-a054-4120-a368-24c161ea4fa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\3D">
+      <UniqueIdentifier>{3aac3ad0-3f4d-45cb-8e62-090c6def2e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\3D\Default3D">
+      <UniqueIdentifier>{c4b1e54f-1ff4-4b43-ba4e-61402fd015b8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -345,12 +348,6 @@
     <FxCompile Include="hlsl\2D_VS.hlsl">
       <Filter>HLSL\2D\Default2D</Filter>
     </FxCompile>
-    <FxCompile Include="hlsl\SkinnedMesh_PS.hlsl">
-      <Filter>HLSL\SkinnedMesh</Filter>
-    </FxCompile>
-    <FxCompile Include="hlsl\SkinnedMesh_VS.hlsl">
-      <Filter>HLSL\SkinnedMesh</Filter>
-    </FxCompile>
     <FxCompile Include="HLSL\DebugPrimitive_PS.hlsl">
       <Filter>HLSL\DebugPrimitive</Filter>
     </FxCompile>
@@ -363,13 +360,16 @@
     <FxCompile Include="HLSL\Font_VS.hlsl">
       <Filter>HLSL\Font</Filter>
     </FxCompile>
+    <FxCompile Include="hlsl\3D_VS.hlsl">
+      <Filter>HLSL\3D\Default3D</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\3D_PS.hlsl">
+      <Filter>HLSL\3D\Default3D</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="hlsl\2D.hlsli">
       <Filter>HLSL\2D\Default2D</Filter>
-    </None>
-    <None Include="hlsl\SkinnedMesh.hlsli">
-      <Filter>HLSL\SkinnedMesh</Filter>
     </None>
     <None Include="hlsl\ShadingFunctions.hlsli">
       <Filter>HLSL</Filter>
@@ -385,6 +385,9 @@
     </None>
     <None Include="HLSL\Font.hlsli">
       <Filter>HLSL\Font</Filter>
+    </None>
+    <None Include="hlsl\3D.hlsli">
+      <Filter>HLSL\3D\Default3D</Filter>
     </None>
   </ItemGroup>
 </Project>

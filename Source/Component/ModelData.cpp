@@ -9,8 +9,6 @@
 
 #include "Manager/SystemManager.h"
 
-#include "System/Common.h"
-
 using namespace DirectX;
 
 struct BoneInfluence
@@ -54,7 +52,7 @@ inline XMFLOAT4 ConvertToXMFloat4(const FbxDouble4& fbxdouble4)
 }
 
 
-ModelData::ModelData(const char* fbxFilename, bool pbr, float samplingRate, bool triangulate) :pbr(pbr)
+ModelData::ModelData(const char* fbxFilename, float samplingRate, bool triangulate)
 {
     std::filesystem::path cerealFilename(fbxFilename);
     cerealFilename.replace_extension("cereal");
@@ -119,11 +117,8 @@ ModelData::ModelData(const char* fbxFilename, bool pbr, float samplingRate, bool
         traverse(fbxScene->GetRootNode());
 
         FetchMeshes(fbxScene, meshes);
-
-        if (pbr)
-            FetchPBRMaterials(fbxScene, fbxFilename, materials);
-        else
-            FetchMaterials(fbxScene, materials);
+        
+    	FetchMaterials(fbxScene, materials);
 
         FetchAnimations(fbxScene, animationClips, samplingRate);
 
@@ -964,7 +959,7 @@ void ModelData::CreateComObjects(const char* fbxFilename)
         { "BONES", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT },
     };
     //通常描画時の頂点シェーダーを生成
-    CreateVsFromCso(".\\Shaders\\SkinnedMesh_VS.cso", defaultVertexShader.ReleaseAndGetAddressOf(),
+    CreateVsFromCso(".\\Shaders\\3D_VS.cso", defaultVertexShader.ReleaseAndGetAddressOf(),
         defaultInputLayout.ReleaseAndGetAddressOf(), inputElementDesc, ARRAYSIZE(inputElementDesc));
 
     D3D11_INPUT_ELEMENT_DESC instanceInputElementDesc[]
@@ -976,20 +971,8 @@ void ModelData::CreateComObjects(const char* fbxFilename)
         { "WEIGHTS", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT },
         { "BONES", 0, DXGI_FORMAT_R32G32B32A32_UINT, 0, D3D11_APPEND_ALIGNED_ELEMENT },
     };
-    //インスタンス描画時の頂点シェーダーを生成
-    CreateVsFromCso(".\\Shaders\\Instancing_VS.cso", instancingVertexShader.ReleaseAndGetAddressOf(),
-        instancingInputLayout.ReleaseAndGetAddressOf(), instanceInputElementDesc, ARRAYSIZE(instanceInputElementDesc));
     //通常描画時のピクセルシェーダーを生成
-    if (pbr)
-    {
-        CreatePsFromCso(".\\Shaders\\PBR_PS.cso", defaultPixelShader.ReleaseAndGetAddressOf());
-    }
-    else
-    {
-        CreatePsFromCso(".\\Shaders\\SkinnedMesh_PS.cso", defaultPixelShader.ReleaseAndGetAddressOf());
-    }
-    //インスタンス描画時のピクセルシェーダーを生成
-    CreatePsFromCso(".\\Shaders\\Instancing_PS.cso", instancingPixelShader.ReleaseAndGetAddressOf());
+	CreatePsFromCso(".\\Shaders\\3D_PS.cso", defaultPixelShader.ReleaseAndGetAddressOf());
 
     replacedVertexShader = nullptr;
     replacedPixelShader = nullptr;

@@ -1,4 +1,4 @@
-#include "SkinnedMesh.hlsli"
+#include "3D.hlsli"
 
 VS_OUT main(VS_IN vin)
 {
