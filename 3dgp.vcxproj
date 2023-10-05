@@ -239,6 +239,7 @@
     <ClCompile Include="Source\Communication\server_udp.cpp" />
     <ClCompile Include="Source\Component\Camera.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\Component\ModelData.cpp" />
     <ClCompile Include="Source\Component\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\SpriteData.cpp" />
     <ClCompile Include="Source\Component\SpriteRenderer.cpp" />
@@ -246,6 +247,7 @@
     <ClCompile Include="Source\GameObject\CameraController.cpp" />
     <ClCompile Include="Source\GameObject\GameObject.cpp" />
     <ClCompile Include="Source\GameObject\Player.cpp" />
+    <ClCompile Include="Source\Manager\ResourceManager.cpp" />
     <ClCompile Include="Source\Manager\SystemManager.cpp" />
     <ClCompile Include="Source\Scene\SceneCommunicate.cpp" />
     <ClCompile Include="Source\Scene\SceneLoading.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="Source\Communication\server_udp.h" />
     <ClInclude Include="Source\Component\Camera.h" />
     <ClInclude Include="Source\Component\Component.h" />
+    <ClInclude Include="Source\Component\ModelData.h" />
     <ClInclude Include="Source\Component\ModelRenderer.h" />
     <ClInclude Include="Source\Component\SpriteData.h" />
     <ClInclude Include="Source\Component\SpriteRenderer.h" />
@@ -291,6 +294,7 @@
     <ClInclude Include="Source\GameObject\CameraController.h" />
     <ClInclude Include="Source\GameObject\GameObject.h" />
     <ClInclude Include="Source\GameObject\Player.h" />
+    <ClInclude Include="Source\Manager\ResourceManager.h" />
     <ClInclude Include="Source\Manager\SingletonObject.h" />
     <ClInclude Include="Source\Manager\SystemManager.h" />
     <ClInclude Include="Source\Scene\Scene.h" />

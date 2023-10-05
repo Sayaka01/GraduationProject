@@ -182,6 +182,12 @@
     <ClCompile Include="Source\Component\Component.cpp">
       <Filter>Sources\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\ModelData.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\ResourceManager.cpp">
+      <Filter>Sources\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -324,6 +330,12 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneTitile.h">
       <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\ModelData.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\ResourceManager.h">
+      <Filter>Sources\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

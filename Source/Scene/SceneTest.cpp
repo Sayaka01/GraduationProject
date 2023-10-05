@@ -7,6 +7,7 @@
 #include "../GameObject/GameObject.h"
 
 #include "Component/SpriteRenderer.h"
+#include "Component/ModelRenderer.h"
 #include "Manager/SystemManager.h"
 
 
@@ -14,6 +15,7 @@ void SceneTest::Initialize()
 {
 	gameObject = new GameObject("test");
 	gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
+	gameObject->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
 }
 
 void SceneTest::Finalize()
