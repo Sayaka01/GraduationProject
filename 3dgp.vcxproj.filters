@@ -179,6 +179,9 @@
     <ClCompile Include="Source\Manager\SystemManager.cpp">
       <Filter>Sources\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\SceneTitle.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -318,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\Texture.h">
       <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneTitile.h">
+      <Filter>Sources\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
