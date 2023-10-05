@@ -17,6 +17,16 @@ public:
 
 private:
 
-	GameObject* gameObject = nullptr;
+	//選択肢ボタンの名前
+	enum MenuTextString:int
+	{
+		Tutorial = 0,
+		StartGame,
+		FinishGame,
+	};
+
+	//選択肢ボタン画像のリスト
+	std::map<std::string,std::unique_ptr<GameObject>> menuText;
+	std::string menuTextName[5];
 
 };
