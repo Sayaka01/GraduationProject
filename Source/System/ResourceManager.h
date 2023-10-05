@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "SkinnedMesh.h"
+#include "Component/ModelData.h"
 
 class ResourceManager
 {
@@ -16,9 +16,9 @@ public:
 		return instance;
 	}
 
-	std::shared_ptr<SkinnedMesh> LoadModelResource(ID3D11Device* device, const char* filename, bool pbr);
+	std::shared_ptr<ModelData> LoadModelResource(const char* filename, bool pbr = false);
 
 private:
-	using ModelMap = std::map<std::string, std::weak_ptr<SkinnedMesh>>;
+	using ModelMap = std::map<std::string, std::weak_ptr<ModelData>>;
 	ModelMap models;
 };

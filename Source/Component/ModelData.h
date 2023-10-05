@@ -203,7 +203,7 @@ private:
 				// 'node_index' is an index that refers to the node array of the scene.
 			int64_t nodeIndex{ 0 };
 
-			// 'offset_transform' is used to convert from model(mesh) space to bone(node) scene.
+			// 'offset_transform' is used to convert from modelData(mesh) space to bone(node) scene.
 			DirectX::XMFLOAT4X4 offsetTransform{ 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
 
 			[[nodiscard]] bool IsOrphan() const { return parentIndex < 0; };

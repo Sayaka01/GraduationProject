@@ -2,7 +2,7 @@
 #include <Stdafx.h>
 #include "SpriteRenderer.h"
 
-#include "Manager/SystemManager.h"
+#include "System/SystemManager.h"
 
 //‰Šú‰»
 void SpriteRenderer::Initialize(const wchar_t* filePath, size_t max_sprites)

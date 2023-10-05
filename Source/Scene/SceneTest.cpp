@@ -8,7 +8,7 @@
 
 #include "Component/SpriteRenderer.h"
 #include "Component/ModelRenderer.h"
-#include "Manager/SystemManager.h"
+#include "System/SystemManager.h"
 
 
 void SceneTest::Initialize()

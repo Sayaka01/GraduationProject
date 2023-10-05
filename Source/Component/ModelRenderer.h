@@ -39,35 +39,35 @@ public:
 
 	//DirectX::XMFLOAT3 GetFrontVec() { return { transform.world._31,transform.world._32 ,transform.world._33 }; }
 
-	[[nodiscard]] ModelData* GetModelResource() const { return model.get(); }
+	[[nodiscard]] ModelData* GetModelResource() const { return modelData.get(); }
 	//DirectX::XMFLOAT4X4& GetWorldTransform() { return transform.world; }
 
 	[[nodiscard]] float GetPlayAnimTimer() const { return playAnimTimer; }
-	[[nodiscard]] size_t GetPlayAnimMaxTimer() const { return model->animationClips.at(currentAnimationIndex).sequence.size(); }
-	[[nodiscard]] float GetAnimationSpeed()const { return model->animationClips.at(currentAnimationIndex).samplingRate * animationSpeed; }
+	[[nodiscard]] size_t GetPlayAnimMaxTimer() const { return modelData->animationClips.at(currentAnimationIndex).sequence.size(); }
+	[[nodiscard]] float GetAnimationSpeed()const { return modelData->animationClips.at(currentAnimationIndex).samplingRate * animationSpeed; }
 	void SetAnimationSpeed(const float speed) { animationSpeed = speed; }
 	[[nodiscard]] int GetAnimationIndex() const { return currentAnimationIndex; }
 
 	//[[nodiscard]] DirectX::XMFLOAT4X4 SearchBoneMatrix(std::string name) const
 	//{
 	//	DirectX::XMFLOAT4X4 mat{};
-	//	DirectX::XMStoreFloat4x4(&mat, DirectX::XMLoadFloat4x4(&model->SearchBoneMatrix(std::move(name))) * DirectX::XMLoadFloat4x4(&transform.world));
+	//	DirectX::XMStoreFloat4x4(&mat, DirectX::XMLoadFloat4x4(&modelData->SearchBoneMatrix(std::move(name))) * DirectX::XMLoadFloat4x4(&transform.world));
 	//	return mat;
 	//}
 
 	//シェーダーの差し替え
-	void SetPixelShader(ID3D11PixelShader* newPixelShader) const { model->SetPixelShader(newPixelShader); }
-	void SetVertexShader(ID3D11VertexShader* newVertexShader) const { model->SetVertexShader(newVertexShader); }
+	void SetPixelShader(ID3D11PixelShader* newPixelShader) const { modelData->SetPixelShader(newPixelShader); }
+	void SetVertexShader(ID3D11VertexShader* newVertexShader) const { modelData->SetVertexShader(newVertexShader); }
 
 	//テクスチャの張替え
-	void SetTexture(Texture newTexture) const { model->SetTexture(newTexture); }
+	void SetTexture(Texture newTexture) const { modelData->SetTexture(newTexture); }
 
 
 
 private:
 	//-----< 変数 >-----//
 
-	std::shared_ptr<ModelData> model = nullptr;
+	std::shared_ptr<ModelData> modelData = nullptr;
 	DirectX::XMFLOAT4 materialColor = { 1.0f,1.0f,1.0f,1.0f };
 
 	float samplingRate = 1.0f;

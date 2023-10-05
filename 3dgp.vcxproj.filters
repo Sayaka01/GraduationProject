@@ -57,9 +57,6 @@
     <Filter Include="Sources\Communicate\Client">
       <UniqueIdentifier>{53ca930b-e9ec-4aae-85ca-16f572ad1627}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Manager">
-      <UniqueIdentifier>{8e69c1be-a054-4120-a368-24c161ea4fa2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="HLSL\3D">
       <UniqueIdentifier>{3aac3ad0-3f4d-45cb-8e62-090c6def2e11}</UniqueIdentifier>
     </Filter>
@@ -176,9 +173,6 @@
     <ClCompile Include="Source\System\Texture.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Manager\SystemManager.cpp">
-      <Filter>Sources\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\SceneTitle.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
@@ -188,8 +182,14 @@
     <ClCompile Include="Source\Component\ModelData.cpp">
       <Filter>Sources\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Manager\ResourceManager.cpp">
-      <Filter>Sources\Manager</Filter>
+    <ClCompile Include="Source\Component\CameraData.cpp">
+      <Filter>Sources\Component\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\ResourceManager.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\SystemManager.cpp">
+      <Filter>Sources\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,9 +271,6 @@
     <ClInclude Include="Source\System\ConstantBuffer.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\SingletonObject.h">
-      <Filter>Sources\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Communication\client.h">
       <Filter>Sources\Communicate\Client</Filter>
     </ClInclude>
@@ -319,9 +316,6 @@
     <ClInclude Include="Source\Component\SpriteRenderer.h">
       <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\SystemManager.h">
-      <Filter>Sources\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Component\SpriteData.h">
       <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
@@ -337,8 +331,14 @@
     <ClInclude Include="Source\Component\ModelData.h">
       <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Manager\ResourceManager.h">
-      <Filter>Sources\Manager</Filter>
+    <ClInclude Include="Source\Component\CameraData.h">
+      <Filter>Sources\Component\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\ResourceManager.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\SystemManager.h">
+      <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

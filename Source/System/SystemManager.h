@@ -2,16 +2,14 @@
 
 #include <d3d11.h>
 
-#include "SingletonObject.h"
 
-
-class SystemManager : public GameObject
+class SystemManager final
 {
 private:
 	//コンストラクタ
 	SystemManager() = default;
 	//デストラクタ
-	virtual ~SystemManager() override = default;
+	virtual ~SystemManager() = default;
 
 public:
 	//インスタンス取得
@@ -21,7 +19,7 @@ public:
 		return instance;
 	}
 
-	void Initialize() override;
+	void Initialize();
 
 	//-----< State >-----//
 	enum class BlendState

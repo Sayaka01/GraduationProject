@@ -5,7 +5,7 @@
 #include "Misc.h"
 #include <cstdio>
 
-#include "Manager/SystemManager.h"
+#include "System/SystemManager.h"
 
 HRESULT CreateVsFromCso(const char* csoName, ID3D11VertexShader** vertexShader,
                         ID3D11InputLayout** inputLayout, D3D11_INPUT_ELEMENT_DESC* inputElementDesc, UINT numElements)

@@ -3,9 +3,10 @@
 #include "ModelRenderer.h"
 
 #include "Component/Transform.h"
+#include "GameObject/GameObject.h"
 
-#include "Manager/ResourceManager.h"
-#include "Manager/SystemManager.h"
+#include "System/ResourceManager.h"
+#include "System/SystemManager.h"
 
 //コンストラクタ
 ModelRenderer::ModelRenderer(const char* filePath)
@@ -18,7 +19,7 @@ void ModelRenderer::Initialize(const char* filePath)
 {
 	name = "ModelRenderer";
 
-	model = ResourceManager::Instance().LoadModelResource(filePath);
+	modelData = ResourceManager::Instance().LoadModelResource(filePath);
 
 }
 
@@ -32,14 +33,13 @@ void ModelRenderer::Update()
 void ModelRenderer::Draw()
 {
 	Animation::Keyframe keyframe;
-	if (!model->animationClips.empty())
+	if (!modelData->animationClips.empty())
 	{
 		//アニメ―ションがある
 		if (interpolationAnim)keyframe = interpolationKeyframe;
-		else keyframe = model->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
+		else keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
 	}
-
-	model->Draw(parent->GetComponent<Transform>()->world, &keyframe, materialColor);
+	modelData->Draw(parent->GetComponent<Transform>()->world, &keyframe, materialColor);
 
 }
 
@@ -74,19 +74,19 @@ void ModelRenderer::UpdateAnimation()
 		}
 
 		const Animation::Keyframe* keyframes[2] = {
-			&model->animationClips.at(oldAnimationIndex).sequence.at(oldKeyframeIndex),
-			&model->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex)
+			&modelData->animationClips.at(oldAnimationIndex).sequence.at(oldKeyframeIndex),
+			&modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex)
 		};
 
-		model->BlendAnimations(keyframes, interpolationRatio, interpolationKeyframe);
-		model->UpdateGlobalTransform(interpolationKeyframe);
+		modelData->BlendAnimations(keyframes, interpolationRatio, interpolationKeyframe);
+		modelData->UpdateGlobalTransform(interpolationKeyframe);
 
 		if (interpolationAnim)return;
 	}
 
-	const float samplingRate = model->animationClips.at(currentAnimationIndex).samplingRate;
+	const float samplingRate = modelData->animationClips.at(currentAnimationIndex).samplingRate;
 	playAnimTimer += samplingRate * animationSpeed * elapsedTime;
-	const size_t maxKeyframe = model->animationClips.at(currentAnimationIndex).sequence.size();
+	const size_t maxKeyframe = modelData->animationClips.at(currentAnimationIndex).sequence.size();
 	if (static_cast<size_t>(playAnimTimer) >= maxKeyframe && isPlayAnimation)
 	{
 		playAnimTimer = 0.0f;

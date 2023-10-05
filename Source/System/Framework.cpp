@@ -5,7 +5,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneTest.h"
 
-#include "Manager/SystemManager.h"
+#include "System/SystemManager.h"
 
 #include "Common.h"
 #include "Misc.h"
@@ -239,7 +239,6 @@ void Framework::Draw()
 bool Framework::Uninitialize()
 {
 	SceneManager::Instance().Clear();
-	SystemManager::Instance().Finalize();
 
 	return true;
 }
