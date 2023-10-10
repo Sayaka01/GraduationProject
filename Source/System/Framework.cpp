@@ -4,6 +4,7 @@
 
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneTest.h"
+#include "../Scene/SceneTitle.h"
 
 #include "System/SystemManager.h"
 

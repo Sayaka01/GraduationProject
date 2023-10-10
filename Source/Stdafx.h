@@ -20,6 +20,7 @@
 
 #include <sstream>
 
+
 #include <memory>
 
 #include <Windows.h>
@@ -30,9 +31,12 @@
 
 #include <vector>
 
+#include <map>
+
 #include <mutex>
 
 #include <cstdint>
+
 
 #include <tchar.h>
 
