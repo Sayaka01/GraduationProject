@@ -2,7 +2,9 @@
 
 #include "Scene.h"
 
-class GameObject;
+#include "GameObject/GameObject.h"
+
+class CameraController;
 
 class SceneTest :public Scene
 {
@@ -16,7 +18,6 @@ public:
 	void Draw()override;
 
 private:
-	
 	GameObject* gameObject = nullptr;
-
+	CameraController* cameraController = nullptr;
 };

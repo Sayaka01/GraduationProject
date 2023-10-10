@@ -114,8 +114,6 @@ void CameraData::UpdateBuffer(const DirectX::XMFLOAT3 pos)
 
 void CameraData::DebugGui()
 {
-#ifdef USE_IMGUI
-
 	ImGui::DragFloat("range", &range, 0.1f);
 	//ImGui::DragFloat3("pos", &eye.x, 0.01f);
 	ImGui::DragFloat3("target", &target.x, 0.01f);
@@ -130,9 +128,6 @@ void CameraData::DebugGui()
 	{
 		shakeTimer = maxShakeTime;
 	}
-
-#endif
-
 }
 
 void CameraData::SetPerspectiveFov(float fovY, float aspect, float nearZ, float farZ)

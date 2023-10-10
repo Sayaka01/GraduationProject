@@ -35,11 +35,18 @@ void Camera::Update()
 	cameraData->Update();
 }
 
+//•`‰æ
+void Camera::Draw()
+{
+	UpdateBuffer();
+}
+
 //ImGui
 void Camera::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		cameraData->DebugGui();
 		ImGui::TreePop();
 	}
 }
@@ -49,22 +56,22 @@ void Camera::UpdateBuffer() const
 	cameraData->UpdateBuffer(parent->GetComponent<Transform>()->pos);
 }
 
-void Camera::MoveCameraAngle()
+void Camera::MoveCameraAngle() const
 {
-	//const GamePad& gamepad = Input::Instance().GetGamePad();
+	const GamePad& gamepad = SystemManager::Instance().GetGamePad();
 
-	//const float rx = gamepad.GetAxisRX();
-	//const float ry = gamepad.GetAxisRY();
+	const float rx = gamepad.GetAxisRX();
+	const float ry = gamepad.GetAxisRY();
 	DirectX::XMFLOAT3 angle = cameraData->GetAngle();
 
-	//float elapsedTime = SystemManager::Instance().GetElapsedTime();
+	const float elapsedTime = SystemManager::Instance().GetElapsedTime();
 
-	//angle.x -= ry * rotationSpeed * elapsedTime;
-	//angle.y += rx * rotationSpeed * elapsedTime;
+	angle.x -= ry * rotationSpeed * elapsedTime;
+	angle.y += rx * rotationSpeed * elapsedTime;
 
 
-	//angle.x = Clamp(angle.x, DirectX::XMConvertToRadians(minDegree), DirectX::XMConvertToRadians(maxDegree));
-	//angle.y = CirculateRadian(angle.y);
+	angle.x = Clamp(angle.x, DirectX::XMConvertToRadians(minDegree), DirectX::XMConvertToRadians(maxDegree));
+	angle.y = CirculateRadian(angle.y);
 
 	cameraData->SetAngle(angle);
 }

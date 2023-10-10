@@ -24,13 +24,15 @@ public:
 	void Initialize() override;
 	//更新
 	void Update() override;
+	//描画
+	void Draw() override;
 	//ImGui
 	void DebugGui() override;
 
 	//定数バッファの更新
 	void UpdateBuffer() const;
 
-	void MoveCameraAngle();
+	void MoveCameraAngle() const;
 
 	void Tracking() const;
 
