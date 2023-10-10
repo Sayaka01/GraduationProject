@@ -116,9 +116,6 @@
     <ClCompile Include="Source\Component\Transform.cpp">
       <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GameObject\Player.cpp">
-      <Filter>Sources\Component\Character</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Component\Camera.cpp">
       <Filter>Sources\Component\Camera</Filter>
     </ClCompile>
@@ -200,6 +197,12 @@
     <ClCompile Include="Source\Component\DirectionLight.cpp">
       <Filter>Sources\Component\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Component\Player.cpp">
+      <Filter>Sources\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\PlayerStates.cpp">
+      <Filter>Sources\Component\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -267,9 +270,6 @@
     </ClInclude>
     <ClInclude Include="Source\Component\Transform.h">
       <Filter>Sources\Component\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameObject\Player.h">
-      <Filter>Sources\Component\Character</Filter>
     </ClInclude>
     <ClInclude Include="Source\Component\Camera.h">
       <Filter>Sources\Component\Camera</Filter>
@@ -354,6 +354,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\DirectionLight.h">
       <Filter>Sources\Component\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\Player.h">
+      <Filter>Sources\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\PlayerStates.h">
+      <Filter>Sources\Component\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

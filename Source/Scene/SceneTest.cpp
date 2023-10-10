@@ -11,6 +11,7 @@
 #include "Component/SpriteRenderer.h"
 #include "Component/ModelRenderer.h"
 #include "Component/DirectionLight.h"
+#include "Component/Player.h"
 #include "System/SystemManager.h"
 #include "System/Common.h"
 
@@ -65,6 +66,9 @@ void SceneTest::PlayerInitialize()
 {
 	player = new GameObject("player");
 	//gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
+	
+	player->AddComponent(new Player());
+	
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");

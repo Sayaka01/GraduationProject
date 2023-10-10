@@ -6,7 +6,7 @@
 
 DirectionLight::DirectionLight()
 {
-
+	name = "DirectionLight";
 	constantBuffer.Initialize(SystemManager::Instance().GetDevice() ,&lightConstants);
 }
 
