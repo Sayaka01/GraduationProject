@@ -19,7 +19,9 @@ public:
 	void Draw()override;
 
 private:
-	GameObject* gameObject = nullptr;
+	void PlayerInitialize();
+
+	GameObject* player = nullptr;
 	GameObject* lightObject = nullptr;
 	CameraController* cameraController = nullptr;
 	DirectionLight* directionLight = nullptr;

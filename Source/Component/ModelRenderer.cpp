@@ -48,7 +48,35 @@ void ModelRenderer::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		if (!modelData->animationClips.empty())
+		{
+			if (ImGui::TreeNode("Animation"))
+			{
+				const int maxKeyframe = static_cast<int>(modelData->animationClips.at(currentAnimationIndex).sequence.size());
+				ImGui::DragInt("keyframe", &keyframeIndex, 1, 0, maxKeyframe - 1);
+				ImGui::DragInt("oldKeyframeIndex", &oldKeyframeIndex, 1, 0, maxKeyframe - 1);
+				ImGui::DragFloat("interpolationRatio", &interpolationRatio, 0.1f, 0, 1.0f);
+				const int maxAnimation = static_cast<int>(modelData->animationClips.size());
+				static int animIndex = 0;
+				ImGui::SliderInt("animationIndex", &animIndex, 0, maxAnimation - 1);
+				ImGui::DragFloat("interpolationSpeed", &interpolationSpeed, 0.01f);
+				ImGui::DragFloat("animationSpeed", &animationSpeed, 0.01f);
 
+				ImGui::Checkbox("isLoopAnimation", &isLoopAnimation);
+				ImGui::Checkbox("playAnimation", &isPlayAnimation);
+				ImGui::Checkbox("interpolationAnim", &interpolationAnim);
+
+				if (ImGui::Button("play"))
+				{
+					PlayAnimation(animIndex, isLoopAnimation);
+				}
+				if (ImGui::Button("stop"))
+				{
+					StopAnimation();
+				}
+				ImGui::TreePop();
+			}
+		}
 		ImGui::TreePop();
 	}
 }
@@ -121,5 +149,9 @@ void ModelRenderer::StopAnimation()
 {
 	playAnimTimer = 0.0f;
 	isPlayAnimation = false;
+}
+void ModelRenderer::AppendAnimation(const char* animationFilename, float samplingRate)
+{
+	modelData->AppendAnimation(animationFilename, samplingRate);
 }
 

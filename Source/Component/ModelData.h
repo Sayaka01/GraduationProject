@@ -331,7 +331,7 @@ public:
 	void UpdateGlobalTransform(Animation::Keyframe& keyframe) const;
 
 	static void BlendAnimations(const Animation::Keyframe* keyframes[2], float factor, Animation::Keyframe& keyframe);
-	bool AppendAnimations(const char* animationFilename, float samplingRate);
+	bool AppendAnimation(const char* animationFilename, float samplingRate = 0.0f);
 
 
 	//Raycast‚ÉŽg‚¤Getter

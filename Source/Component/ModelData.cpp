@@ -1077,7 +1077,7 @@ void ModelData::FetchAnimations(FbxScene* fbxScene, std::vector<Animation>& anim
     }
 }
 
-bool ModelData::AppendAnimations(const char* animationFilename, float samplingRate)
+bool ModelData::AppendAnimation(const char* animationFilename, float samplingRate)
 {
     std::filesystem::path cerealFilename(animationFilename);
     cerealFilename.replace_extension("anim");

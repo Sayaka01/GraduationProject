@@ -28,7 +28,7 @@ public:
 	void UpdateAnimation();//アニメ―ションの更新
 	void PlayAnimation(int animationIndex, bool loop = true);//アニメ―ションの再生
 	void StopAnimation();//アニメ―ションの停止
-
+	void AppendAnimation(const char* animationFilename, float samplingRate = 0.0f);//アニメーションの追加
 
 
 	//-----< Getter, Setter >-----//
