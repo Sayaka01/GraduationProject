@@ -46,5 +46,6 @@ private:
 	DirectX::XMFLOAT2 menuRadius = { 0,0 };
 	DirectX::XMFLOAT2 circlePivot = { 0,0 };
 
+	float uiTime = 0.0f;
 
 };

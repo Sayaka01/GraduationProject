@@ -28,6 +28,7 @@ void SceneGame::Initialize()
 	menuText.emplace(menuTextName[(int)MenuTextString::FinishGame_mst], new GameObject("finishGame"));
 	menuText[menuTextName[(int)MenuTextString::FinishGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_FinishGame.png"));
 
+	//ƒ^ƒCƒgƒ‹‰æ‘œ‚Ì“Ç‚İ‚İ
 	titleLogo = std::make_unique<GameObject>("TitleLogo");
 	titleLogo->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/title_logo.png"));
 	titleLogo->GetComponent<SpriteRenderer>()->pos = { 400,-100 };

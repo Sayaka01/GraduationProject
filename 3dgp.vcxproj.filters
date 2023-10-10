@@ -367,6 +367,9 @@
     <ClInclude Include="Source\Scene\SceneGame.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\System\easing.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="hlsl\2D_PS.hlsl">

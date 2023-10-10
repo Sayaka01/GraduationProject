@@ -10,6 +10,8 @@
 
 #include "System/SystemManager.h"
 
+#include "System/easing.h"
+
 #include <magic_enum.hpp>
 
 void SceneTitle::Initialize()
@@ -32,13 +34,12 @@ void SceneTitle::Initialize()
 	titleLogo->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/title_logo.png"));
 	titleLogo->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
 
-	currentSelectDegree = -120;
+	currentSelectDegree = -40;
 	menuRadius = { 400,300 };
 	circlePivot = { -250, 400 };
 	float spacing = 0.0f;//‰æ‘œ“¯Žm‚ÌŠÔŠu
 	for (auto& textes : menuText)
 	{
-		currentSelectDegree = spacing;
 		textes.second->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree +spacing,currentSelectDegree + spacing }, menuRadius);
 		spacing += 40.0f;
 	}
@@ -61,12 +62,19 @@ void SceneTitle::Update()
 	float deltaTime = SystemManager::Instance().GetElapsedTime();
 	GamePad& gamepad = SystemManager::Instance().GetGamePad();
 	float rotationSpeed = 150;
+	static float oldTarget=0.0f;
+
+	//•Ï‰»ŽžŠÔ
+	float changeMaxTime = 0.3f;
+
 	if (gamepad.GetButtonDown() & GamePad::BTN_UP)
 	{
 		if ((int)selectMenuType > 0)
 		{
 			selectMenuType -= 1;
 			operateType = 0;
+			uiTime = 0;
+			oldTarget = targetSelectDegree;
 		}
 	}
 	if (gamepad.GetButtonDown() & GamePad::BTN_DOWN)
@@ -75,6 +83,8 @@ void SceneTitle::Update()
 		{
 			selectMenuType += 1;
 			operateType = 1;
+			uiTime = 0;
+			oldTarget = targetSelectDegree;
 		}
 	}
 
@@ -90,7 +100,7 @@ void SceneTitle::Update()
 		break;
 	case 2://"Finish Game"‚Ì‚Æ‚«
 		targetSelectDegree = -80;
-		PostQuitMessage(0);
+		//PostQuitMessage(0);
 		break;
 	}
 
@@ -100,14 +110,27 @@ void SceneTitle::Update()
 		currentSelectDegree = targetSelectDegree;
 		break;
 	case 0:
-		currentSelectDegree = currentSelectDegree + deltaTime * rotationSpeed;
-		if (currentSelectDegree > targetSelectDegree)
+		uiTime += deltaTime ;//Œo‰ßŽžŠÔ
+		currentSelectDegree = oldTarget;
+		//Bounce‚Ì‚æ‚é•Ï‰»—Ê‚ª•Ô‚Á‚Ä‚­‚é‚½‚ß‚Ç‚±‚©‚ç‚Ç‚ê‚¾‚¯•Ï‰»‚·‚é‚©
+		currentSelectDegree += easing::Elastic::easeOut(uiTime, 0, targetSelectDegree - currentSelectDegree, changeMaxTime);
+
+		//currentSelectDegree = currentSelectDegree + deltaTime * rotationSpeed;
+		if (uiTime > changeMaxTime)
 			operateType = -1;
 		break;
 	case 1:
-		currentSelectDegree = currentSelectDegree - deltaTime * rotationSpeed;
-		if (currentSelectDegree < targetSelectDegree)
+		uiTime += deltaTime;//Œo‰ßŽžŠÔ
+		currentSelectDegree = oldTarget;
+		//Bounce‚Ì‚æ‚é•Ï‰»—Ê‚ª•Ô‚Á‚Ä‚­‚é‚½‚ß‚Ç‚±‚©‚ç‚Ç‚ê‚¾‚¯•Ï‰»‚·‚é‚©
+		currentSelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentSelectDegree - targetSelectDegree, changeMaxTime);
+
+		//currentSelectDegree = currentSelectDegree + deltaTime * rotationSpeed;
+		if (uiTime > changeMaxTime)
 			operateType = -1;
+		//currentSelectDegree = currentSelectDegree - deltaTime * rotationSpeed;
+		//if (currentSelectDegree < targetSelectDegree)
+		//	operateType = -1;
 		break;
 	}
 
@@ -119,6 +142,7 @@ void SceneTitle::Update()
 
 #ifdef USE_IMGUI
 	ImGui::Begin("title debug ui");
+	ImGui::InputInt("operateType", &operateType);
 	ImGui::InputFloat("currentSelectDegree", &currentSelectDegree);
 	ImGui::InputFloat2("circlePivot", &circlePivot.x);
 	ImGui::InputFloat2("menuRadius", &menuRadius.x);
