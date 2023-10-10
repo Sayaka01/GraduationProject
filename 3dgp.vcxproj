@@ -240,6 +240,7 @@
     <ClCompile Include="Source\Component\Camera.cpp" />
     <ClCompile Include="Source\Component\CameraData.cpp" />
     <ClCompile Include="Source\Component\Component.cpp" />
+    <ClCompile Include="Source\Component\DirectionLight.cpp" />
     <ClCompile Include="Source\Component\ModelData.cpp" />
     <ClCompile Include="Source\Component\ModelRenderer.cpp" />
     <ClCompile Include="Source\Component\SpriteData.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Source\Component\Camera.h" />
     <ClInclude Include="Source\Component\CameraData.h" />
     <ClInclude Include="Source\Component\Component.h" />
+    <ClInclude Include="Source\Component\DirectionLight.h" />
     <ClInclude Include="Source\Component\ModelData.h" />
     <ClInclude Include="Source\Component\ModelRenderer.h" />
     <ClInclude Include="Source\Component\SpriteData.h" />

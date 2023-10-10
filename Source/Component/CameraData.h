@@ -1,7 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
-#include "System/ConstantBuffer.h"
 
+#include "System/ConstantBuffer.h"
 
 class CameraData
 {
@@ -11,7 +11,7 @@ public:
 
 	void Initialize();
 
-	void Update();
+	DirectX::XMFLOAT3 Update();
 
 	void SetLookAt(const DirectX::XMFLOAT3& eye, const DirectX::XMFLOAT3& target, const DirectX::XMFLOAT3& up);
 

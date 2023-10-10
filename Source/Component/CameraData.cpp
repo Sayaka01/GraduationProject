@@ -38,7 +38,7 @@ void CameraData::Initialize()
 
 }
 
-void CameraData::Update()
+DirectX::XMFLOAT3 CameraData::Update()
 {
 	//カメラの回転値を回転行列に変換
 	const DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
@@ -69,6 +69,7 @@ void CameraData::Update()
 	//カメラの視点と注視点を設定
 	SetLookAt(corEye, t, { 0.0f,1,0.0001f });
 
+	return corEye;
 }
 
 //指定方向を向く

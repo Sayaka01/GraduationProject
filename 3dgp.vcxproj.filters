@@ -63,6 +63,9 @@
     <Filter Include="HLSL\3D\Default3D">
       <UniqueIdentifier>{c4b1e54f-1ff4-4b43-ba4e-61402fd015b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Component\Light">
+      <UniqueIdentifier>{3c0cdf65-8b19-4f08-91a7-bf997aa23ede}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Scene\SceneLoading.cpp">
@@ -193,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="Source\System\GamePad.cpp">
       <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Component\DirectionLight.cpp">
+      <Filter>Sources\Component\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +351,9 @@
     </ClInclude>
     <ClInclude Include="Source\System\GamePad.h">
       <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Component\DirectionLight.h">
+      <Filter>Sources\Component\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

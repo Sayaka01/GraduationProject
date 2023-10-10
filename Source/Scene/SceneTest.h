@@ -5,6 +5,7 @@
 #include "GameObject/GameObject.h"
 
 class CameraController;
+class DirectionLight;
 
 class SceneTest :public Scene
 {
@@ -19,5 +20,7 @@ public:
 
 private:
 	GameObject* gameObject = nullptr;
+	GameObject* lightObject = nullptr;
 	CameraController* cameraController = nullptr;
+	DirectionLight* directionLight = nullptr;
 };

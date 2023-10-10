@@ -32,7 +32,7 @@ void Camera::Update()
 
 	Tracking();
 
-	cameraData->Update();
+	parent->GetComponent<Transform>()->pos = cameraData->Update();
 }
 
 //•`‰æ

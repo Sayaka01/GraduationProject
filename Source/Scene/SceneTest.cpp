@@ -9,6 +9,7 @@
 
 #include "Component/SpriteRenderer.h"
 #include "Component/ModelRenderer.h"
+#include "Component/DirectionLight.h"
 #include "System/SystemManager.h"
 
 
@@ -19,6 +20,9 @@ void SceneTest::Initialize()
 	gameObject->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
 
 	cameraController = new CameraController();
+
+	lightObject = new GameObject("Light");
+	lightObject->AddComponent(new DirectionLight());
 }
 
 void SceneTest::Finalize()
@@ -28,11 +32,16 @@ void SceneTest::Finalize()
 
 	cameraController->Finalize();
 	delete cameraController;
+
+	lightObject->Finalize();
+	delete lightObject;
 }
 
 void SceneTest::Update()
 {
 	cameraController->Update();
+
+	lightObject->Update();
 
 	gameObject->Update();
 
@@ -45,5 +54,9 @@ void SceneTest::Update()
 
 void SceneTest::Draw()
 {
+	cameraController->Draw();
+
+	lightObject->Draw();
+
 	gameObject->Draw();
 }
