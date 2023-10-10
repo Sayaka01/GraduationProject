@@ -6,11 +6,11 @@
 #include <memory>
 #include "GameObject/GameObject.h"
 
-class SceneTitle :public Scene
+class SceneGame :public Scene
 {
 public:
-	SceneTitle() {}
-	~SceneTitle()override {}
+	SceneGame() {}
+	~SceneGame()override {}
 
 	void Initialize()override;
 	void Finalize()override;
@@ -24,7 +24,7 @@ private:
 	DirectX::XMFLOAT2 moveRoundFloat2(DirectX::XMFLOAT2 rePoint, DirectX::XMFLOAT2 degree, DirectX::XMFLOAT2 radius);
 
 	//選択肢ボタンの名前
-	enum MenuTextString:int
+	enum MenuTextString :int
 	{
 		Tutorial_mst = 0,
 		StartGame_mst,
@@ -35,7 +35,7 @@ private:
 	std::unique_ptr<GameObject> titleLogo;
 
 	//選択肢ボタン画像のリスト
-	std::map<std::string,std::unique_ptr<GameObject>> menuText;
+	std::map<std::string, std::unique_ptr<GameObject>> menuText;
 	std::string menuTextName[MenuTextString::Max_mst];//画像の名前リスト(String型)
 
 	int selectMenuType = MenuTextString::StartGame_mst;
