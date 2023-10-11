@@ -68,7 +68,7 @@ private:
 	bool tracking = false;
 
 	//model‚ğ’Ç”ö‚·‚é‚Æ‚«‚Ìmodel‚ÌŒ´“_‚©‚ç‚Ì•â³’l
-	DirectX::XMFLOAT3 targetCorrection = { 0.0f,8.0f,0.0f };
+	DirectX::XMFLOAT3 targetCorrection = { 0.0f,10.0f,0.0f };
 
 	float maxDegree = 85.0f;
 	float minDegree = -12.5f;
