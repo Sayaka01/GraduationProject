@@ -62,8 +62,6 @@ void SceneGame::PlayerInitialize()
 	player = new GameObject("player");
 	//gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
 
-	player->AddComponent(new Player());
-
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
@@ -81,6 +79,8 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");
 
 	player->AddComponent(modelRenderer);
+
+	player->AddComponent(new Player());
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
 

@@ -3,6 +3,10 @@
 
 #include "PlayerStates.h"
 
+#include "GameObject/GameObject.h"
+
+#include "Component/ModelRenderer.h"
+
 #include "System/SystemManager.h"
 #include "System/UserFunction.h"
 
@@ -13,9 +17,14 @@ Idle::Idle()
 {
 	name = "Idle";
 }
+Idle::Idle(GameObject* parent)
+{
+	name = "Idle";
+	this->parent = parent;
+}
 void Idle::Enter()
 {
-	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation(5, true);
 }
 void Idle::Update()
 {
@@ -46,6 +55,11 @@ std::string Idle::Judge()
 Run::Run()
 {
 	name = "Run";
+}
+Run::Run(GameObject* parent)
+{
+	name = "Run";
+	this->parent = parent;
 }
 void Run::Enter()
 {

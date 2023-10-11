@@ -11,8 +11,8 @@ void Player::Initialize()
 	name = "Player";
 
 	//ステートの追加
-	states.emplace_back(new Idle());//待機
-	states.emplace_back(new Run());//走り
+	states.emplace_back(new Idle(parent));//待機
+	states.emplace_back(new Run(parent));//走り
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -74,13 +74,13 @@ void Player::ChangeState(std::string nextStateName)
 			currentState = state;//ステートの変更
 			currentState->Enter();//ステート遷移時の処理
 			changeState = true;
-			OutputDebugLog(nextStateName + "ステートに遷移しました。");
+			OutputDebugLog(nextStateName + "ステートに遷移しました。\n");
 			break;
 		}
 	}
 
 	if (!changeState)
 	{
-		OutputDebugLog(nextStateName + "という名前のステートは存在しません。");
+		OutputDebugLog(nextStateName + "という名前のステートは存在しません。\n");
 	}
 }

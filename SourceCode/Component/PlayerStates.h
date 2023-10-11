@@ -1,5 +1,7 @@
 #pragma once
 
+class GameObject;
+
 //プレイヤーの状態
 namespace PlayerState
 {
@@ -24,6 +26,8 @@ namespace PlayerState
 
 	protected:
 		std::string name = "";//ステートの名前
+
+		GameObject* parent = nullptr;
 	};
 
 	//待機
@@ -31,6 +35,7 @@ namespace PlayerState
 	{
 	public:
 		Idle();
+		Idle(GameObject* parent);
 		~Idle() = default;
 
 		//ステート遷移時の処理
@@ -48,6 +53,7 @@ namespace PlayerState
 	{
 	public:
 		Run();
+		Run(GameObject* parent);
 		~Run() = default;
 
 		//ステート遷移時の処理
