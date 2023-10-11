@@ -168,7 +168,7 @@ bool Framework::Initialize()
 	// 
 	//****************************************************************
 	SceneManager::Instance().Initialize();
-	SceneManager::Instance().ChangeScene(new SceneTitle);
+	SceneManager::Instance().ChangeScene(new SceneTest);
 
 
 	return true;

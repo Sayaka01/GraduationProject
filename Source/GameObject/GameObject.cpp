@@ -120,6 +120,7 @@ void GameObject::ClearComponent()
 		{
 			components.erase(it);
 		}
+		component->Finalize();
 		delete component;
 	}
 
