@@ -19,6 +19,8 @@ public:
 	virtual void Update(){}
 	//•`‰æ
 	virtual void Draw(){}
+	//I—¹ˆ—
+	virtual void Finalize(){}
 	//ImGui
 	virtual void DebugGui(){}
 
