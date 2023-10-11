@@ -53,7 +53,9 @@ private:
 	//選択中のメニュータイプ
 	short selectMenuType = MenuTextString::StartGame_mst;
 	//選択肢ボタンの現在の回転量
-	float currentSelectDegree = 0.0f;
+	float currentSelectDegree = -40;
+	float currentUISelectDegree = -40;
+
 	//回転させるそれぞれの最大値
 	float targetMenuDegreeList[3] = { 0,-40,-80 };
 

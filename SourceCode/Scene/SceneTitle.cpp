@@ -14,7 +14,7 @@
 
 #include "System/easing.h"
 
-//#include "System/Common.h"
+#include "System/Common.h"
 
 #include <magic_enum.hpp>
 
@@ -39,9 +39,11 @@ void SceneTitle::Initialize()
 	titleLogo->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
 	menuBack = std::make_unique<GameObject>("menuBack");
 	menuBack->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/circleGear.png"));
-	menuBack->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+	menuBack->GetComponent<SpriteRenderer>()->pos = { -10,500 };
+	menuBack->GetComponent<SpriteRenderer>()->scale = { 2.5f,2.5f };
+	menuBack->GetComponent<SpriteRenderer>()->pivot = menuBack->GetComponent<SpriteRenderer>()->GetSpriteSize()* DirectX::XMFLOAT2(0.5f,0.5f);
+	menuBack->GetComponent<SpriteRenderer>()->color = { 1,1,1,0.5f };
 
-	currentSelectDegree = -40;
 	menuRadius = { 400,300 };
 	circlePivot = { -250, 400 };
 	float spacing = 0.0f;//âÊëúìØémÇÃä‘äu
@@ -59,6 +61,7 @@ void SceneTitle::Finalize()
 		textes.second->Finalize();
 	}
 	titleLogo->Finalize();
+	menuBack->Finalize();
 }
 
 void SceneTitle::Update()
@@ -119,13 +122,15 @@ void SceneTitle::Update()
 	{
 	case OperateType::None:
 		currentSelectDegree = targetMenuDegreeList[selectMenuType];
+		currentUISelectDegree = targetMenuDegreeList[selectMenuType];
 		break;
 	case OperateType::Up:
-		uiTime += deltaTime ;//åoâﬂéûä‘
+		uiTime += deltaTime;//åoâﬂéûä‘
 		currentSelectDegree = oldTarget;
+		currentUISelectDegree = oldTarget;
 		//BounceÇÃÇÊÇÈïœâªó Ç™ï‘Ç¡ÇƒÇ≠ÇÈÇΩÇﬂÇ«Ç±Ç©ÇÁÇ«ÇÍÇæÇØïœâªÇ∑ÇÈÇ©
-		currentSelectDegree += easing::Elastic::easeOut
-		(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentSelectDegree, changeMaxTime);
+		currentSelectDegree -= easing::Quad::easeOut(uiTime, 0, currentSelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
+		currentUISelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentUISelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
 
 		if (uiTime > changeMaxTime)
 			operateType = OperateType::None;
@@ -133,9 +138,10 @@ void SceneTitle::Update()
 	case OperateType::Down:
 		uiTime += deltaTime;//åoâﬂéûä‘
 		currentSelectDegree = oldTarget;
+		currentUISelectDegree = oldTarget;
 		//BounceÇÃÇÊÇÈïœâªó Ç™ï‘Ç¡ÇƒÇ≠ÇÈÇΩÇﬂÇ«Ç±Ç©ÇÁÇ«ÇÍÇæÇØïœâªÇ∑ÇÈÇ©
-		currentSelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentSelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
-
+		currentSelectDegree += easing::Quad::easeOut(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentSelectDegree, changeMaxTime);
+		currentUISelectDegree += easing::Elastic::easeOut(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentUISelectDegree, changeMaxTime);
 		if (uiTime > changeMaxTime)
 			operateType = OperateType::None;
 		break;
@@ -146,6 +152,8 @@ void SceneTitle::Update()
 	menuText[menuNameList[(int)MenuTextString::StartGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 40,currentSelectDegree + 40 }, menuRadius);
 	menuText[menuNameList[(int)MenuTextString::FinishGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 80,currentSelectDegree + 80 }, menuRadius);
 
+	menuBack->GetComponent<SpriteRenderer>()->degree = currentUISelectDegree +40;
+	menuBack->Update();
 
 #ifdef USE_IMGUI
 	ImGui::Begin("title debug ui");
@@ -158,11 +166,13 @@ void SceneTitle::Update()
 
 void SceneTitle::Draw()
 {
+	menuBack->Draw();
 	for (auto& textes : menuText)
 	{
 		textes.second->Draw();
 	}
 	titleLogo->Draw();
+
 }
 
 //â~èÛÇ…ìÆÇ©Ç∑
