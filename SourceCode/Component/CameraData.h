@@ -74,7 +74,7 @@ private:
 	float range = 30.0f;
 
 	//modelを追尾するときのmodelの原点からの補正値
-	DirectX::XMFLOAT3 targetCorrection = { 0.0f,12.0f, 0.0f };
+	DirectX::XMFLOAT3 targetCorrection = { 0.0f,10.0f, 0.0f };
 	
 
 	//カメラシェイク

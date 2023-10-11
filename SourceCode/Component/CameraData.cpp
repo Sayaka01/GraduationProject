@@ -116,8 +116,8 @@ void CameraData::UpdateBuffer(const DirectX::XMFLOAT3 pos)
 void CameraData::DebugGui()
 {
 	ImGui::DragFloat("range", &range, 0.1f);
-	//ImGui::DragFloat3("pos", &eye.x, 0.01f);
 	ImGui::DragFloat3("target", &target.x, 0.01f);
+	ImGui::DragFloat3("targetCorrection", &targetCorrection.x, 0.01f);
 	ImGui::DragFloat3("angle", &angle.x, 0.01f);
 	ImGui::DragFloat3("up", &up.x, 0.01f);
 	ImGui::DragFloat3("front", &front.x, 0.01f);

@@ -84,11 +84,6 @@ void GameObject::DebugGui()
 		if (component->GetEnable())
 			component->DebugGui();
 	}
-	//子オブジェクトのデバッグ描画
-	for (GameObject* childObj : children)
-	{
-		childObj->DebugGui();
-	}
 	ImGui::End();
 #endif
 }
