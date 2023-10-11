@@ -10,7 +10,11 @@
 
 #include "System/SystemManager.h"
 
+#include "Scene/SceneGame.h"
+
 #include "System/easing.h"
+
+//#include "System/Common.h"
 
 #include <magic_enum.hpp>
 
@@ -18,21 +22,24 @@ void SceneTitle::Initialize()
 {
 	for (int i = 0; i < (int)MenuTextString::Max_mst; i++)
 	{
-		menuTextName[i] = std::to_string(i) + magic_enum::enum_name((MenuTextString)i).data();
+		menuNameList[i] = std::to_string(i) + magic_enum::enum_name((MenuTextString)i).data();
 	}
 	//「TutorialPlay」画像の読み込み
-	menuText.emplace(menuTextName[(int)MenuTextString::Tutorial_mst],new GameObject("tutorialPlay"));
-	menuText[menuTextName[(int)MenuTextString::Tutorial_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_TutorialPlay.png"));
+	menuText.emplace(menuNameList[(int)MenuTextString::Tutorial_mst],new GameObject("tutorialPlay"));
+	menuText[menuNameList[(int)MenuTextString::Tutorial_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_TutorialPlay.png"));
 	//「StartGame」画像の読み込み
-	menuText.emplace(menuTextName[(int)MenuTextString::StartGame_mst],new GameObject("startGame"));
-	menuText[menuTextName[(int)MenuTextString::StartGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_StartGame.png"));
+	menuText.emplace(menuNameList[(int)MenuTextString::StartGame_mst],new GameObject("startGame"));
+	menuText[menuNameList[(int)MenuTextString::StartGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_StartGame.png"));
 	//「FinishGame」画像の読み込み
-	menuText.emplace(menuTextName[(int)MenuTextString::FinishGame_mst],new GameObject("finishGame"));
-	menuText[menuTextName[(int)MenuTextString::FinishGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_FinishGame.png"));
+	menuText.emplace(menuNameList[(int)MenuTextString::FinishGame_mst],new GameObject("finishGame"));
+	menuText[menuNameList[(int)MenuTextString::FinishGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_FinishGame.png"));
 
 	titleLogo = std::make_unique<GameObject>("TitleLogo");
 	titleLogo->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/title_logo.png"));
 	titleLogo->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+	menuBack = std::make_unique<GameObject>("menuBack");
+	menuBack->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/circleGear.png"));
+	menuBack->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
 
 	currentSelectDegree = -40;
 	menuRadius = { 400,300 };
@@ -56,8 +63,6 @@ void SceneTitle::Finalize()
 
 void SceneTitle::Update()
 {
-	DirectX::XMFLOAT2 rePoint = { 0,0 };
-	static int operateType = -1;
 	//1フレームの経過時間を取得
 	float deltaTime = SystemManager::Instance().GetElapsedTime();
 	GamePad& gamepad = SystemManager::Instance().GetGamePad();
@@ -67,82 +72,83 @@ void SceneTitle::Update()
 	//変化時間
 	float changeMaxTime = 0.3f;
 
-	if (gamepad.GetButtonDown() & GamePad::BTN_UP)
+	//上ボタンを押したとき
+	if ((gamepad.GetButtonUp() & GamePad::BTN_UP) )
+		//|| (gamepad.GetAxisLY() >0))
 	{
 		if ((int)selectMenuType > 0)
 		{
+			oldTarget = targetMenuDegreeList[selectMenuType];
 			selectMenuType -= 1;
-			operateType = 0;
+			operateType = OperateType::Up;
 			uiTime = 0;
-			oldTarget = targetSelectDegree;
 		}
 	}
-	if (gamepad.GetButtonDown() & GamePad::BTN_DOWN)
+	//下ボタンを押したとき
+	if ((gamepad.GetButtonUp() & GamePad::BTN_DOWN))
+		//|| (gamepad.GetAxisLY() <0))
 	{
 		if ((int)selectMenuType < (int)MenuTextString::Max_mst-1)
 		{
+			oldTarget = targetMenuDegreeList[selectMenuType];
 			selectMenuType += 1;
-			operateType = 1;
+			operateType = OperateType::Down;
 			uiTime = 0;
-			oldTarget = targetSelectDegree;
 		}
 	}
 
-	switch (selectMenuType)
+	//決定ボタンを押したとき
+	if (gamepad.GetButtonUp() & GamePad::BTN_A)
 	{
-	case 0://"Tutorial Play"のとき
-		targetSelectDegree = 0;
-		//SceneManager::Instance().ChangeScene(new SceneGame);
-		break;
-	case 1://"Start Game"のとき
-		targetSelectDegree = -40;
-		//SceneManager::Instance().ChangeScene(new SceneGame);
-		break;
-	case 2://"Finish Game"のとき
-		targetSelectDegree = -80;
-		//PostQuitMessage(0);
-		break;
+		switch (selectMenuType)
+		{
+		case MenuTextString::Tutorial_mst://"Tutorial Play"のとき
+			SceneManager::Instance().ChangeScene(new SceneGame);
+			return;
+		case MenuTextString::StartGame_mst://"Start Game"のとき
+			SceneManager::Instance().ChangeScene(new SceneGame);
+			return;
+		case MenuTextString::FinishGame_mst://"Finish Game"のとき
+			PostQuitMessage(0);
+			return;
+		}
 	}
+
 
 	switch (operateType)
 	{
-	case -1:
-		currentSelectDegree = targetSelectDegree;
+	case OperateType::None:
+		currentSelectDegree = targetMenuDegreeList[selectMenuType];
 		break;
-	case 0:
+	case OperateType::Up:
 		uiTime += deltaTime ;//経過時間
 		currentSelectDegree = oldTarget;
 		//Bounceのよる変化量が返ってくるためどこからどれだけ変化するか
-		currentSelectDegree += easing::Elastic::easeOut(uiTime, 0, targetSelectDegree - currentSelectDegree, changeMaxTime);
+		currentSelectDegree += easing::Elastic::easeOut
+		(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentSelectDegree, changeMaxTime);
 
-		//currentSelectDegree = currentSelectDegree + deltaTime * rotationSpeed;
 		if (uiTime > changeMaxTime)
-			operateType = -1;
+			operateType = OperateType::None;
 		break;
-	case 1:
+	case OperateType::Down:
 		uiTime += deltaTime;//経過時間
 		currentSelectDegree = oldTarget;
 		//Bounceのよる変化量が返ってくるためどこからどれだけ変化するか
-		currentSelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentSelectDegree - targetSelectDegree, changeMaxTime);
+		currentSelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentSelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
 
-		//currentSelectDegree = currentSelectDegree + deltaTime * rotationSpeed;
 		if (uiTime > changeMaxTime)
-			operateType = -1;
-		//currentSelectDegree = currentSelectDegree - deltaTime * rotationSpeed;
-		//if (currentSelectDegree < targetSelectDegree)
-		//	operateType = -1;
+			operateType = OperateType::None;
 		break;
 	}
 
 	//UIの移動
-	menuText[menuTextName[(int)MenuTextString::Tutorial_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 0,currentSelectDegree + 0 }, menuRadius);
-	menuText[menuTextName[(int)MenuTextString::StartGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 40,currentSelectDegree + 40 }, menuRadius);
-	menuText[menuTextName[(int)MenuTextString::FinishGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 80,currentSelectDegree + 80 }, menuRadius);
+	menuText[menuNameList[(int)MenuTextString::Tutorial_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 0,currentSelectDegree + 0 }, menuRadius);
+	menuText[menuNameList[(int)MenuTextString::StartGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 40,currentSelectDegree + 40 }, menuRadius);
+	menuText[menuNameList[(int)MenuTextString::FinishGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 80,currentSelectDegree + 80 }, menuRadius);
 
 
 #ifdef USE_IMGUI
 	ImGui::Begin("title debug ui");
-	ImGui::InputInt("operateType", &operateType);
 	ImGui::InputFloat("currentSelectDegree", &currentSelectDegree);
 	ImGui::InputFloat2("circlePivot", &circlePivot.x);
 	ImGui::InputFloat2("menuRadius", &menuRadius.x);

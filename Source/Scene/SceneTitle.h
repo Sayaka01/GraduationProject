@@ -24,7 +24,7 @@ private:
 	DirectX::XMFLOAT2 moveRoundFloat2(DirectX::XMFLOAT2 rePoint, DirectX::XMFLOAT2 degree, DirectX::XMFLOAT2 radius);
 
 	//選択肢ボタンの名前
-	enum MenuTextString:int
+	enum MenuTextString:short
 	{
 		Tutorial_mst = 0,
 		StartGame_mst,
@@ -32,20 +32,39 @@ private:
 		Max_mst,//最大数
 	};
 
+	enum class OperateType:short
+	{
+		None = -1,
+		Up,
+		Down,
+	};
+
+	//タイトルロゴ画像
 	std::unique_ptr<GameObject> titleLogo;
+	std::unique_ptr<GameObject> menuBack;
 
-	//選択肢ボタン画像のリスト
+
+
+	//選択肢ボタン画像の配列
 	std::map<std::string,std::unique_ptr<GameObject>> menuText;
-	std::string menuTextName[MenuTextString::Max_mst];//画像の名前リスト(String型)
+	//画像の名前リスト(String型)
+	std::string menuNameList[MenuTextString::Max_mst];
 
-	int selectMenuType = MenuTextString::StartGame_mst;
-	float currentSelectDegree = 0.0f;//選択肢ボタンの現在の回転量
-	float targetSelectDegree = 0.0f;//選択肢ボタンの回す回転量
+	//選択中のメニュータイプ
+	short selectMenuType = MenuTextString::StartGame_mst;
+	//選択肢ボタンの現在の回転量
+	float currentSelectDegree = 0.0f;
+	//回転させるそれぞれの最大値
+	float targetMenuDegreeList[3] = { 0,-40,-80 };
 
 	//メニューテキストがまわる半径サイズ
 	DirectX::XMFLOAT2 menuRadius = { 0,0 };
+	//回転の中心点
 	DirectX::XMFLOAT2 circlePivot = { 0,0 };
 
+	//イージング用のUI経過時間
 	float uiTime = 0.0f;
+
+	OperateType operateType = OperateType::None;
 
 };
