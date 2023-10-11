@@ -68,27 +68,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Scene\SceneLoading.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\SceneManager.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\SceneTest.cpp">
-      <Filter>Sources\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameObject\GameObject.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Framework.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Main.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Stdafx.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
     <ClCompile Include="Lib\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -113,140 +92,122 @@
     <ClCompile Include="Lib\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Transform.cpp">
-      <Filter>Sources\Component\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\Camera.cpp">
-      <Filter>Sources\Component\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameObject\CameraController.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Communication\client.cpp">
+    <ClCompile Include="SourceCode\Communication\client.cpp">
       <Filter>Sources\Communicate\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\client_multicast.cpp">
+    <ClCompile Include="SourceCode\Communication\client_multicast.cpp">
       <Filter>Sources\Communicate\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\client_server_structure.cpp">
+    <ClCompile Include="SourceCode\Communication\client_server_structure.cpp">
       <Filter>Sources\Communicate\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\client_tcp.cpp">
+    <ClCompile Include="SourceCode\Communication\client_tcp.cpp">
       <Filter>Sources\Communicate\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\client_udp.cpp">
+    <ClCompile Include="SourceCode\Communication\client_udp.cpp">
       <Filter>Sources\Communicate\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\server.cpp">
+    <ClCompile Include="SourceCode\Communication\server.cpp">
       <Filter>Sources\Communicate\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\server_multicast.cpp">
+    <ClCompile Include="SourceCode\Communication\server_multicast.cpp">
       <Filter>Sources\Communicate\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\server_tcp.cpp">
+    <ClCompile Include="SourceCode\Communication\server_tcp.cpp">
       <Filter>Sources\Communicate\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\server_udp.cpp">
+    <ClCompile Include="SourceCode\Communication\server_udp.cpp">
       <Filter>Sources\Communicate\Server</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Communication\p2p_structure.cpp">
+    <ClCompile Include="SourceCode\Communication\p2p_structure.cpp">
       <Filter>Sources\Communicate</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Console.cpp">
+    <ClCompile Include="SourceCode\Stdafx.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\SceneCommunicate.cpp">
+    <ClCompile Include="SourceCode\Scene\SceneCommunicate.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ModelRenderer.cpp">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\SpriteRenderer.cpp">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\SpriteData.cpp">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\CreateShader.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\System\Texture.cpp">
-      <Filter>Sources\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\SceneTitle.cpp">
+    <ClCompile Include="SourceCode\Scene\SceneGame.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Component.cpp">
+    <ClCompile Include="SourceCode\Scene\SceneLoading.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scene\SceneManager.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scene\SceneTest.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Scene\SceneTitle.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Console.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\CreateShader.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Framework.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\GamePad.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Main.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\ResourceManager.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\SystemManager.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Texture.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameObject\CameraController.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameObject\GameObject.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Component.cpp">
       <Filter>Sources\Component</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\ModelData.cpp">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Component\CameraData.cpp">
+    <ClCompile Include="SourceCode\Component\Camera.cpp">
       <Filter>Sources\Component\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\ResourceManager.cpp">
-      <Filter>Sources\System</Filter>
+    <ClCompile Include="SourceCode\Component\CameraData.cpp">
+      <Filter>Sources\Component\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\SystemManager.cpp">
-      <Filter>Sources\System</Filter>
+    <ClCompile Include="SourceCode\Component\Player.cpp">
+      <Filter>Sources\Component\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\GamePad.cpp">
-      <Filter>Sources\System</Filter>
+    <ClCompile Include="SourceCode\Component\PlayerStates.cpp">
+      <Filter>Sources\Component\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\DirectionLight.cpp">
+    <ClCompile Include="SourceCode\Component\DirectionLight.cpp">
       <Filter>Sources\Component\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\Player.cpp">
-      <Filter>Sources\Component\Character</Filter>
+    <ClCompile Include="SourceCode\Component\ModelData.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Component\PlayerStates.cpp">
-      <Filter>Sources\Component\Character</Filter>
+    <ClCompile Include="SourceCode\Component\ModelRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\SceneGame.cpp">
-      <Filter>Sources\Scene</Filter>
+    <ClCompile Include="SourceCode\Component\SpriteData.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\SpriteRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Transform.cpp">
+      <Filter>Sources\Component\Transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Scene\Scene.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneLoading.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneManager.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneTest.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GameObject\GameObject.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\Component.h">
-      <Filter>Sources\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Common.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Framework.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\HighResolutionTimer.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Misc.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\PoolAllocator.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\UserFunction.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Stdafx.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
     <ClInclude Include="Lib\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -271,104 +232,143 @@
     <ClInclude Include="Lib\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Transform.h">
-      <Filter>Sources\Component\Transform</Filter>
+    <ClInclude Include="SourceCode\Communication\client.h">
+      <Filter>Sources\Communicate\Client</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Camera.h">
-      <Filter>Sources\Component\Camera</Filter>
+    <ClInclude Include="SourceCode\Communication\client_multicast.h">
+      <Filter>Sources\Communicate\Client</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GameObject\CameraController.h">
+    <ClInclude Include="SourceCode\Communication\client_server_structure.h">
+      <Filter>Sources\Communicate\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\client_tcp.h">
+      <Filter>Sources\Communicate\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\client_udp.h">
+      <Filter>Sources\Communicate\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\server.h">
+      <Filter>Sources\Communicate\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\server_multicast.h">
+      <Filter>Sources\Communicate\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\server_tcp.h">
+      <Filter>Sources\Communicate\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\server_udp.h">
+      <Filter>Sources\Communicate\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\network_function.h">
+      <Filter>Sources\Communicate</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Communication\p2p_structure.h">
+      <Filter>Sources\Communicate</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Stdafx.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\Scene.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneCommunicate.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneGame.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneLoading.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneManager.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneTest.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Scene\SceneTitle.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Common.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Console.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\ConstantBuffer.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\CreateShader.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\easing.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Framework.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\GamePad.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\HighResolutionTimer.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Misc.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\PoolAllocator.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\ResourceManager.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\SystemManager.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Texture.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\UserFunction.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameObject\CameraController.h">
       <Filter>Sources\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\ConstantBuffer.h">
-      <Filter>Sources\System</Filter>
+    <ClInclude Include="SourceCode\GameObject\GameObject.h">
+      <Filter>Sources\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\client.h">
-      <Filter>Sources\Communicate\Client</Filter>
+    <ClInclude Include="SourceCode\Component\Component.h">
+      <Filter>Sources\Component</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Communication\client_multicast.h">
-      <Filter>Sources\Communicate\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\client_server_structure.h">
-      <Filter>Sources\Communicate\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\client_tcp.h">
-      <Filter>Sources\Communicate\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\client_udp.h">
-      <Filter>Sources\Communicate\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\server.h">
-      <Filter>Sources\Communicate\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\server_multicast.h">
-      <Filter>Sources\Communicate\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\server_tcp.h">
-      <Filter>Sources\Communicate\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\server_udp.h">
-      <Filter>Sources\Communicate\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\network_function.h">
-      <Filter>Sources\Communicate</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Communication\p2p_structure.h">
-      <Filter>Sources\Communicate</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Console.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneCommunicate.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ModelRenderer.h">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\SpriteRenderer.h">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\SpriteData.h">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\CreateShader.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\Texture.h">
-      <Filter>Sources\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\SceneTitle.h">
-      <Filter>Sources\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\ModelData.h">
-      <Filter>Sources\Component\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Component\CameraData.h">
+    <ClInclude Include="SourceCode\Component\Camera.h">
       <Filter>Sources\Component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\ResourceManager.h">
-      <Filter>Sources\System</Filter>
+    <ClInclude Include="SourceCode\Component\CameraData.h">
+      <Filter>Sources\Component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\SystemManager.h">
-      <Filter>Sources\System</Filter>
+    <ClInclude Include="SourceCode\Component\Player.h">
+      <Filter>Sources\Component\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\GamePad.h">
-      <Filter>Sources\System</Filter>
+    <ClInclude Include="SourceCode\Component\PlayerStates.h">
+      <Filter>Sources\Component\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\DirectionLight.h">
+    <ClInclude Include="SourceCode\Component\DirectionLight.h">
       <Filter>Sources\Component\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\Player.h">
-      <Filter>Sources\Component\Character</Filter>
+    <ClInclude Include="SourceCode\Component\ModelData.h">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Component\PlayerStates.h">
-      <Filter>Sources\Component\Character</Filter>
+    <ClInclude Include="SourceCode\Component\ModelRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\SceneGame.h">
-      <Filter>Sources\Scene</Filter>
+    <ClInclude Include="SourceCode\Component\SpriteData.h">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\easing.h">
-      <Filter>Sources\System</Filter>
+    <ClInclude Include="SourceCode\Component\SpriteRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\Transform.h">
+      <Filter>Sources\Component\Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

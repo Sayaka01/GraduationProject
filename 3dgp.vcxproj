@@ -120,6 +120,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>.\Lib\DirectXTK-master\Inc;.\Lib\FBX SDK\2020.2\include;.\Lib\cereal-master\include;.\Lib\Effekseer162b\include;.\Source;.\Lib\magic_enum-master\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\Lib\DirectXTK-master\Inc;.\Lib\FBX SDK\2020.2\include;.\Lib\cereal-master\include;.\Lib\Effekseer162b\include;.\SourceCode;.\Lib\magic_enum-master\include;%(AdditionalLibraryDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>Stdafx.h</PrecompiledHeaderFile>
@@ -227,47 +228,47 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Communication\client.cpp" />
-    <ClCompile Include="Source\Communication\client_multicast.cpp" />
-    <ClCompile Include="Source\Communication\client_server_structure.cpp" />
-    <ClCompile Include="Source\Communication\client_tcp.cpp" />
-    <ClCompile Include="Source\Communication\client_udp.cpp" />
-    <ClCompile Include="Source\Communication\p2p_structure.cpp" />
-    <ClCompile Include="Source\Communication\server.cpp" />
-    <ClCompile Include="Source\Communication\server_multicast.cpp" />
-    <ClCompile Include="Source\Communication\server_tcp.cpp" />
-    <ClCompile Include="Source\Communication\server_udp.cpp" />
-    <ClCompile Include="Source\Component\Camera.cpp" />
-    <ClCompile Include="Source\Component\CameraData.cpp" />
-    <ClCompile Include="Source\Component\Component.cpp" />
-    <ClCompile Include="Source\Component\DirectionLight.cpp" />
-    <ClCompile Include="Source\Component\ModelData.cpp" />
-    <ClCompile Include="Source\Component\ModelRenderer.cpp" />
-    <ClCompile Include="Source\Component\Player.cpp" />
-    <ClCompile Include="Source\Component\PlayerStates.cpp" />
-    <ClCompile Include="Source\Component\SpriteData.cpp" />
-    <ClCompile Include="Source\Component\SpriteRenderer.cpp" />
-    <ClCompile Include="Source\Component\Transform.cpp" />
-    <ClCompile Include="Source\GameObject\CameraController.cpp" />
-    <ClCompile Include="Source\GameObject\GameObject.cpp" />
-    <ClCompile Include="Source\Scene\SceneCommunicate.cpp" />
-    <ClCompile Include="Source\Scene\SceneGame.cpp" />
-    <ClCompile Include="Source\Scene\SceneLoading.cpp" />
-    <ClCompile Include="Source\Scene\SceneManager.cpp" />
-    <ClCompile Include="Source\Scene\SceneTest.cpp" />
-    <ClCompile Include="Source\Scene\SceneTitle.cpp" />
-    <ClCompile Include="Source\Stdafx.cpp">
+    <ClCompile Include="SourceCode\Communication\client.cpp" />
+    <ClCompile Include="SourceCode\Communication\client_multicast.cpp" />
+    <ClCompile Include="SourceCode\Communication\client_server_structure.cpp" />
+    <ClCompile Include="SourceCode\Communication\client_tcp.cpp" />
+    <ClCompile Include="SourceCode\Communication\client_udp.cpp" />
+    <ClCompile Include="SourceCode\Communication\p2p_structure.cpp" />
+    <ClCompile Include="SourceCode\Communication\server.cpp" />
+    <ClCompile Include="SourceCode\Communication\server_multicast.cpp" />
+    <ClCompile Include="SourceCode\Communication\server_tcp.cpp" />
+    <ClCompile Include="SourceCode\Communication\server_udp.cpp" />
+    <ClCompile Include="SourceCode\Component\Camera.cpp" />
+    <ClCompile Include="SourceCode\Component\CameraData.cpp" />
+    <ClCompile Include="SourceCode\Component\Component.cpp" />
+    <ClCompile Include="SourceCode\Component\DirectionLight.cpp" />
+    <ClCompile Include="SourceCode\Component\ModelData.cpp" />
+    <ClCompile Include="SourceCode\Component\ModelRenderer.cpp" />
+    <ClCompile Include="SourceCode\Component\Player.cpp" />
+    <ClCompile Include="SourceCode\Component\PlayerStates.cpp" />
+    <ClCompile Include="SourceCode\Component\SpriteData.cpp" />
+    <ClCompile Include="SourceCode\Component\SpriteRenderer.cpp" />
+    <ClCompile Include="SourceCode\Component\Transform.cpp" />
+    <ClCompile Include="SourceCode\GameObject\CameraController.cpp" />
+    <ClCompile Include="SourceCode\GameObject\GameObject.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneCommunicate.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneGame.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneLoading.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneManager.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneTest.cpp" />
+    <ClCompile Include="SourceCode\Scene\SceneTitle.cpp" />
+    <ClCompile Include="SourceCode\Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\System\Console.cpp" />
-    <ClCompile Include="Source\System\CreateShader.cpp" />
-    <ClCompile Include="Source\System\Framework.cpp" />
-    <ClCompile Include="Source\System\GamePad.cpp" />
-    <ClCompile Include="Source\System\Main.cpp" />
-    <ClCompile Include="Source\System\ResourceManager.cpp" />
-    <ClCompile Include="Source\System\SystemManager.cpp" />
-    <ClCompile Include="Source\System\Texture.cpp" />
+    <ClCompile Include="SourceCode\System\Console.cpp" />
+    <ClCompile Include="SourceCode\System\CreateShader.cpp" />
+    <ClCompile Include="SourceCode\System\Framework.cpp" />
+    <ClCompile Include="SourceCode\System\GamePad.cpp" />
+    <ClCompile Include="SourceCode\System\Main.cpp" />
+    <ClCompile Include="SourceCode\System\ResourceManager.cpp" />
+    <ClCompile Include="SourceCode\System\SystemManager.cpp" />
+    <ClCompile Include="SourceCode\System\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\imgui\imconfig.h" />
@@ -278,52 +279,52 @@
     <ClInclude Include="Lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="Lib\imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\imgui\imstb_truetype.h" />
-    <ClInclude Include="Source\Communication\client.h" />
-    <ClInclude Include="Source\Communication\client_multicast.h" />
-    <ClInclude Include="Source\Communication\client_server_structure.h" />
-    <ClInclude Include="Source\Communication\client_tcp.h" />
-    <ClInclude Include="Source\Communication\client_udp.h" />
-    <ClInclude Include="Source\Communication\network_function.h" />
-    <ClInclude Include="Source\Communication\p2p_structure.h" />
-    <ClInclude Include="Source\Communication\server.h" />
-    <ClInclude Include="Source\Communication\server_multicast.h" />
-    <ClInclude Include="Source\Communication\server_tcp.h" />
-    <ClInclude Include="Source\Communication\server_udp.h" />
-    <ClInclude Include="Source\Component\Camera.h" />
-    <ClInclude Include="Source\Component\CameraData.h" />
-    <ClInclude Include="Source\Component\Component.h" />
-    <ClInclude Include="Source\Component\DirectionLight.h" />
-    <ClInclude Include="Source\Component\ModelData.h" />
-    <ClInclude Include="Source\Component\ModelRenderer.h" />
-    <ClInclude Include="Source\Component\Player.h" />
-    <ClInclude Include="Source\Component\PlayerStates.h" />
-    <ClInclude Include="Source\Component\SpriteData.h" />
-    <ClInclude Include="Source\Component\SpriteRenderer.h" />
-    <ClInclude Include="Source\Component\Transform.h" />
-    <ClInclude Include="Source\GameObject\CameraController.h" />
-    <ClInclude Include="Source\GameObject\GameObject.h" />
-    <ClInclude Include="Source\Scene\Scene.h" />
-    <ClInclude Include="Source\Scene\SceneCommunicate.h" />
-    <ClInclude Include="Source\Scene\SceneGame.h" />
-    <ClInclude Include="Source\Scene\SceneLoading.h" />
-    <ClInclude Include="Source\Scene\SceneManager.h" />
-    <ClInclude Include="Source\Scene\SceneTest.h" />
-    <ClInclude Include="Source\Scene\SceneTitle.h" />
-    <ClInclude Include="Source\Stdafx.h" />
-    <ClInclude Include="Source\System\Common.h" />
-    <ClInclude Include="Source\System\Console.h" />
-    <ClInclude Include="Source\System\ConstantBuffer.h" />
-    <ClInclude Include="Source\System\CreateShader.h" />
-    <ClInclude Include="Source\System\easing.h" />
-    <ClInclude Include="Source\System\Framework.h" />
-    <ClInclude Include="Source\System\GamePad.h" />
-    <ClInclude Include="Source\System\HighResolutionTimer.h" />
-    <ClInclude Include="Source\System\Misc.h" />
-    <ClInclude Include="Source\System\PoolAllocator.h" />
-    <ClInclude Include="Source\System\ResourceManager.h" />
-    <ClInclude Include="Source\System\SystemManager.h" />
-    <ClInclude Include="Source\System\Texture.h" />
-    <ClInclude Include="Source\System\UserFunction.h" />
+    <ClInclude Include="SourceCode\Communication\client.h" />
+    <ClInclude Include="SourceCode\Communication\client_multicast.h" />
+    <ClInclude Include="SourceCode\Communication\client_server_structure.h" />
+    <ClInclude Include="SourceCode\Communication\client_tcp.h" />
+    <ClInclude Include="SourceCode\Communication\client_udp.h" />
+    <ClInclude Include="SourceCode\Communication\network_function.h" />
+    <ClInclude Include="SourceCode\Communication\p2p_structure.h" />
+    <ClInclude Include="SourceCode\Communication\server.h" />
+    <ClInclude Include="SourceCode\Communication\server_multicast.h" />
+    <ClInclude Include="SourceCode\Communication\server_tcp.h" />
+    <ClInclude Include="SourceCode\Communication\server_udp.h" />
+    <ClInclude Include="SourceCode\Component\Camera.h" />
+    <ClInclude Include="SourceCode\Component\CameraData.h" />
+    <ClInclude Include="SourceCode\Component\Component.h" />
+    <ClInclude Include="SourceCode\Component\DirectionLight.h" />
+    <ClInclude Include="SourceCode\Component\ModelData.h" />
+    <ClInclude Include="SourceCode\Component\ModelRenderer.h" />
+    <ClInclude Include="SourceCode\Component\Player.h" />
+    <ClInclude Include="SourceCode\Component\PlayerStates.h" />
+    <ClInclude Include="SourceCode\Component\SpriteData.h" />
+    <ClInclude Include="SourceCode\Component\SpriteRenderer.h" />
+    <ClInclude Include="SourceCode\Component\Transform.h" />
+    <ClInclude Include="SourceCode\GameObject\CameraController.h" />
+    <ClInclude Include="SourceCode\GameObject\GameObject.h" />
+    <ClInclude Include="SourceCode\Scene\Scene.h" />
+    <ClInclude Include="SourceCode\Scene\SceneCommunicate.h" />
+    <ClInclude Include="SourceCode\Scene\SceneGame.h" />
+    <ClInclude Include="SourceCode\Scene\SceneLoading.h" />
+    <ClInclude Include="SourceCode\Scene\SceneManager.h" />
+    <ClInclude Include="SourceCode\Scene\SceneTest.h" />
+    <ClInclude Include="SourceCode\Scene\SceneTitle.h" />
+    <ClInclude Include="SourceCode\Stdafx.h" />
+    <ClInclude Include="SourceCode\System\Common.h" />
+    <ClInclude Include="SourceCode\System\Console.h" />
+    <ClInclude Include="SourceCode\System\ConstantBuffer.h" />
+    <ClInclude Include="SourceCode\System\CreateShader.h" />
+    <ClInclude Include="SourceCode\System\easing.h" />
+    <ClInclude Include="SourceCode\System\Framework.h" />
+    <ClInclude Include="SourceCode\System\GamePad.h" />
+    <ClInclude Include="SourceCode\System\HighResolutionTimer.h" />
+    <ClInclude Include="SourceCode\System\Misc.h" />
+    <ClInclude Include="SourceCode\System\PoolAllocator.h" />
+    <ClInclude Include="SourceCode\System\ResourceManager.h" />
+    <ClInclude Include="SourceCode\System\SystemManager.h" />
+    <ClInclude Include="SourceCode\System\Texture.h" />
+    <ClInclude Include="SourceCode\System\UserFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL\DebugPrimitive_PS.hlsl">
