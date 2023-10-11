@@ -203,6 +203,9 @@
     <ClCompile Include="Source\Component\PlayerStates.cpp">
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\SceneGame.cpp">
+      <Filter>Sources\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Scene\Scene.h">
@@ -360,6 +363,12 @@
     </ClInclude>
     <ClInclude Include="Source\Component\PlayerStates.h">
       <Filter>Sources\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneGame.h">
+      <Filter>Sources\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\easing.h">
+      <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

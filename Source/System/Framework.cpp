@@ -168,7 +168,7 @@ bool Framework::Initialize()
 	// 
 	//****************************************************************
 	SceneManager::Instance().Initialize();
-	SceneManager::Instance().ChangeScene(new SceneTest);
+	SceneManager::Instance().ChangeScene(new SceneTitle);
 
 
 	return true;
@@ -201,7 +201,7 @@ void Framework::Draw()
 
 	HRESULT hr{ S_OK };
 
-	FLOAT color[]{ 0.3f, 0.6f, 1.0f, 1.0f };
+	FLOAT color[]{ 0.3f, 0.3f, 0.3f, 1.0f };
 	
 	dc->ClearRenderTargetView(renderTargetView.Get(), color);
 	dc->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
