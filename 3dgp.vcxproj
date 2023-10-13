@@ -227,6 +227,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SourceCode\AI\ActionDerived.cpp" />
+    <ClCompile Include="SourceCode\AI\BehaviorData.cpp" />
+    <ClCompile Include="SourceCode\AI\BehaviorTree.cpp" />
+    <ClCompile Include="SourceCode\AI\JudgmentDerived.cpp" />
+    <ClCompile Include="SourceCode\AI\NodeBase.cpp" />
     <ClCompile Include="SourceCode\Communication\client.cpp" />
     <ClCompile Include="SourceCode\Communication\client_multicast.cpp" />
     <ClCompile Include="SourceCode\Communication\client_server_structure.cpp" />
@@ -241,6 +246,7 @@
     <ClCompile Include="SourceCode\Component\CameraData.cpp" />
     <ClCompile Include="SourceCode\Component\Component.cpp" />
     <ClCompile Include="SourceCode\Component\DirectionLight.cpp" />
+    <ClCompile Include="SourceCode\Component\Enemy.cpp" />
     <ClCompile Include="SourceCode\Component\ModelData.cpp" />
     <ClCompile Include="SourceCode\Component\ModelRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\Player.cpp" />
@@ -278,6 +284,13 @@
     <ClInclude Include="Lib\imgui\imstb_rectpack.h" />
     <ClInclude Include="Lib\imgui\imstb_textedit.h" />
     <ClInclude Include="Lib\imgui\imstb_truetype.h" />
+    <ClInclude Include="SourceCode\AI\ActionBase.h" />
+    <ClInclude Include="SourceCode\AI\ActionDerived.h" />
+    <ClInclude Include="SourceCode\AI\BehaviorData.h" />
+    <ClInclude Include="SourceCode\AI\BehaviorTree.h" />
+    <ClInclude Include="SourceCode\AI\JudgementBase.h" />
+    <ClInclude Include="SourceCode\AI\JudgmentDerived.h" />
+    <ClInclude Include="SourceCode\AI\NodeBase.h" />
     <ClInclude Include="SourceCode\Communication\client.h" />
     <ClInclude Include="SourceCode\Communication\client_multicast.h" />
     <ClInclude Include="SourceCode\Communication\client_server_structure.h" />
@@ -293,6 +306,7 @@
     <ClInclude Include="SourceCode\Component\CameraData.h" />
     <ClInclude Include="SourceCode\Component\Component.h" />
     <ClInclude Include="SourceCode\Component\DirectionLight.h" />
+    <ClInclude Include="SourceCode\Component\Enemy.h" />
     <ClInclude Include="SourceCode\Component\ModelData.h" />
     <ClInclude Include="SourceCode\Component\ModelRenderer.h" />
     <ClInclude Include="SourceCode\Component\Player.h" />
