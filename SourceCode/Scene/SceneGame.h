@@ -20,9 +20,11 @@ public:
 
 private:
 	void PlayerInitialize();
+	void EnemyInitialize();
 
 	GameObject* objectManager = nullptr;
 	GameObject* player = nullptr;
+	GameObject* enemy = nullptr;
 	GameObject* lightObject = nullptr;
 	GameObject* stage = nullptr;
 	CameraController* cameraController = nullptr;

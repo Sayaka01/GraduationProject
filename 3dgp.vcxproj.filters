@@ -66,6 +66,9 @@
     <Filter Include="Sources\Component\Light">
       <UniqueIdentifier>{3c0cdf65-8b19-4f08-91a7-bf997aa23ede}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Component\AI">
+      <UniqueIdentifier>{47246b30-c3ac-4d1e-8190-5d0247185a3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lib\imgui\imgui.cpp">
@@ -205,6 +208,24 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Component\Transform.cpp">
       <Filter>Sources\Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Enemy.cpp">
+      <Filter>Sources\Component\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AI\ActionDerived.cpp">
+      <Filter>Sources\Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AI\BehaviorData.cpp">
+      <Filter>Sources\Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AI\BehaviorTree.cpp">
+      <Filter>Sources\Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AI\JudgmentDerived.cpp">
+      <Filter>Sources\Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AI\NodeBase.cpp">
+      <Filter>Sources\Component\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +390,30 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Component\Transform.h">
       <Filter>Sources\Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\Enemy.h">
+      <Filter>Sources\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\ActionBase.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\ActionDerived.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\BehaviorData.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\BehaviorTree.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\JudgementBase.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\JudgmentDerived.h">
+      <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AI\NodeBase.h">
+      <Filter>Sources\Component\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

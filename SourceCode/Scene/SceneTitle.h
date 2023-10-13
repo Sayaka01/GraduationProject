@@ -40,13 +40,13 @@ private:
 	};
 
 	//タイトルロゴ画像
-	std::unique_ptr<GameObject> titleLogo;
-	std::unique_ptr<GameObject> menuBack;
+	std::unique_ptr<GameObject> sprTitleLogo;
+	std::vector<std::unique_ptr<GameObject>> sprBackGears;
 
 
 
 	//選択肢ボタン画像の配列
-	std::map<std::string,std::unique_ptr<GameObject>> menuText;
+	std::map<std::string,std::unique_ptr<GameObject>> sprMenuText;
 	//画像の名前リスト(String型)
 	std::string menuNameList[MenuTextString::Max_mst];
 
