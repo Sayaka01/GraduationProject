@@ -36,7 +36,7 @@ public:
     void AddNode(std::string parentName, std::string entryName, int priority, Rule selectRule, JudgmentBase* judgment, ActionBase* action);
 
     //実行
-    NodeBase* Run(NodeBase* actionNode, BehaviorData* data, float elapsedTime);
+    NodeBase* Run(NodeBase* actionNode, BehaviorData* data);
 
 private:
     //ノード全削除

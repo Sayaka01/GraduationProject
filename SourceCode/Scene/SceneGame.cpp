@@ -13,6 +13,7 @@
 #include "Component/ModelRenderer.h"
 #include "Component/DirectionLight.h"
 #include "Component/Player.h"
+#include "Component/Enemy.h"
 
 #include "System/SystemManager.h"
 #include "System/Common.h"
@@ -111,7 +112,7 @@ void SceneGame::EnemyInitialize()
 
 	enemy->AddComponent(modelRenderer);
 
-	enemy->AddComponent(new Player());
+	enemy->AddComponent(new Enemy());
 
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };

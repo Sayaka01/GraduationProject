@@ -6,6 +6,13 @@
 
 #include "PlayerStates.h"
 
+class BehaviorTree;
+class BehaviorData;
+class NodeBase;
+class ActionBase;
+
+//#define OpenConsole
+
 class Enemy : public Component
 {
 public:
@@ -25,12 +32,7 @@ public:
 	//ImGui
 	void DebugGui() override;
 
-	virtual bool ActRun() = 0;
-	virtual bool ActWalk() = 0;
-	virtual bool ActAttack() = 0;
-	virtual bool ActDamage() = 0;
-	virtual bool ActEscape() = 0;
-	virtual bool ActDie() = 0;
+	bool UpdateState() {}
 
 	//-----< Getter, Setter >-----//
 
@@ -38,7 +40,6 @@ public:
 private:
 
 	//-----< ŠÖ” >-----//
-	void ChangeState(std::string nextStateName);
 
 
 	//-----< •Ï” >-----//
@@ -46,4 +47,9 @@ private:
 	//PlayerState::Default* currentState = nullptr;
 
 	DirectX::XMFLOAT3 moveVelocity = {};//ˆÚ“®ƒxƒNƒgƒ‹
+
+	BehaviorTree* aiTree{ nullptr };
+	BehaviorData* behaviorData{ nullptr };
+	NodeBase* activeNode{ nullptr };
+
 };

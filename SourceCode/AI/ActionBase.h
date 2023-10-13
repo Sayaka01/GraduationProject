@@ -6,6 +6,7 @@ class ActionBase
 {
 public:
     ActionBase(Enemy* enemy) :owner(enemy) {}
+    ~ActionBase() { }
     //Àsî•ñ
     enum class State
     {
@@ -25,6 +26,7 @@ public:
 
 protected:
     Enemy* owner{ nullptr };
+    float runTimer = 0.0f;//s“®‚ÌÀsŠÔ
     //int step = 0;
     //Enemy::BehaviorState state = Enemy::BehaviorState::NONE;
 };

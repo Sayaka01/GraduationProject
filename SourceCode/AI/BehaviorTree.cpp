@@ -50,10 +50,10 @@ void BehaviorTree::AddNode(std::string parentName, std::string entryName, int pr
 }
 
 //実行
-NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data, float elapsedTime)
+NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data)
 {
     //ノード実行
-    ActionBase::State state = actionNode->Run(elapsedTime);
+    ActionBase::State state = actionNode->Run();
 
     //正常終了
     if (state == ActionBase::State::Complete)
@@ -65,7 +65,7 @@ NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data, float elap
         if (sequenceNode == nullptr)
         {
             //ノードの終了処理を実行
-            //actionNode->Exit();
+            actionNode->Exit();
             return nullptr;
         }
         else

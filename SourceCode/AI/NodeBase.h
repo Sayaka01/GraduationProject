@@ -42,7 +42,9 @@ public:
     NodeBase* SearchNode(std::string serchName);
     NodeBase* Inference(Enemy* enemy, BehaviorData* data);
     NodeBase* InferenceAbsolute(Enemy* enemy, BehaviorData* data);
-    ActionBase::State Run(float elapsedTime);
+    ActionBase::State Run();
+    void Enter();// 行動の初期処理
+    void Exit();// 行動の終了処理
     std::vector<NodeBase*> children;//子ノード
 protected:
     std::string         name;//名前

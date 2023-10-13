@@ -3,10 +3,11 @@
 #include <magic_enum.hpp>
 #include "System/UserFunction.h"
 
+#include "System/Console.h"
 
 NodeBase::~NodeBase()
 {
-    (judgment);
+    SafeDelete(judgment);
     SafeDelete(action);
     //delete judgment;
     //delete action;
@@ -46,7 +47,13 @@ bool NodeBase::Judgment()
 {
     if (judgment != nullptr)
     {
-        return judgment->Judgment();
+        if (judgment->Judgment())
+        {
+            Enter();//行動の初期処理を実行しtrueを返す
+            return true;
+        }
+        else
+            return false;
     }
     return true;
 }
@@ -288,12 +295,34 @@ NodeBase* NodeBase::InferenceAbsolute(Enemy* enemy, BehaviorData* data)
     return result;
 }
 
-ActionBase::State NodeBase::Run(float elapsedTime)
+ActionBase::State NodeBase::Run()
 {
     if (action != nullptr)
     {
+        ConsoleFunc::WriteEndl("Run");
+        //行動を実行する
         return action->Run();
     }
 
     return ActionBase::State::Failed;
+}
+
+//行動の初期処理
+void NodeBase::Enter()
+{
+    if (action != nullptr)
+    {
+        ConsoleFunc::WriteEndl("Enter");
+        action->Enter();
+    }
+}
+
+//行動の終了処理
+void NodeBase::Exit()
+{
+    if (action != nullptr)
+    {
+        ConsoleFunc::WriteEndl("Exit");
+        action->Exit();
+    }
 }
