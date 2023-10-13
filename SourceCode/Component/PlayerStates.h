@@ -5,6 +5,24 @@ class GameObject;
 //プレイヤーの状態
 namespace PlayerState
 {
+	//アニメーション
+	enum class Animation
+	{
+		Attack,
+		Death,
+		Falling,
+		GetHit1,
+		GetHit2,
+		Idle,
+		Jump,
+		JumpFlip,
+		Landing,
+		Revive,
+		Running,
+		Walking,
+		Punching,
+	};
+
 	//基底クラス
 	class Default
 	{
@@ -25,9 +43,21 @@ namespace PlayerState
 		std::string GetName() { return name; }
 
 	protected:
+		//移動ベクトルをプレイヤーコンポーネントに保存
+		void SetMoveVelocity(DirectX::XMFLOAT3 velocity);
+		//移動ベクトルを計算
+		DirectX::XMFLOAT3 CalcMoveVec();
+		//コントローラーのLスティックの入力値を取得
+		DirectX::XMFLOAT2 GetLStickVec();
+		//移動ベクトルに応じたY軸回転
+		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
+
 		std::string name = "";//ステートの名前
 
-		GameObject* parent = nullptr;
+		GameObject* parent = nullptr;//親オブジェクト
+
+		float rotateSpeed = DirectX::XMConvertToRadians(720);
+		float rotateRatio = 0.75f;
 	};
 
 	//待機
@@ -64,5 +94,8 @@ namespace PlayerState
 		void Exit()override;
 		//ステート変更するかどうか
 		std::string Judge()override;
+
+	private:
+		float runSpeed = 30.0f;
 	};
 }

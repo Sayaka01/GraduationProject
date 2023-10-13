@@ -26,6 +26,8 @@ public:
 	void DebugGui() override;
 
 	//-----< Getter, Setter >-----//
+	DirectX::XMFLOAT3 GetMoveVelocity() { return moveVelocity; }
+	void SetMoveVelocity(DirectX::XMFLOAT3 velocity) { moveVelocity = velocity; }
 
 
 private:

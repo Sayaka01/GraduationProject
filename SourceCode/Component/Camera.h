@@ -46,7 +46,14 @@ public:
 	void SetTarget(const DirectX::XMFLOAT3 target) const { cameraData->SetTarget(target); }
 	[[nodiscard]] DirectX::XMFLOAT3 GetTarget() const { return cameraData->GetTarget(); }
 
-	void SetTargetObj(GameObject* obj) { targetObj = obj; }
+	void SetTargetObj(GameObject* obj) 
+	{ 
+		if (obj) 
+		{
+			targetObj = obj;
+			tracking = true;
+		}
+	}
 	void SetIsTracking(bool isTracking) { tracking = isTracking; }
 
 	//modelを追尾するときのmodelの原点からの補正値をセットする

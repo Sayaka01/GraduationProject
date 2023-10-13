@@ -2,6 +2,10 @@
 #include "Stdafx.h"
 #include "Player.h"
 
+#include "GameObject/GameObject.h"
+
+#include "Component/Transform.h"
+
 #include "System/UserFunction.h"
 
 using namespace PlayerState;
@@ -20,9 +24,16 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	currentState->Update();//ステートの更新
-	std::string nextStateName = currentState->Judge();//ステート変更か判定
-	ChangeState(nextStateName);//nextStateNameが""じゃなければステートが変更される
+	//ステートの更新
+	currentState->Update();
+	
+	//位置の更新
+	parent->GetComponent<Transform>()->pos += moveVelocity;
+	
+	//ステート変更か判定
+	std::string nextStateName = currentState->Judge();
+	//nextStateNameが""じゃなければステートが変更される
+	ChangeState(nextStateName);
 }
 
 void Player::Draw()
@@ -57,7 +68,7 @@ void Player::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
-
+		ImGui::DragFloat3("moveVelocity", &moveVelocity.x);
 		ImGui::TreePop();
 	}
 }

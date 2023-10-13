@@ -82,6 +82,8 @@ public:
 	//オブジェクトの名前の取得
 	std::string GetName() { return name; }
 
+	//親オブジェクトの取得
+	GameObject* GetParent() { return parent; }
 	//親オブジェクトの設定
 	void SetParent(GameObject* parent)
 	{
