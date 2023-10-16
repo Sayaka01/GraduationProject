@@ -49,7 +49,6 @@ bool NodeBase::Judgment()
     {
         if (judgment->Judgment())
         {
-            Enter();//行動の初期処理を実行しtrueを返す
             return true;
         }
         else
@@ -271,7 +270,7 @@ NodeBase* NodeBase::InferenceAbsolute(Enemy* enemy, BehaviorData* data)
     {
         if (children.at(i)->judgment != nullptr)
         {
-            if (children.at(i)->judgment->Judgment() /*&& children.at(i)->rule== BehaviorTree::Rule::Absolute*/)
+            if (children.at(i)->judgment->Judgment() && children.at(i)->rule== BehaviorTree::Rule::Absolute)
             {
                 list.emplace_back(children.at(i));
             }
@@ -299,7 +298,6 @@ ActionBase::State NodeBase::Run()
 {
     if (action != nullptr)
     {
-        ConsoleFunc::WriteEndl("Run");
         //行動を実行する
         return action->Run();
     }

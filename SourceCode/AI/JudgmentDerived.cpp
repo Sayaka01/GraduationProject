@@ -67,7 +67,7 @@ bool DamageJudgment::Judgment()
     //if (owner->GetIsDamaged())
     {
         //owner->SetIsDamaged(false);
-        return true;
+        //return true;
     }
     return false;
 }
@@ -77,7 +77,7 @@ bool DeathJudgment::Judgment()
     //HP‚ª‚OˆÈ‰º‚É‚È‚Á‚½‚çDeathƒm[ƒh‚Ö
     //if (owner->GetHp() <= 0)
     {
-        return true;
+        //return true;
     }
     return false;
 }

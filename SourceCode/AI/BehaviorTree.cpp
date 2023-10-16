@@ -16,7 +16,10 @@ NodeBase* BehaviorTree::ActiveNodeInference(BehaviorData* data)
 {
     //データをリセット
     data->Init();
-    return root->Inference(owner, data);
+    NodeBase* node= root->Inference(owner, data);
+    node->Enter(); //行動の初期処理を実行しtrueを返す
+
+    return node;
 }
 
 //シーケンスノードから推論

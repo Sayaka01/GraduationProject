@@ -11,7 +11,7 @@ class BehaviorData;
 class NodeBase;
 class ActionBase;
 
-//#define OpenConsole
+#define OpenConsole
 
 class Enemy : public Component
 {

@@ -76,10 +76,10 @@ void Enemy::Update()
 {
 
 	//ビヘイビアツリー
-	//if (activeNode == nullptr)
-	//	activeNode = aiTree->ActiveNodeInference(behaviorData);
-	//else
-	//	activeNode = aiTree->Run(activeNode, behaviorData);
+	if (activeNode == nullptr)
+		activeNode = aiTree->ActiveNodeInference(behaviorData);
+	else
+		activeNode = aiTree->Run(activeNode, behaviorData);
 
 	//currentState->Update();//ステートの更新
 	//std::string nextStateName = currentState->Judge();//ステート変更か判定
