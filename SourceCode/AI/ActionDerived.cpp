@@ -7,7 +7,13 @@
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+
+    if (owner->RunPunchState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //owner->SetState(Enemy::BehaviorState::Punch);
 
@@ -24,35 +30,37 @@ ActionBase::State PunchAction::Run()
 
     //行動が終わったら切り替え
     //if (owner->ActRun())
-    if(runTimer < 0)
-    {
-        // パンチエフェクトを停止
-        //owner->StopPunchEffect();
-        // 攻撃用Sphereを無効化
-        //owner->SetValidAttackSphere(false);
-        // 攻撃用の位置を計算をやめる
-        //owner->GetModel()->SetDoCalcAttackBone(false);
-        return ActionBase::State::Complete;
-    }
+    // パンチエフェクトを停止
+    //owner->StopPunchEffect();
+    // 攻撃用Sphereを無効化
+    //owner->SetValidAttackSphere(false);
+    // 攻撃用の位置を計算をやめる
+    //owner->GetModel()->SetDoCalcAttackBone(false);
     return ActionBase::State::Running;
 }
 
 // 打撃行動の初期処理
 void PunchAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterPunchState();
 }
 
 // 打撃行動の終了処理
 void PunchAction::Exit()
 {
-
+    owner->ExitPunchState();
 }
 
 // 重撃行動のアクション
 ActionBase::State SkillAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunSkillState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //owner->SetState(Enemy::BehaviorState::Skill);
 
@@ -75,78 +83,88 @@ ActionBase::State SkillAction::Run()
     //owner->AddTrailPos(owner->GetModel()->GetTrailHeadPosition(), owner->GetModel()->GetTrailTailPosition());
     //アニメーションが再生し終わったらアクション終了
     //if (!owner->GetModel()->IsPlayAnimation())
-    if (runTimer <0)
-    {
-        //攻撃用Sphereを無効化
-        //owner->SetValidAttackSphere(false);
-        //攻撃用の位置を計算をやめる
-        //owner->GetModel()->SetDoCalcAttackBone(false);
-        return ActionBase::State::Complete;
-    }
+    
+    //攻撃用Sphereを無効化
+    //owner->SetValidAttackSphere(false);
+    //攻撃用の位置を計算をやめる
+    //owner->GetModel()->SetDoCalcAttackBone(false);
+    //return ActionBase::State::Complete;
+    
     return ActionBase::State::Running;
 }
 
 // 重撃行動の初期処理
 void SkillAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterSkillState();
 }
 
 // 重撃行動の終了処理
 void SkillAction::Exit()
 {
+    owner->ExitSkillState();
 }
 
 // 休憩行動のアクション
 ActionBase::State BreakAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
 
-    //float runTimer = owner->GetRunTimer();
-        //owner->SetState(Enemy::BehaviorState::Break);
-        // 実行時間をランダム(1~2秒)で決める
-        //owner->SetRunTimer(1.5f);
-        // 休憩アニメーションに設定
-        //owner->ChangeBreakAnimation();
-        //if (owner->GetIsPlayerAttack())//プレイヤーを探している場合
-        //{
-        //    //プレイヤーから敵の位置へのベクトル
-        //    DirectX::XMFLOAT3 vec = Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition());
-        //    vec = Math::Normalize(vec);
-        //    float length = Math::RandomRange(2.0f, 10.0f);
-        //    vec = Math::Scale(vec, length);// vecをlength倍する
-
-        //    owner->SetTargetPosition(Math::AddAll(owner->GetPosition(), vec));// ターゲットの位置を設定
-        //}
-
-        //runTimer -= elapsedTime;
-        //// タイマー更新
-        //owner->SetRunTimer(runTimer);
-        // 実行時間が経過したらアクション終了
-        //if (runTimer <= 0.0f)
-    if (runTimer < 0)
+    if (owner->RunBreakState())
     {
         return ActionBase::State::Complete;
     }
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
+
+    //float runTimer = owner->GetRunTimer();
+    //owner->SetState(Enemy::BehaviorState::Break);
+    // 実行時間をランダム(1~2秒)で決める
+    //owner->SetRunTimer(1.5f);
+    // 休憩アニメーションに設定
+    //owner->ChangeBreakAnimation();
+    //if (owner->GetIsPlayerAttack())//プレイヤーを探している場合
+    //{
+    //    //プレイヤーから敵の位置へのベクトル
+    //    DirectX::XMFLOAT3 vec = Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition());
+    //    vec = Math::Normalize(vec);
+    //    float length = Math::RandomRange(2.0f, 10.0f);
+    //    vec = Math::Scale(vec, length);// vecをlength倍する
+
+    //    owner->SetTargetPosition(Math::AddAll(owner->GetPosition(), vec));// ターゲットの位置を設定
+    //}
+
+    //runTimer -= elapsedTime;
+    //// タイマー更新
+    //owner->SetRunTimer(runTimer);
+    // 実行時間が経過したらアクション終了
+    //if (runTimer <= 0.0f)
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 休憩行動の初期処理
 void BreakAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterBreakState();
 }
 
 // 休憩行動の終了処理
 void BreakAction::Exit()
 {
-
+    owner->ExitBreakState();
 }
 
 // 徘徊行動のアクション
 ActionBase::State WanderAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunWanderState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //owner->SetState(Enemy::BehaviorState::Wander);
     // 徘徊アニメーションに設定
@@ -154,34 +172,37 @@ ActionBase::State WanderAction::Run()
     //徘徊するランダムの位置を算出するための基準位置を今の位置に設定
     //owner->SetReferencePointWander(owner->GetPosition());
     //目的地へ移動
-    owner->MoveToTargetPosition(elapsedTime);
+    //owner->MoveToTargetPosition(elapsedTime);
     // 追跡範囲内で護石を発見したらアクション終了
     //if (owner->SerchStone(owner->GetPursuitRange()))
-    if (runTimer < 0)
-    {
-        return ActionBase::State::Complete;
-    }
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 徘徊行動の初期処理
 void WanderAction::Enter()
 {
-
-
-    runTimer = 5.0f;
+    owner->EnterWanderState();
 }
 
 // 徘徊行動の終了処理
 void WanderAction::Exit()
 {
-
+    owner->ExitWanderState();
 }
 
 // 待機ノードのアクション
 ActionBase::State IdleAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunIdleState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //float runTimer = owner->GetRunTimer();
     //owner->SetState(Enemy::BehaviorState::Idle);
@@ -193,29 +214,34 @@ ActionBase::State IdleAction::Run()
     //タイマー更新
     //owner->SetRunTimer(runTimer);
     //if (runTimer <= 0.0f)
-    if (runTimer < 0)
-    {
-        return ActionBase::State::Complete;
-    }
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 追跡行動の初期処理
 void IdleAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterIdleState();
 }
 
 // 追跡行動の終了処理
 void IdleAction::Exit()
 {
-
+    owner->ExitIdleState();
 }
 
 // 追跡攻撃のアクション
 ActionBase::State PursuitAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunPursuitState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //float runTimer = owner->GetRunTimer();
     //owner->SetState(Enemy::BehaviorState::Pursuit);
@@ -229,41 +255,45 @@ ActionBase::State PursuitAction::Run()
     //owner->SetRunTimer(runTimer);
     // 実行時間が経過したらアクション終了
     //if (runTimer <= 0.0f)
-    if (runTimer < 0)
-    {
-        return ActionBase::State::Complete;
-    }
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 追跡行動の初期処理
 void PursuitAction::Enter()
 {
-    runTimer = 5.0f;
-
+    owner->EnterPursuitState();
 }
 
 // 追跡行動の終了処理
 void PursuitAction::Exit()
 {
-
+    owner->ExitPursuitState();
 }
 
 // 逃走行動のアクション
 ActionBase::State EscapeAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunEscapeState())
+    {
+        return ActionBase::State::Complete;
+    }
 
-    DirectX::XMFLOAT3 targetPosition;
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
+
+    //DirectX::XMFLOAT3 targetPosition;
 
     //owner->SetState(Enemy::BehaviorState::Leave);
     // 離れるアニメーションに設定
     //owner->ChangeLeaveAnimation();
 
-    if (runTimer < 0)
-    {
-        return ActionBase::State::Complete;
-    }
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
 
     return ActionBase::State::Running;
 }
@@ -271,20 +301,25 @@ ActionBase::State EscapeAction::Run()
 // 逃走行動の初期処理
 void EscapeAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterEscapeState();
 
 }
 
 // 逃走行動の終了処理
 void EscapeAction::Exit()
 {
-
+    owner->ExitEscapeState();
 }
 
 // 死亡行動のアクション
 ActionBase::State DieAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunDieState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //float runTimer = owner->GetRunTimer();
     //owner->SetState(Enemy::BehaviorState::Die);
@@ -294,59 +329,60 @@ ActionBase::State DieAction::Run()
     // パンチエフェクトが流れていたら停止する
     //owner->StopPunchEffect();
     //owner->PlayDieEffect();
-    //if (!owner->GetModel()->IsPlayAnimation())
-    {
-        //runTimer -= elapsedTime;
-        //owner->SetRunTimer(runTimer);
+    //runTimer -= elapsedTime;
+    //owner->SetRunTimer(runTimer);
 
-        //if (runTimer <= 0.0f)
-        if (runTimer < 0)
-        {
-            //owner->SetDieNotice(true);
-            return ActionBase::State::Complete;
-        }
-    }
+    //if (runTimer <= 0.0f)
+    //if (runTimer < 0)
+    //{
+    //    //owner->SetDieNotice(true);
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 死亡行動の初期処理
 void DieAction::Enter()
 {
-    runTimer = 5.0f;
-
+    owner->EnterDieState();
 }
 
 // 死亡行動の終了処理
 void DieAction::Exit()
 {
-
+    owner->ExitDieState();
 }
 
 // 被弾行動のアクション
 ActionBase::State DamageAction::Run()
 {
-    runTimer -= SystemManager::Instance().GetElapsedTime();
+    if (owner->RunDamageState())
+    {
+        return ActionBase::State::Complete;
+    }
+
+    //runTimer -= SystemManager::Instance().GetElapsedTime();
 
     //owner->SetState(Enemy::BehaviorState::Damage);
     // 被弾アニメーションに設定
     //owner->ChangeDamageAnimation();
     //アニメーションが再生し終わったらおわり
     //if (!owner->GetModel()->IsPlayAnimation())
-    if (runTimer < 0)
-    {
-        return ActionBase::State::Complete;
-    }
+    //if (runTimer < 0)
+    //{
+    //    return ActionBase::State::Complete;
+    //}
     return ActionBase::State::Running;
 }
 
 // 被弾行動の初期処理
 void DamageAction::Enter()
 {
-    runTimer = 5.0f;
+    owner->EnterDamageState();
 }
 
 // 被弾行動の終了処理
 void DamageAction::Exit()
 {
-
+    owner->ExitDamageState();
 }

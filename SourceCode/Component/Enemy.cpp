@@ -14,6 +14,11 @@
 
 #include "System/Console.h"
 
+#include "Component/Transform.h"
+#include "Component/ModelRenderer.h"
+
+#include "GameObject/GameObject.h"
+
 using namespace PlayerState;
 
 
@@ -29,7 +34,6 @@ void Enemy::Initialize()
 	behaviorData = new BehaviorData();
 	aiTree = new BehaviorTree(this);
 
-	//ToDo：エクセルで読み込むように変更
 	aiTree->AddNode("", "Root", 0, BehaviorTree::Rule::Random, nullptr, nullptr);
 	//aiTree->AddNode("", "Root", 0, BehaviorTree::Rule::Priority, nullptr, nullptr);
 
@@ -62,25 +66,18 @@ void Enemy::Initialize()
 	//aiTree->AddNode("Attack", "Break", 3, BehaviorTree::Rule::Non, nullptr, new BreakAction(this));
 
 	aiTree->AddNode("Discovery", "Pursuit", 1, BehaviorTree::Rule::Non, nullptr, new PursuitAction(this));
-
-
-	//ステートの追加
-	//states.emplace_back(new Idle(parent));//待機
-	//states.emplace_back(new Run(parent));//走り
-
-	//待機ステートに
-	//ChangeState("Idle");
+	
+	//"待機アニメーション"を再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
 }
 
 void Enemy::Update()
 {
-
 	//ビヘイビアツリー
 	if (activeNode == nullptr)
 		activeNode = aiTree->ActiveNodeInference(behaviorData);
 	else
 		activeNode = aiTree->Run(activeNode, behaviorData);
-
 	//currentState->Update();//ステートの更新
 	//std::string nextStateName = currentState->Judge();//ステート変更か判定
 	//ChangeState(nextStateName);//nextStateNameが""じゃなければステートが変更される
@@ -138,3 +135,204 @@ void Enemy::DebugGui()
 		ImGui::TreePop();
 	}
 }
+
+
+//***********************************************************************************************
+//      パンチアクション 
+//***********************************************************************************************
+void Enemy::EnterPunchState()
+{
+	//パンチアニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::LeftSlashAttack, true);
+}
+
+bool Enemy::RunPunchState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+
+void Enemy::ExitPunchState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      重撃アクション
+//***********************************************************************************************
+void Enemy::EnterSkillState()
+{
+	//重撃アニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::BrastAttack, true);
+}
+bool Enemy::RunSkillState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitSkillState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      休憩アクション
+//***********************************************************************************************
+void Enemy::EnterBreakState()
+{
+	//休憩アニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle2, true);
+}
+bool Enemy::RunBreakState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitBreakState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      徘徊アクション
+//***********************************************************************************************
+void Enemy::EnterWanderState()
+{
+	//歩きアニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::DashForward, false);
+}
+bool Enemy::RunWanderState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitWanderState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      待機アクション
+//***********************************************************************************************
+void Enemy::EnterIdleState()
+{
+	//待機アニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
+}
+bool Enemy::RunIdleState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitIdleState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      追跡アクション
+//***********************************************************************************************
+void Enemy::EnterPursuitState()
+{
+	//歩きアニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::DashForward, false);
+}
+bool Enemy::RunPursuitState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitPursuitState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      逃走アクション
+//***********************************************************************************************
+void Enemy::EnterEscapeState()
+{
+	//歩きアニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::DashForward, true);
+}
+bool Enemy::RunEscapeState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitEscapeState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      死亡アクション
+//***********************************************************************************************
+void Enemy::EnterDieState()
+{
+	//死亡アニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Die, true);
+}
+bool Enemy::RunDieState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitDieState()
+{
+}
+//***********************************************************************************************
+
+//***********************************************************************************************
+//      被弾アクション
+//***********************************************************************************************
+void Enemy::EnterDamageState()
+{
+	//被弾アニメーションを再生	
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::TakeDamege, true);
+}
+bool Enemy::RunDamageState()
+{
+	//アニメーションの再生が終了したらステートの切り替え
+	if (!parent->GetComponent<ModelRenderer>()->IsPlayAnimation())
+	{
+		return true;
+	}
+	return false;
+}
+void Enemy::ExitDamageState()
+{
+}
+//***********************************************************************************************

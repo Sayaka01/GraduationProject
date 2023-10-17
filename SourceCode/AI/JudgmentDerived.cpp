@@ -29,12 +29,12 @@ bool EscapeJudgment::Judgment()
 
 bool AttackJudgment::Judgment()
 {
-        //ƒvƒŒƒCƒ„[‚Æ“G‚Ì‹——£‚ªˆê’èˆÈ‰º‚É‚È‚Á‚½‚çUŒ‚‰Â”\
-        //float lengthPl = Math::Length(Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition()));
-        //if (lengthPl < owner->GetAttackRange())
-        {
-            return true;
-        }
+    //ƒvƒŒƒCƒ„[‚Æ“G‚Ì‹——£‚ªˆê’èˆÈ‰º‚É‚È‚Á‚½‚çUŒ‚‰Â”\
+    //float lengthPl = Math::Length(Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition()));
+    //if (lengthPl < owner->GetAttackRange())
+    {
+        return true;
+    }
 
     return false;
 }
