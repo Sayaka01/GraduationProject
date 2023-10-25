@@ -69,6 +69,9 @@
     <Filter Include="Sources\Component\AI">
       <UniqueIdentifier>{47246b30-c3ac-4d1e-8190-5d0247185a3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Component\Collider">
+      <UniqueIdentifier>{64dcdef5-5e8f-4f49-b5d1-24a559a6b378}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lib\imgui\imgui.cpp">
@@ -226,6 +229,21 @@
     </ClCompile>
     <ClCompile Include="SourceCode\AI\NodeBase.cpp">
       <Filter>Sources\Component\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\Physics.cpp">
+      <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\SphereCollider.cpp">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\SphereMeshRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\PrimitiveMeshRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\System\CollideManager.cpp">
+      <Filter>Sources\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +432,24 @@
     </ClInclude>
     <ClInclude Include="SourceCode\AI\NodeBase.h">
       <Filter>Sources\Component\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\Physics.h">
+      <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\Collider.h">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\SphereCollider.h">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\SphereMeshRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\PrimitiveMeshRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\System\CollideManager.h">
+      <Filter>Sources\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

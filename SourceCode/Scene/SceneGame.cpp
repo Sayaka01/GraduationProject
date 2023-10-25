@@ -14,13 +14,18 @@
 #include "Component/DirectionLight.h"
 #include "Component/Player.h"
 #include "Component/Enemy.h"
+#include "Component/SphereCollider.h"
 
 #include "System/SystemManager.h"
 #include "System/Common.h"
 
+#include "System/CollideManager.h"
+
 
 void SceneGame::Initialize()
 {
+	CollideManager::Instance().Initialize();
+
 	objectManager = new GameObject("objectManager");
 
 	PlayerInitialize();
@@ -46,6 +51,8 @@ void SceneGame::Initialize()
 
 void SceneGame::Finalize()
 {
+	CollideManager::Instance().Finalize();
+
 	objectManager->Finalize();
 	delete objectManager;
 }
@@ -53,11 +60,15 @@ void SceneGame::Finalize()
 void SceneGame::Update()
 {
 	objectManager->Update();
+
 }
 
 void SceneGame::Draw()
 {
 	objectManager->Draw();
+
+	CollideManager::Instance().Draw();
+
 }
 
 void SceneGame::PlayerInitialize()
@@ -84,6 +95,8 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(modelRenderer);
 
 	player->AddComponent(new Player());
+
+	player->AddComponent(new SphereCollider());
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
 
@@ -113,6 +126,7 @@ void SceneGame::EnemyInitialize()
 	enemy->AddComponent(modelRenderer);
 
 	enemy->AddComponent(new Enemy());
+	enemy->AddComponent(new SphereCollider());
 
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };

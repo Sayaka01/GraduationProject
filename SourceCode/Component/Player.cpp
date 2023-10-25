@@ -5,6 +5,7 @@
 #include "GameObject/GameObject.h"
 
 #include "Component/Transform.h"
+#include "Component/SphereCollider.h"
 
 #include "System/UserFunction.h"
 
@@ -29,6 +30,8 @@ void Player::Update()
 	
 	//位置の更新
 	parent->GetComponent<Transform>()->pos += moveVelocity;
+
+	parent->GetComponent<SphereCollider>()->center = parent->GetComponent<Transform>()->pos;
 	
 	//ステート変更か判定
 	std::string nextStateName = currentState->Judge();
