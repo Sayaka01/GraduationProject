@@ -12,6 +12,13 @@ SphereCollider::SphereCollider()
 	name = "SphereCollider";
 }
 
+SphereCollider::SphereCollider(std::string compName)
+{
+	CollideManager::Instance().AddSphereCollider(this);
+
+	name = compName;
+}
+
 SphereCollider::~SphereCollider()
 {
 }

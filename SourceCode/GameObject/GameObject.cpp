@@ -53,6 +53,7 @@ void GameObject::Update()
 	}
 
 	//子オブジェクトの削除
+	RemoveChildren();
 	DeleteChildren();
 }
 
@@ -146,6 +147,16 @@ GameObject* GameObject::GetChild(std::string name) const
 [[nodiscard]] GameObject* GameObject::GetGameObj(size_t index)const
 {
 	return children.at(index);
+}
+void GameObject::RemoveChildren()
+{
+	for (GameObject* child : children)
+	{
+		if (!child->active)
+		{
+			RemoveChild(child);
+		}
+	}
 }
 //子オブジェクトの削除準備(名前検索）
 void GameObject::RemoveChild(std::string name)

@@ -31,6 +31,9 @@ public:
 
 	//-----< Getter, Setter >-----//
 
+	//コンポーネントの名前の取得
+	std::string GetName() { return name; }
+
 	//このコンポーネントの親オブジェクトの設定
 	void SetParent(GameObject* parent) { this->parent = parent; }
 	//このコンポーネントの親オブジェクトの取得

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <string>
 
 #include "Collider.h"
 
@@ -8,6 +9,7 @@ class SphereCollider : public Collider
 {
 public:
 	SphereCollider();
+	SphereCollider(std::string compName);
 	~SphereCollider() override;
 
 	//-----< ŠÖ” >-----//

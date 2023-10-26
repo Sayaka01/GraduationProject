@@ -56,6 +56,20 @@ public:
 
 		return nullptr;
 	}
+	template<class T>
+	//コンポーネントの取得（名前検索）（1つずつ）
+	Component* GetComponent(std::string compName)
+	{
+		for (Component* component : components)
+		{
+			if (component->GetName() == compName)
+			{
+				T* com = dynamic_cast<T*>(component);
+				if (com != nullptr) return com;
+			}
+		}
+	}
+
 	//コンポーネントの削除
 	void ClearComponent();
 
@@ -66,6 +80,8 @@ public:
 	[[nodiscard]] GameObject* GetChild(std::string name) const;
 	//子オブジェクトの取得（インデックス）
 	[[nodiscard]] GameObject* GetGameObj(size_t index)const;
+	//active=falseの子オブジェクト削除
+	void RemoveChildren();
 	//子オブジェクトの削除準備(名前検索）
 	void RemoveChild(std::string name);
 	//子オブジェクトの削除準備

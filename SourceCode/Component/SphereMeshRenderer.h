@@ -21,10 +21,6 @@ public:
 	//•`‰æ
 	void Draw(SphereCollider* sphereCollider);
 
-	//-----< Getter, Setter >-----//
-
-	//-----< \‘¢‘Ì >-----//
-
 private:
 	//-----< •Ï” >-----//
 
