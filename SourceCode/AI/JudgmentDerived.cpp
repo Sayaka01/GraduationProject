@@ -2,14 +2,18 @@
 #include "JudgmentDerived.h"
 
 bool BattleJudgment::Judgment()
-{
-    //if (owner->GetIsPlayerAttack())//プレイヤーを探している場合
-    {   
-        //プレイヤーを追跡範囲内で見つけたらBattleノードへ
-        //if (owner->SerchPlayer(owner->GetPursuitRange()))
+{    
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        //プレイヤーとの距離
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        float length = vector.Length();
+
+        //プレイヤーと敵の距離が一定以下になったら攻撃可能
+        if (length < owner->GetPursuitRange())//攻撃範囲に入っている場合
         {
-            //ノードの初期処理
-            //actionNode->Enter();
             return true;
         }
     }
@@ -29,29 +33,38 @@ bool EscapeJudgment::Judgment()
 
 bool AttackJudgment::Judgment()
 {
-    //プレイヤーと敵の距離が一定以下になったら攻撃可能
-    //float lengthPl = Math::Length(Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition()));
-    //if (lengthPl < owner->GetAttackRange())
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
     {
-        return true;
-    }
+        //プレイヤーとの距離
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        float length = vector.Length();
 
+        //プレイヤーと敵の距離が一定以下になったら攻撃可能
+        if (length < owner->GetAttackRange())
+        {
+            return true;
+        }
+    }
     return false;
 }
 
 bool WanderJudgment::Judgment()
 {
-    //float length = Math::Length(Math::SubAll(owner->GetPosition(), owner->GetTargetPosition()));
-
-    //if (owner->GetIsPlayerAttack())//プレイヤーを探している場合
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
     {
-        //プレイヤーと敵の距離が一定以上になったら徘徊可能
-        //float lengthPl = Math::Length(Math::SubAll(owner->GetPosition(), owner->GetPlayerPosition()));
-        //if (lengthPl > owner->GetPursuitRange() && length>=1.5f)
+        //プレイヤーとの距離
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        float length = vector.Length();
+
+        //プレイヤーと敵の距離が一定以上になったら徘徊
+        if (length > owner->GetPursuitRange() && owner->GetLengthToTargetPosition() >= 1.5f)
         {
             return true;
         }
-
     }
     return false;
 }

@@ -248,6 +248,9 @@
     <ClCompile Include="SourceCode\Component\Collider.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Component\RigidBody.cpp">
+      <Filter>Sources\Component\Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\imgui\imconfig.h">
@@ -453,6 +456,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\System\CollideManager.h">
       <Filter>Sources\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\RigidBody.h">
+      <Filter>Sources\Component\Transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

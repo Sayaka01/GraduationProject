@@ -253,6 +253,7 @@
     <ClCompile Include="SourceCode\Component\Player.cpp" />
     <ClCompile Include="SourceCode\Component\PlayerStates.cpp" />
     <ClCompile Include="SourceCode\Component\PrimitiveMeshRenderer.cpp" />
+    <ClCompile Include="SourceCode\Component\RigidBody.cpp" />
     <ClCompile Include="SourceCode\Component\SphereCollider.cpp" />
     <ClCompile Include="SourceCode\Component\SphereMeshRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\SpriteData.cpp" />
@@ -319,6 +320,7 @@
     <ClInclude Include="SourceCode\Component\Player.h" />
     <ClInclude Include="SourceCode\Component\PlayerStates.h" />
     <ClInclude Include="SourceCode\Component\PrimitiveMeshRenderer.h" />
+    <ClInclude Include="SourceCode\Component\RigidBody.h" />
     <ClInclude Include="SourceCode\Component\SphereCollider.h" />
     <ClInclude Include="SourceCode\Component\SphereMeshRenderer.h" />
     <ClInclude Include="SourceCode\Component\SpriteData.h" />

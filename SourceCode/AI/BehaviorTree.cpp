@@ -4,7 +4,6 @@
 #include "BehaviorData.h"
 #include "NodeBase.h"
 #include "Component/enemy.h"
-#include "System/UserFunction.h"
 
 BehaviorTree::~BehaviorTree()
 {
@@ -53,10 +52,10 @@ void BehaviorTree::AddNode(std::string parentName, std::string entryName, int pr
 }
 
 //実行
-NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data)
+NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data, float elapsedTime)
 {
     //ノード実行
-    ActionBase::State state = actionNode->Run();
+    ActionBase::State state = actionNode->Run(elapsedTime);
 
     //正常終了
     if (state == ActionBase::State::Complete)

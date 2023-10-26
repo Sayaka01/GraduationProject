@@ -948,3 +948,13 @@ static std::wstring StringToWString(std::string oString)
     // •ÏŠ·Œ‹‰Ê‚ð•Ô‚·
     return(oRet);
 }
+
+namespace Random
+{
+    // min‚Æmax‚ÌŠÔ‚Ìƒ‰ƒ“ƒ_ƒ€‚Ì’l‚ð•Ô‚·
+    static float Range(float min, float max)
+    {
+        float value = static_cast<float>(rand()) / RAND_MAX;
+        return min + (max - min) * value;
+    }
+}

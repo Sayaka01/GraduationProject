@@ -1,9 +1,11 @@
 #include "Stdafx.h"
 #include "NodeBase.h"
 #include <magic_enum.hpp>
-#include "System/UserFunction.h"
 
-#include "System/Console.h"
+//#include "../Sources/Tools/InlineUtl.h"
+//#include "Tools/Console.h"
+
+#include "Component/Enemy.h"
 
 NodeBase::~NodeBase()
 {
@@ -294,12 +296,12 @@ NodeBase* NodeBase::InferenceAbsolute(Enemy* enemy, BehaviorData* data)
     return result;
 }
 
-ActionBase::State NodeBase::Run()
+ActionBase::State NodeBase::Run(float elapsedTime)
 {
     if (action != nullptr)
     {
         //s“®‚ðŽÀs‚·‚é
-        return action->Run();
+        return action->Run(elapsedTime);
     }
 
     return ActionBase::State::Failed;
@@ -310,7 +312,9 @@ void NodeBase::Enter()
 {
     if (action != nullptr)
     {
+#ifdef OpenConsole
         ConsoleFunc::WriteEndl("Enter");
+#endif
         action->Enter();
     }
 }
@@ -320,7 +324,9 @@ void NodeBase::Exit()
 {
     if (action != nullptr)
     {
+#ifdef OpenConsole
         ConsoleFunc::WriteEndl("Exit");
+#endif
         action->Exit();
     }
 }

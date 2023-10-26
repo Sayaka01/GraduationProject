@@ -3,15 +3,17 @@
 #include <DirectXMath.h>
 
 #include "Component.h"
-
-#include "PlayerStates.h"
+#include "Component/Transform.h"
+#include "GameObject/GameObject.h"
+#include "System/UserFunction.h"
+#include "Component/RigidBody.h"
 
 class BehaviorTree;
 class BehaviorData;
 class NodeBase;
 class ActionBase;
 
-#define OpenConsole
+//#define OpenConsole
 
 
 
@@ -45,66 +47,53 @@ public:
 	void Initialize() override;
 	//更新
 	void Update() override;
-	//描画
-	void Draw() override;
 	//終了処理
 	void Finalize()override;
 	//ImGui
 	void DebugGui() override;
 
-	bool UpdateState() {}
+	// アニメーションの切り替え
+	void ChangeAnimation(AnimationName animeIndex, bool isLoop);
+
+	//ターゲットを範囲内でランダムに設定
+	void SetTargetPositionRandom(float maxRange)
+	{
+		float theta = Random::Range(0, DirectX::XM_PI*2);
+		float range = Random::Range(0.0f, maxRange);
+		targetPosition.x = parent->GetComponent<Transform>()->pos.x + sinf(theta) * range;
+		targetPosition.y = parent->GetComponent<Transform>()->pos.y;
+		targetPosition.z = parent->GetComponent<Transform>()->pos.z + cosf(theta) * range;
+	}
+
+	//目的位置へ移動する
+	void MoveToTargetPosition(float elapsedTime);
+
+	// 目的位置までの距離を取得
+	float GetLengthToTargetPosition()
+	{
+		Transform* ownerTransform = parent->GetComponent<Transform>();
+
+		// プレイヤーと自身のベクトルを計算
+		DirectX::SimpleMath::Vector3 vector = targetPosition - ownerTransform->pos;
+
+		// ベクトルの長さ
+		return vector.Length();
+	}
+
+	// 姿勢回転
+	void RotateTransform(float elapsedTime);
 
 	//-----< Getter, Setter >-----//
 
 	void SetRunTimer(float time) { runTimer = time; }
+	float GetRunTimer() { return runTimer; }
 
+	float GetAttackRange() { return attackRange; }
+	float GetPursuitRange() { return pursuitRange; }
+	float GetWanderRange() { return wanderRange; }
 
-	// パンチアクション
-	virtual void EnterPunchState();
-	virtual bool RunPunchState();
-	virtual void ExitPunchState();
-
-	// 重撃アクション
-	virtual void EnterSkillState();
-	virtual bool RunSkillState();
-	virtual void ExitSkillState();
-
-	// 休憩アクション
-	virtual void EnterBreakState();
-	virtual bool RunBreakState();
-	virtual void ExitBreakState();
-
-	// 徘徊アクション
-	virtual void EnterWanderState();
-	virtual bool RunWanderState();
-	virtual void ExitWanderState();
-
-	// 待機アクション
-	virtual void EnterIdleState();
-	virtual bool RunIdleState();
-	virtual void ExitIdleState();
-
-	// 追跡アクション
-	virtual void EnterPursuitState();
-	virtual bool RunPursuitState();
-	virtual void ExitPursuitState();
-
-	// 逃走アクション
-	virtual void EnterEscapeState();
-	virtual bool RunEscapeState();
-	virtual void ExitEscapeState();
-
-	// 死亡アクション
-	virtual void EnterDieState();
-	virtual bool RunDieState();
-	virtual void ExitDieState();
-
-	// 死亡アクション
-	virtual void EnterDamageState();
-	virtual bool RunDamageState();
-	virtual void ExitDamageState();
-
-
+	void SetTargetPosition(DirectX::XMFLOAT3 pos) { targetPosition = pos; }
+	DirectX::XMFLOAT3 GetTargetPosition() { return targetPosition; }
 private:
 
 	//-----< 関数 >-----//
@@ -120,6 +109,27 @@ private:
 	BehaviorData* behaviorData{ nullptr };
 	NodeBase* activeNode{ nullptr };
 
-	float runTimer = 0.0f;
+	float runTimer = 0.0f;//行動時間
+	DirectX::XMFLOAT3 targetPosition{ 0.0f,0.0f,0.0f };
+
+
+	//回転速度
+	float rotateSpeed = 5.0f;
+
+	// 移動速度
+	float moveSpeed = 10.0f;
+
+	//-----< 定数 >-----//
+
+	//攻撃を開始する範囲
+	const float attackRange{ 13.0f };
+
+	//追跡を開始する範囲
+	const float pursuitRange{ 80.0f };
+
+	//徘徊を開始する範囲
+	const float wanderRange{ 60.0f };
+
+	float rotateRatio = 0.75f;
 
 };

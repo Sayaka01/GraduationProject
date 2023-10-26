@@ -15,7 +15,7 @@ public:
         Complete,//¬Œ÷
     };
 
-    virtual ActionBase::State Run() = 0;
+    virtual ActionBase::State Run(float elapsedTime) = 0;
     virtual void Enter() = 0;
     virtual void Exit() = 0;
 
@@ -26,7 +26,6 @@ public:
 
 protected:
     Enemy* owner{ nullptr };
-    float runTimer = 0.0f;//s“®‚ÌÀsŠÔ
     //int step = 0;
     //Enemy::BehaviorState state = Enemy::BehaviorState::NONE;
 };
