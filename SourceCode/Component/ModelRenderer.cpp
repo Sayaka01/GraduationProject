@@ -121,7 +121,7 @@ void ModelRenderer::UpdateAnimation()
 
 		if (!isLoopAnimation)
 		{
-			//isPlayAnimation = false;
+			isPlayAnimation = false;
 			playAnimTimer = static_cast<float>(maxKeyframe - 1);
 		}
 
