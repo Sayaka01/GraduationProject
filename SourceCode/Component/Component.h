@@ -3,6 +3,7 @@
 #include <string>
 
 class GameObject;
+class Collider;
 
 class Component
 {
@@ -23,6 +24,9 @@ public:
 	virtual void Finalize(){}
 	//ImGui
 	virtual void DebugGui(){}
+
+	//ヒットイベント
+	virtual void OnCollisionEnter(Collider* collider) {}
 
 
 	//-----< Getter, Setter >-----//

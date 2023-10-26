@@ -22,6 +22,7 @@ void SphereCollider::DebugGui()
 	{
 		ImGui::DragFloat3("center", &center.x);
 		ImGui::DragFloat("radius", &radius);
+		Collider::DebugGui();
 		ImGui::TreePop();
 	}
 }

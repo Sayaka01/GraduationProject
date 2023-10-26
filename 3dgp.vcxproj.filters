@@ -230,7 +230,7 @@
     <ClCompile Include="SourceCode\AI\NodeBase.cpp">
       <Filter>Sources\Component\AI</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\System\Physics.cpp">
+    <ClCompile Include="SourceCode\System\PhysicsFunction.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Component\SphereCollider.cpp">
@@ -244,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\System\CollideManager.cpp">
       <Filter>Sources\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Collider.cpp">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -433,7 +436,7 @@
     <ClInclude Include="SourceCode\AI\NodeBase.h">
       <Filter>Sources\Component\AI</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\System\Physics.h">
+    <ClInclude Include="SourceCode\System\PhysicsFunction.h">
       <Filter>Sources\System</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Component\Collider.h">

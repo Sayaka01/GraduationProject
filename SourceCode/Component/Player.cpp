@@ -21,6 +21,9 @@ void Player::Initialize()
 
 	//待機ステートに
 	ChangeState("Idle");
+
+	//HitEventの設定
+	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 }
 
 void Player::Update()
@@ -74,6 +77,11 @@ void Player::DebugGui()
 		ImGui::DragFloat3("moveVelocity", &moveVelocity.x);
 		ImGui::TreePop();
 	}
+}
+
+void Player::OnCollisionEnter(Collider* collider)
+{
+	parent->GetComponent<Transform>()->pos = parent->GetComponent<SphereCollider>()->center;
 }
 
 void Player::ChangeState(std::string nextStateName)

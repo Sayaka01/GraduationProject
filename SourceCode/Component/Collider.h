@@ -11,17 +11,21 @@ public:
 	~Collider() override = default;
 
 	//-----< 関数 >-----//
-	virtual void OnCollisionEnter() {}
-	virtual void OnCollisionExit() {}
-	virtual void OnCollisionStay() {}
 
-	//-----< Getter, Setter >-----//
+	//ImGui
+	void DebugGui()override;
 
-	//-----< 構造体 >-----//
+	//衝突後の処理
+	void SetHitProcessFunc(Component* component, void (Component::* pFunc)(Collider* collider)) { this->component = component; HitProcessFunc = pFunc; }
+	void OnCollisionEnter(Collider* collider);
 
-protected:
+
 	//-----< 変数 >-----//
-	bool hitFlag = false;
-	bool drawDebugPrimitive = true;
+	DirectX::XMFLOAT3 center = {};
+	bool drawDebugPrimitive = true;//デバッグ描画を行うか
+	int priority = 0;//当たり判定の優先度（０が一番優先度高い）
 
+private:
+	void (Component::*HitProcessFunc)(Collider* collider);
+	Component* component = nullptr;
 };

@@ -61,6 +61,7 @@ void SceneGame::Update()
 {
 	objectManager->Update();
 
+	CollideManager::Instance().Collide();
 }
 
 void SceneGame::Draw()
@@ -94,9 +95,9 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(modelRenderer);
 
-	player->AddComponent(new Player());
+	player->AddComponent(new SphereCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
-	player->AddComponent(new SphereCollider());
+	player->AddComponent(new Player());
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
 

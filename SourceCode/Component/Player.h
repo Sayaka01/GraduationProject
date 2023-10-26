@@ -25,6 +25,8 @@ public:
 	//ImGui
 	void DebugGui() override;
 
+	void OnCollisionEnter(Collider* collider) override;
+
 	//-----< Getter, Setter >-----//
 	DirectX::XMFLOAT3 GetMoveVelocity() { return moveVelocity; }
 	void SetMoveVelocity(DirectX::XMFLOAT3 velocity) { moveVelocity = velocity; }
