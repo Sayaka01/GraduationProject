@@ -47,25 +47,74 @@ void CollideManager::Collide()
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
 			{
+				DirectX::XMFLOAT3 centerA = colliderA->GetCenter();
+				DirectX::XMFLOAT3 centerB = colliderA->GetCenter();
+
 				if (colliderA->priority > colliderB->priority)
 				{
 					//colliderAを押し出す
-					colliderA->center += result.normal * result.penetration;					
+					centerA += result.normal * result.penetration;
 				}
 				else if(colliderA->priority < colliderB->priority)
 				{
 					//colliderBを押し出す
-					colliderB->center -= result.normal * result.penetration;
+					centerB -= result.normal * result.penetration;
 				}
 				else
 				{
 					//半分ずつ押し出す
-					colliderA->center += result.normal * result.penetration * 0.5f;					
-					colliderB->center -= result.normal * result.penetration * 0.5f;
+					centerA += result.normal * result.penetration * 0.5f;
+					centerB -= result.normal * result.penetration * 0.5f;
 				}
 
+				colliderA->SetCenter(centerA);
+				colliderB->SetCenter(centerB);
+				
 				colliderA->OnCollisionEnter(colliderB);
 				colliderB->OnCollisionEnter(colliderA);
+
+			}
+		}
+	}
+
+	//Capsule
+	for (CapsuleCollider* capsule : capsuleColliders)
+	{
+		for (SphereCollider* sphere : sphereColliders)
+		{
+			if (!capsule->GetEnable())continue;
+			if (!sphere->GetEnable())continue;
+
+			if (capsule->GetParentName() == sphere->GetParentName())continue;
+
+
+			if (Physics::IntersectSphereVsCapsule(sphere, capsule, &result))
+			{
+				DirectX::XMFLOAT3 sphereCenter = sphere->GetCenter();
+
+				if (capsule->priority > sphere->priority)
+				{
+					//capsuleを押し出す
+					capsule->begin -= result.normal * result.penetration;
+					capsule->end -= result.normal * result.penetration;
+				}
+				else if(capsule->priority < sphere->priority)
+				{
+					//colliderBを押し出す
+					sphereCenter += result.normal * result.penetration;
+				}
+				else
+				{
+					//半分ずつ押し出す
+					capsule->begin -= result.normal * result.penetration;
+					capsule->end -= result.normal * result.penetration;
+					sphereCenter += result.normal * result.penetration * 0.5f;
+				}
+
+				sphere->SetCenter(sphereCenter);
+				
+				capsule->OnCollisionEnter(sphere);
+				sphere->OnCollisionEnter(capsule);
 
 			}
 		}
@@ -87,6 +136,8 @@ void CollideManager::Draw()
 	for (CapsuleCollider* collider : capsuleColliders)
 	{
 		if (collider->GetEnable() && collider->drawDebugPrimitive)
+		{
 			capsuleMesh->Draw(collider);
+		}
 	}
 }

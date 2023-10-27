@@ -38,8 +38,10 @@ void Player::Update()
 	parent->GetComponent<Transform>()->pos += moveVelocity;
 
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
-	capsuleCollider->center = parent->GetComponent<Transform>()->pos;
-	capsuleCollider->center.y += capsuleCollider->radius + capsuleCollider->cylinderSize * 0.5f;
+	capsuleCollider->begin = parent->GetComponent<Transform>()->pos;
+	capsuleCollider->begin.y += capsuleCollider->radius + capsuleCollider->cylinderSize;
+	capsuleCollider->end = parent->GetComponent<Transform>()->pos;
+	capsuleCollider->end.y += capsuleCollider->radius;
 	
 	//ステート変更か判定
 	std::string nextStateName = currentState->Judge();
@@ -87,8 +89,8 @@ void Player::DebugGui()
 void Player::OnCollisionEnter(Collider* collider)
 {
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
-	parent->GetComponent<Transform>()->pos = capsuleCollider->center;
-	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius + capsuleCollider->cylinderSize * 0.5f;
+	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
+	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
 }
 
 void Player::ChangeState(std::string nextStateName)

@@ -30,12 +30,17 @@ void CapsuleCollider::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
-		ImGui::DragFloat3("center", &center.x);
-		radian = QuaternionToEuler(quaternion);
-		ImGui::DragFloat3("radian", &radian.x);
-		quaternion = EulerToQuaternion(radian);
+		//ImGui::DragFloat3("begin", &begin.x);
+		//ImGui::DragFloat3("end", &end.x);
+
+		//radian = QuaternionToEuler(quaternion);
+		//ImGui::DragFloat3("radian", &radian.x);
+		//quaternion = EulerToQuaternion(radian);
+		
 		ImGui::DragFloat("radius", &radius);
-		ImGui::DragFloat("cylinderSize", &cylinderSize);
+
+		//ImGui::DragFloat("cylinderSize", &cylinderSize);
+
 		Collider::DebugGui();
 		ImGui::TreePop();
 	}
@@ -43,6 +48,9 @@ void CapsuleCollider::DebugGui()
 
 void CapsuleCollider::CalcCapsuleParam(DirectX::XMFLOAT3 begin, DirectX::XMFLOAT3 end)
 {
+	this->begin = begin;
+	this->end = end;
+
 	XMFLOAT3 vec = end - begin;//begin->end
 	float length = LengthFloat3(vec);
 	vec = NormalizeFloat3(vec);
@@ -63,4 +71,20 @@ void CapsuleCollider::CalcCapsuleParam(DirectX::XMFLOAT3 begin, DirectX::XMFLOAT
 	radian = QuaternionToEuler(quaternion);
 
 	cylinderSize = length;
+
+	UpdateCenter();
+}
+
+void CapsuleCollider::UpdateCenter()
+{
+	DirectX::XMFLOAT3 center = GetCenter();
+
+	XMFLOAT3 vec = end - begin;//begin->end
+	float length = LengthFloat3(vec);
+	vec = NormalizeFloat3(vec);
+
+	center = begin + vec * length * 0.5f;
+
+	SetCenter(center);
+
 }

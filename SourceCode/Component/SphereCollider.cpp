@@ -27,7 +27,10 @@ void SphereCollider::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		DirectX::XMFLOAT3 center = this->GetCenter();
 		ImGui::DragFloat3("center", &center.x);
+		this->SetCenter(center);
+
 		ImGui::DragFloat("radius", &radius);
 		Collider::DebugGui();
 		ImGui::TreePop();
