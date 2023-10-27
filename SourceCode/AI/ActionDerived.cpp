@@ -11,7 +11,7 @@
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
     // アニメーションが再生し終わったら打撃行動を終了
-    if (!owner->GetParent()->GetComponent<ModelRenderer>()->IsPlayAnimation())
+    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -57,7 +57,7 @@ void PunchAction::Exit()
 ActionBase::State SkillAction::Run(float elapsedTime)
 {
     // アニメーションが再生し終わったら重撃行動を終了
-    if (!owner->GetParent()->GetComponent<ModelRenderer>()->IsPlayAnimation())
+    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -116,7 +116,7 @@ ActionBase::State BreakAction::Run(float elapsedTime)
     owner->SetRunTimer(runTimer);
 
     // 実行時間が経過したらアクション終了
-    if (runTimer <= 0.0f && !owner->GetParent()->GetComponent<ModelRenderer>()->IsPlayAnimation())
+    if (runTimer <= 0.0f && owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -301,7 +301,7 @@ void DieAction::Exit()
 ActionBase::State DamageAction::Run(float elapsedTime)
 {
     // アニメーションが再生し終わったら被弾行動を終了
-    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsPlayAnimation())
+    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }

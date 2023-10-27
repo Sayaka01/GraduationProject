@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 
 #include "Component.h"
 
@@ -22,7 +23,24 @@ public:
 	void DebugGui() override;
 
 	//-----< Getter, Setter >-----//
-
+	DirectX::XMFLOAT3 GetRight()
+	{ 
+		DirectX::SimpleMath::Vector3 right = { world._11,world._12,world._13 };
+		right.Normalize();
+		return right; 
+	}
+	DirectX::XMFLOAT3 GetUp() 
+	{
+		DirectX::SimpleMath::Vector3 up = { world._21,world._22,world._23 };
+		up.Normalize();
+		return up;
+	}
+	DirectX::XMFLOAT3 GetForward() 
+	{
+		DirectX::SimpleMath::Vector3 forward = { world._31,world._32,world._33 };
+		forward.Normalize();
+		return forward;
+	}
 
 	//-----< \‘¢‘Ì >-----//
 

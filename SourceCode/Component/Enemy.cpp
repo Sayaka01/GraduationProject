@@ -14,10 +14,14 @@
 #include "Component/Transform.h"
 #include "Component/ModelRenderer.h"
 #include "Component/RigidBody.h"
+#include "Component/SphereCollider.h"
 
 #include "GameObject/GameObject.h"
 
 #include "System/SystemManager.h"
+#include "System/UserFunction.h"
+
+#include <SimpleMath.h>
 
 
 void Enemy::Initialize()
@@ -65,6 +69,16 @@ void Enemy::Initialize()
 
 	//重力を一旦無視する
 	parent->GetComponent<RigidBody>()->SetUseGravity(false);
+
+	//攻撃用に腕の関節位置を取得
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "RigRArm2");
+	//取得したい骨の位置の計算をオンにする
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
+	//腰の位置を取得
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("waist", "RigMain");
+	//取得したい骨の位置の計算をオンにする
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("waist")->isCalc = true;
+	parent->GetComponent<SphereCollider>("waist")->radius = 3.0f;
 }
 
 void Enemy::Update()
@@ -75,6 +89,19 @@ void Enemy::Update()
 	else
 		activeNode = aiTree->Run(activeNode, behaviorData,SystemManager::Instance().GetElapsedTime());
 		//activeNode = aiTree->Run(activeNode, behaviorData,elapsedTime);
+
+	// 骨の位置の取得
+	DirectX::SimpleMath::Vector3 bonePos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
+	// 腰の位置の取得
+	DirectX::SimpleMath::Vector3 waistPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("waist");
+	DirectX::SimpleMath::Vector3 forward = parent->GetComponent<Transform>()->GetForward();
+	waistPos -= forward * 1.5f;
+
+
+	// sphereColliderの位置を設定
+	parent->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
+	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
+
 }
 
 void Enemy::Finalize()
@@ -120,7 +147,7 @@ void Enemy::DebugGui()
 			parentStateStr = activeNode->GetParent()->GetName();
 		}
 		ImGui::Text("Behavior :%s : %s", parentStateStr.c_str(), stateStr.c_str());
-
+		//ImGui::InputFloat3("right hand position", &pos.x);
 		ImGui::TreePop();
 	}
 }
