@@ -37,9 +37,12 @@ void SceneTitle::Initialize()
 	sprMenuText.emplace(menuNameList[(int)MenuTextString::FinishGame_mst],new GameObject("finishGame"));
 	sprMenuText[menuNameList[(int)MenuTextString::FinishGame_mst]]->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/text_FinishGame.png"));
 
+	//タイトルロゴ画像の読み込み
 	sprTitleLogo = std::make_unique<GameObject>("TitleLogo");
 	sprTitleLogo->AddComponent(new SpriteRenderer(L"./Resources/Sprite/Title/title_logo.png"));
 	sprTitleLogo->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+
+	//背景のギア画像読み込み
 	for (int i = 0; i < 5; i++)
 	{
 		sprBackGears.emplace_back(std::make_unique<GameObject>("menuBack" + std::to_string(i)));
@@ -47,9 +50,10 @@ void SceneTitle::Initialize()
 		sprBackGears[i]->AddComponent(new SpriteRenderer(filename.c_str()));
 		sprBackGears[i]->GetComponent<SpriteRenderer>()->pos = { -10,500 };
 		sprBackGears[i]->GetComponent<SpriteRenderer>()->pivot = sprBackGears[i]->GetComponent<SpriteRenderer>()->GetSpriteSize() * DirectX::XMFLOAT2(0.5f, 0.5f);
-		sprBackGears[i]->GetComponent<SpriteRenderer>()->color = { 1,1,1,0.5f };
+		sprBackGears[i]->GetComponent<SpriteRenderer>()->color = { 1,0.26f,0.65f,0.5f };
 	}
 
+	//選択テキストの位置などを設定	
 	menuRadius = { 400,300 };
 	circlePivot = { -250, 400 };
 	float spacing = 0.0f;//画像同士の間隔
@@ -182,6 +186,15 @@ void SceneTitle::Update()
 
 	sprBackGears[0]->GetComponent<SpriteRenderer>()->degree = currentUISelectDegree + 40;
 	sprBackGears[0]->Update();
+
+	for (int i = 0; i < 3; i++)
+	{
+		if(selectMenuType == i)
+			sprMenuText[menuNameList[i]]->GetComponent<SpriteRenderer>()->color = { 0.6f,0.8f,0.96f,1 };
+		else
+			sprMenuText[menuNameList[i]]->GetComponent<SpriteRenderer>()->color = { 0.6f,0.8f,0.96f,0.5f };
+
+	}
 
 #ifdef USE_IMGUI
 	ImGui::Begin("title debug ui");

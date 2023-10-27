@@ -263,6 +263,7 @@
     <ClCompile Include="SourceCode\Component\Transform.cpp" />
     <ClCompile Include="SourceCode\GameObject\CameraController.cpp" />
     <ClCompile Include="SourceCode\GameObject\GameObject.cpp" />
+    <ClCompile Include="SourceCode\GameObject\Health.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneCommunicate.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneGame.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneLoading.cpp" />
@@ -332,6 +333,7 @@
     <ClInclude Include="SourceCode\Component\Transform.h" />
     <ClInclude Include="SourceCode\GameObject\CameraController.h" />
     <ClInclude Include="SourceCode\GameObject\GameObject.h" />
+    <ClInclude Include="SourceCode\GameObject\Health.h" />
     <ClInclude Include="SourceCode\Scene\Scene.h" />
     <ClInclude Include="SourceCode\Scene\SceneCommunicate.h" />
     <ClInclude Include="SourceCode\Scene\SceneGame.h" />

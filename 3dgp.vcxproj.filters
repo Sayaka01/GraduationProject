@@ -66,11 +66,11 @@
     <Filter Include="Sources\Component\Light">
       <UniqueIdentifier>{3c0cdf65-8b19-4f08-91a7-bf997aa23ede}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Component\AI">
-      <UniqueIdentifier>{47246b30-c3ac-4d1e-8190-5d0247185a3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Component\Collider">
       <UniqueIdentifier>{64dcdef5-5e8f-4f49-b5d1-24a559a6b378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\AI">
+      <UniqueIdentifier>{47246b30-c3ac-4d1e-8190-5d0247185a3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -216,19 +216,19 @@
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\AI\ActionDerived.cpp">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\AI\BehaviorData.cpp">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\AI\BehaviorTree.cpp">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\AI\JudgmentDerived.cpp">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\AI\NodeBase.cpp">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\System\PhysicsFunction.cpp">
       <Filter>Sources\System</Filter>
@@ -256,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Component\CapsuleCollider.cpp">
       <Filter>Sources\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GameObject\Health.cpp">
+      <Filter>Sources\GameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,25 +428,25 @@
       <Filter>Sources\Component\Character</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\ActionBase.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\ActionDerived.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\BehaviorData.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\BehaviorTree.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\JudgementBase.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\JudgmentDerived.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\AI\NodeBase.h">
-      <Filter>Sources\Component\AI</Filter>
+      <Filter>Sources\AI</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\System\PhysicsFunction.h">
       <Filter>Sources\System</Filter>
@@ -471,6 +474,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Component\CapsuleCollider.h">
       <Filter>Sources\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameObject\Health.h">
+      <Filter>Sources\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

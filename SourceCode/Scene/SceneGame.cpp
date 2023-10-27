@@ -6,6 +6,7 @@
 
 #include "../GameObject/GameObject.h"
 #include "../GameObject/CameraController.h"
+#include "../GameObject/Health.h"
 
 #include "Component/Transform.h"
 #include "Component/Camera.h"
@@ -102,6 +103,8 @@ void SceneGame::PlayerInitialize()
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
 
+	player->AddComponent(new Health(30));
+
 }
 
 void SceneGame::EnemyInitialize()
@@ -134,4 +137,5 @@ void SceneGame::EnemyInitialize()
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
 
+	enemy->AddComponent(new Health(20));
 }
