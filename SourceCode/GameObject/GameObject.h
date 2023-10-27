@@ -53,7 +53,6 @@ public:
 				if (com != nullptr) return com;
 			}
 		}
-
 		return nullptr;
 	}
 	template<class T>
@@ -68,6 +67,7 @@ public:
 				if (com != nullptr) return com;
 			}
 		}
+		return nullptr;
 	}
 
 	//コンポーネントの削除

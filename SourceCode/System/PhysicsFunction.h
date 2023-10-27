@@ -4,6 +4,7 @@
 
 
 class SphereCollider;
+class CapsuleCollider;
 
 namespace Physics
 {
@@ -22,4 +23,9 @@ namespace Physics
 		SphereCollider* colliderB,
 		IntersectionResult* result = {});
 
+	//‹…vsƒJƒvƒZƒ‹
+	bool IntersectSphereVsCapsule(
+		SphereCollider* sphereCollider,
+		CapsuleCollider* capsuleCollider,
+		IntersectionResult* result);
 }

@@ -104,7 +104,7 @@ void SphereMeshRenderer::Draw(SphereCollider* sphereCollider)
 {
 	//ƒ[ƒ‹ƒhs—ñ‚Ìì¬
 	float r = sphereCollider->radius;
-	DirectX::XMFLOAT3 center = sphereCollider->center;
+	DirectX::XMFLOAT3 center = sphereCollider->GetCenter();
 	DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(r,r,r) };
 	DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(0.0f,0.0f,0.0f) };
 	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(center.x,center.y,center.z) };

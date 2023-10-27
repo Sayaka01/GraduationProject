@@ -99,8 +99,8 @@ void Enemy::Update()
 
 
 	// sphereCollider‚ÌˆÊ’u‚ðÝ’è
-	parent->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
-	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
+	parent->GetComponent<SphereCollider>("attackRightHand")->SetCenter(bonePos);
+	parent->GetComponent<SphereCollider>("waist")->SetCenter(waistPos);
 
 }
 
