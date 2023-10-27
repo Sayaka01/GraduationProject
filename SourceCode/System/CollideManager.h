@@ -4,6 +4,8 @@
 
 class SphereMeshRenderer;
 class SphereCollider;
+class CapsuleMeshRenderer;
+class CapsuleCollider;
 
 class CollideManager
 {
@@ -31,8 +33,12 @@ public:
 
 	//SphereCollider‚Ì’Ç‰Á
 	void AddSphereCollider(SphereCollider* sphereCollider) { sphereColliders.emplace_back(sphereCollider); }
+	//CapsuleCollider‚Ì’Ç‰Á
+	void AddCapsuleCollider(CapsuleCollider* capsuleCollider) { capsuleColliders.emplace_back(capsuleCollider); }
 
 private:
 	SphereMeshRenderer* sphereMesh = nullptr;
 	std::vector<SphereCollider*> sphereColliders;
+	CapsuleMeshRenderer* capsuleMesh = nullptr;
+	std::vector<CapsuleCollider*> capsuleColliders;
 };

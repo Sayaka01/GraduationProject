@@ -56,6 +56,45 @@ inline float CirculateDegree(float degree)
     return degree;
 }
 
+//オイラー角からクオータニオンの変換
+inline XMFLOAT4 EulerToQuaternion(XMFLOAT3 radian)
+{
+    XMVECTOR Q = DirectX::XMQuaternionRotationRollPitchYaw(radian.x, radian.y, radian.z);
+    XMFLOAT4 q{};
+    XMStoreFloat4(&q, Q);
+
+    return q;
+}
+
+//クオータニオンからオイラー角への変換
+inline XMFLOAT3 QuaternionToEuler(XMFLOAT4 quaternion)
+{
+    const float xx = quaternion.x * quaternion.x;
+    const float yy = quaternion.y * quaternion.y;
+    const float zz = quaternion.z * quaternion.z;
+
+    const float m31 = 2.f * quaternion.x * quaternion.z + 2.f * quaternion.y * quaternion.w;
+    const float m32 = 2.f * quaternion.y * quaternion.z - 2.f * quaternion.x * quaternion.w;
+    const float m33 = 1.f - 2.f * xx - 2.f * yy;
+
+    const float cy = sqrtf(m33 * m33 + m31 * m31);
+    const float cx = atan2f(-m32, cy);
+    if (cy > 16.f * FLT_EPSILON)
+    {
+        const float m12 = 2.f * quaternion.x * quaternion.y + 2.f * quaternion.z * quaternion.w;
+        const float m22 = 1.f - 2.f * xx - 2.f * zz;
+
+        return XMFLOAT3(cx, atan2f(m31, m33), atan2f(m12, m22));
+    }
+    else
+    {
+        const float m11 = 1.f - 2.f * yy - 2.f * zz;
+        const float m21 = 2.f * quaternion.x * quaternion.y - 2.f * quaternion.z * quaternion.w;
+
+        return XMFLOAT3(cx, 0.f, atan2f(-m21, m11));
+    }
+}
+
 //-----< A地点からB地点へのベクトルを求める関数 >-----//
 inline XMFLOAT2 MakeVectorAtoB(const XMFLOAT2& a, const XMFLOAT2& b, bool isNormalized = false)
 {

@@ -244,6 +244,8 @@
     <ClCompile Include="SourceCode\Communication\server_udp.cpp" />
     <ClCompile Include="SourceCode\Component\Camera.cpp" />
     <ClCompile Include="SourceCode\Component\CameraData.cpp" />
+    <ClCompile Include="SourceCode\Component\CapsuleCollider.cpp" />
+    <ClCompile Include="SourceCode\Component\CapsuleMeshRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\Collider.cpp" />
     <ClCompile Include="SourceCode\Component\Component.cpp" />
     <ClCompile Include="SourceCode\Component\DirectionLight.cpp" />
@@ -311,6 +313,8 @@
     <ClInclude Include="SourceCode\Communication\server_udp.h" />
     <ClInclude Include="SourceCode\Component\Camera.h" />
     <ClInclude Include="SourceCode\Component\CameraData.h" />
+    <ClInclude Include="SourceCode\Component\CapsuleCollider.h" />
+    <ClInclude Include="SourceCode\Component\CapsuleMeshRenderer.h" />
     <ClInclude Include="SourceCode\Component\Collider.h" />
     <ClInclude Include="SourceCode\Component\Component.h" />
     <ClInclude Include="SourceCode\Component\DirectionLight.h" />

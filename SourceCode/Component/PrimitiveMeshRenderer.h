@@ -16,6 +16,8 @@ public:
 
 	//‰Šú‰»
 	void Initialize()override;
+	//•`‰æ€”õ
+	void DrawPrepare();
 	//•`‰æ
 	void Draw()override;
 

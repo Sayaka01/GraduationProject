@@ -245,11 +245,17 @@
     <ClCompile Include="SourceCode\System\CollideManager.cpp">
       <Filter>Sources\System</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Component\Collider.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Component\RigidBody.cpp">
       <Filter>Sources\Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Collider.cpp">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\CapsuleMeshRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\CapsuleCollider.cpp">
+      <Filter>Sources\Component\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -459,6 +465,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Component\RigidBody.h">
       <Filter>Sources\Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\CapsuleMeshRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\CapsuleCollider.h">
+      <Filter>Sources\Component\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

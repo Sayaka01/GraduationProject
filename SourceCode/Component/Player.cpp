@@ -5,7 +5,7 @@
 #include "GameObject/GameObject.h"
 
 #include "Component/Transform.h"
-#include "Component/SphereCollider.h"
+#include "Component/CapsuleCollider.h"
 
 #include "System/UserFunction.h"
 
@@ -23,8 +23,10 @@ void Player::Initialize()
 	ChangeState("Idle");
 
 	//HitEventの設定
-	parent->GetComponent<SphereCollider>()->radius = 2.5f;
-	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	capsuleCollider->radius = 2.0f;
+	capsuleCollider->cylinderSize = 5.0f;
+	capsuleCollider->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 }
 
 void Player::Update()
@@ -35,8 +37,9 @@ void Player::Update()
 	//位置の更新
 	parent->GetComponent<Transform>()->pos += moveVelocity;
 
-	parent->GetComponent<SphereCollider>()->center = parent->GetComponent<Transform>()->pos;
-	parent->GetComponent<SphereCollider>()->center.y += 6.0f;
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	capsuleCollider->center = parent->GetComponent<Transform>()->pos;
+	capsuleCollider->center.y += capsuleCollider->radius + capsuleCollider->cylinderSize * 0.5f;
 	
 	//ステート変更か判定
 	std::string nextStateName = currentState->Judge();
@@ -83,8 +86,9 @@ void Player::DebugGui()
 
 void Player::OnCollisionEnter(Collider* collider)
 {
-	parent->GetComponent<Transform>()->pos = parent->GetComponent<SphereCollider>()->center;
-	parent->GetComponent<Transform>()->pos.y -= 6.0f;
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	parent->GetComponent<Transform>()->pos = capsuleCollider->center;
+	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius + capsuleCollider->cylinderSize * 0.5f;
 }
 
 void Player::ChangeState(std::string nextStateName)

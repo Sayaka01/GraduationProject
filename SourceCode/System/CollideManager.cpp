@@ -4,25 +4,29 @@
 
 #include "Component/SphereMeshRenderer.h"
 #include "Component/SphereCollider.h"
+#include "Component/CapsuleMeshRenderer.h"
+#include "Component/CapsuleCollider.h"
 
 #include "System/PhysicsFunction.h"
 #include "System/UserFunction.h"
 
 void CollideManager::Initialize()
 {
+	//スフィアメッシュの生成
 	sphereMesh = new SphereMeshRenderer();
-
+	//カプセルメッシュの生成
+	capsuleMesh = new CapsuleMeshRenderer();
 }
 
 void CollideManager::Finalize()
 {
-	if (sphereMesh)
-	{
-		delete sphereMesh;
-		sphereMesh = nullptr;
-	}
-
+	//スフィアメッシュの削除
+	SafeDelete(sphereMesh);
 	sphereColliders.clear();
+
+	//カプセルメッシュの削除
+	SafeDelete(capsuleMesh);
+	capsuleColliders.clear();
 }
 
 void CollideManager::Collide()
@@ -38,6 +42,7 @@ void CollideManager::Collide()
 		{
 			if (!colliderA->GetEnable())continue;
 			if (!colliderB->GetEnable())continue;
+			if (colliderA->GetParentName() == colliderB->GetParentName())continue;
 			if (colliderA == colliderB)continue;
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
@@ -73,7 +78,15 @@ void CollideManager::Draw()
 	sphereMesh->DrawPrepare();
 	for (SphereCollider* collider : sphereColliders)
 	{
-		if (collider->drawDebugPrimitive)
+		if (collider->GetEnable() && collider->drawDebugPrimitive)
 			sphereMesh->Draw(collider);
+	}
+
+	//カプセル描画
+	capsuleMesh->DrawPrepare();
+	for (CapsuleCollider* collider : capsuleColliders)
+	{
+		if (collider->GetEnable() && collider->drawDebugPrimitive)
+			capsuleMesh->Draw(collider);
 	}
 }

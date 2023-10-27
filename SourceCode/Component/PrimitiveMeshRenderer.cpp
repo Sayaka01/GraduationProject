@@ -23,7 +23,7 @@ void PrimitiveMeshRenderer::Initialize()
 
 }
 
-void PrimitiveMeshRenderer::Draw()
+void PrimitiveMeshRenderer::DrawPrepare()
 {
 	//デバイスコンテキストの取得
 	ID3D11DeviceContext* dc = SystemManager::Instance().GetDeviceContext();
@@ -38,11 +38,19 @@ void PrimitiveMeshRenderer::Draw()
 	SystemManager::Instance().SetDepthStencilState(SystemManager::DepthStencilState::SortOnWriteOn);
 
 	// プリミティブ設定
-	UINT stride = sizeof(DirectX::XMFLOAT3);
-	UINT offset = 0;
 	dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+}
+
+void PrimitiveMeshRenderer::Draw()
+{
+	DrawPrepare();
+
+	//デバイスコンテキストの取得
+	ID3D11DeviceContext* dc = SystemManager::Instance().GetDeviceContext();
 
 	//頂点バッファの設定
+	UINT stride = sizeof(DirectX::XMFLOAT3);
+	UINT offset = 0;
 	dc->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 
 

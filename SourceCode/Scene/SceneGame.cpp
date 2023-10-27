@@ -15,6 +15,7 @@
 #include "Component/Player.h"
 #include "Component/Enemy.h"
 #include "Component/SphereCollider.h"
+#include "Component/CapsuleCollider.h"
 
 #include "System/SystemManager.h"
 #include "System/Common.h"
@@ -95,7 +96,7 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(modelRenderer);
 
-	player->AddComponent(new SphereCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->AddComponent(new CapsuleCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new Player());
 
