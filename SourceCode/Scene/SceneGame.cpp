@@ -127,8 +127,9 @@ void SceneGame::EnemyInitialize()
 
 	enemy->AddComponent(modelRenderer);
 
+	enemy->AddComponent(new SphereCollider("waist"));
+	enemy->AddComponent(new SphereCollider("attackRightHand"));
 	enemy->AddComponent(new Enemy());
-	enemy->AddComponent(new SphereCollider());
 
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };

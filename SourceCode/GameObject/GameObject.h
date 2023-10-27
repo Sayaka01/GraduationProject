@@ -58,7 +58,7 @@ public:
 	}
 	template<class T>
 	//コンポーネントの取得（名前検索）（1つずつ）
-	Component* GetComponent(std::string compName)
+	T* GetComponent(std::string compName)
 	{
 		for (Component* component : components)
 		{
