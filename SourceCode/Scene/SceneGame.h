@@ -22,6 +22,9 @@ private:
 	void PlayerInitialize();
 	void EnemyInitialize();
 
+	// 2D‰æ‘œ‚Ì‰Šúİ’è
+	void SpriteInitialze();
+
 	GameObject* objectManager = nullptr;
 	GameObject* player = nullptr;
 	GameObject* enemy = nullptr;
@@ -29,4 +32,9 @@ private:
 	GameObject* stage = nullptr;
 	CameraController* cameraController = nullptr;
 	DirectionLight* directionLight = nullptr;
+
+	// ƒvƒŒƒCƒ„[‚ÌUIŒn
+	GameObject* sprUiFrame{ nullptr };
+	GameObject* sprBoxBar{ nullptr };
+	GameObject* sprCircleBar{ nullptr };
 };

@@ -61,7 +61,7 @@ void Enemy::Initialize()
 	parent->AddComponent(new RigidBody());
 
 	//"待機アニメーション"を再生
-	//parent->GetComponent<MeshRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
 	
 	//姿勢設定
 	parent->GetComponent<Transform>()->pos = { 2.0f,-2.9f,-2.0f };

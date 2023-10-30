@@ -17,6 +17,7 @@
 #include "Component/Enemy.h"
 #include "Component/SphereCollider.h"
 #include "Component/CapsuleCollider.h"
+#include "Component/SpriteRenderer.h"
 
 #include "System/SystemManager.h"
 #include "System/Common.h"
@@ -138,4 +139,19 @@ void SceneGame::EnemyInitialize()
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
 
 	enemy->AddComponent(new Health(20));
+}
+
+// 2D‰æ‘œ‚Ì‰ŠúÝ’è
+void SceneGame::SpriteInitialze()
+{
+	//ƒ^ƒCƒgƒ‹ƒƒS‰æ‘œ‚Ì“Ç‚Ýž‚Ý
+	sprUiFrame = new GameObject("uiFrame");
+	sprUiFrame->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
+	sprUiFrame->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+	sprBoxBar = new GameObject("uiFrame");
+	sprBoxBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
+	sprBoxBar->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+	sprCircleBar = new GameObject("uiFrame");
+	sprCircleBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
+	sprCircleBar->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
 }
