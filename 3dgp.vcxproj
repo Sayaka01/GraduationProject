@@ -242,6 +242,8 @@
     <ClCompile Include="SourceCode\Communication\server_multicast.cpp" />
     <ClCompile Include="SourceCode\Communication\server_tcp.cpp" />
     <ClCompile Include="SourceCode\Communication\server_udp.cpp" />
+    <ClCompile Include="SourceCode\Component\BoxCollider.cpp" />
+    <ClCompile Include="SourceCode\Component\BoxMeshRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\Camera.cpp" />
     <ClCompile Include="SourceCode\Component\CameraData.cpp" />
     <ClCompile Include="SourceCode\Component\CapsuleCollider.cpp" />
@@ -312,6 +314,8 @@
     <ClInclude Include="SourceCode\Communication\server_multicast.h" />
     <ClInclude Include="SourceCode\Communication\server_tcp.h" />
     <ClInclude Include="SourceCode\Communication\server_udp.h" />
+    <ClInclude Include="SourceCode\Component\BoxCollider.h" />
+    <ClInclude Include="SourceCode\Component\BoxMeshRenderer.h" />
     <ClInclude Include="SourceCode\Component\Camera.h" />
     <ClInclude Include="SourceCode\Component\CameraData.h" />
     <ClInclude Include="SourceCode\Component\CapsuleCollider.h" />

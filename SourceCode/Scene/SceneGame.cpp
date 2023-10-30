@@ -16,6 +16,7 @@
 #include "Component/Player.h"
 #include "Component/Enemy.h"
 #include "Component/SphereCollider.h"
+#include "Component/BoxCollider.h"
 #include "Component/CapsuleCollider.h"
 
 #include "System/SystemManager.h"

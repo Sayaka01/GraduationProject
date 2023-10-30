@@ -4,6 +4,8 @@
 
 #include "Component/SphereMeshRenderer.h"
 #include "Component/SphereCollider.h"
+#include "Component/BoxMeshRenderer.h"
+#include "Component/BoxCollider.h"
 #include "Component/CapsuleMeshRenderer.h"
 #include "Component/CapsuleCollider.h"
 
@@ -14,6 +16,8 @@ void CollideManager::Initialize()
 {
 	//スフィアメッシュの生成
 	sphereMesh = new SphereMeshRenderer();
+	//ボックスメッシュの生成
+	boxMesh = new BoxMeshRenderer();
 	//カプセルメッシュの生成
 	capsuleMesh = new CapsuleMeshRenderer();
 }
@@ -23,6 +27,10 @@ void CollideManager::Finalize()
 	//スフィアメッシュの削除
 	SafeDelete(sphereMesh);
 	sphereColliders.clear();
+
+	//ボックスメッシュの削除
+	SafeDelete(boxMesh);
+	boxColliders.clear();
 
 	//カプセルメッシュの削除
 	SafeDelete(capsuleMesh);
@@ -131,12 +139,21 @@ void CollideManager::Draw()
 			sphereMesh->Draw(collider);
 	}
 
+	//Box描画
+	boxMesh->DrawPrepare();
+	for (BoxCollider* collider : boxColliders)
+	{
+		if (collider->GetEnable() && collider->drawDebugPrimitive)
+			boxMesh->Draw(collider);
+	}
+
 	//カプセル描画
 	capsuleMesh->DrawPrepare();
 	for (CapsuleCollider* collider : capsuleColliders)
 	{
 		if (collider->GetEnable() && collider->drawDebugPrimitive)
 		{
+			collider->CalcCapsuleParam();
 			capsuleMesh->Draw(collider);
 		}
 	}

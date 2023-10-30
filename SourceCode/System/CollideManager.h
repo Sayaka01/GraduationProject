@@ -4,6 +4,8 @@
 
 class SphereMeshRenderer;
 class SphereCollider;
+class BoxMeshRenderer;
+class BoxCollider;
 class CapsuleMeshRenderer;
 class CapsuleCollider;
 
@@ -33,12 +35,16 @@ public:
 
 	//SphereCollider‚Ì’Ç‰Á
 	void AddSphereCollider(SphereCollider* sphereCollider) { sphereColliders.emplace_back(sphereCollider); }
+	//BoxCollider‚Ì’Ç‰Á
+	void AddBoxCollider(BoxCollider* boxCollider) { boxColliders.emplace_back(boxCollider); }
 	//CapsuleCollider‚Ì’Ç‰Á
 	void AddCapsuleCollider(CapsuleCollider* capsuleCollider) { capsuleColliders.emplace_back(capsuleCollider); }
 
 private:
 	SphereMeshRenderer* sphereMesh = nullptr;
 	std::vector<SphereCollider*> sphereColliders;
+	BoxMeshRenderer* boxMesh = nullptr;
+	std::vector<BoxCollider*> boxColliders;
 	CapsuleMeshRenderer* capsuleMesh = nullptr;
 	std::vector<CapsuleCollider*> capsuleColliders;
 };

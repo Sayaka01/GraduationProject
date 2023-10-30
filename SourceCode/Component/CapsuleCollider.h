@@ -18,7 +18,7 @@ public:
 	void DebugGui() override;
 
 	//”CˆÓ²‰ñ“]
-	void CalcCapsuleParam(DirectX::XMFLOAT3 begin, DirectX::XMFLOAT3 end);
+	void CalcCapsuleParam();
 
 	//’†‰›ˆÊ’u‚ÌXV
 	void UpdateCenter();

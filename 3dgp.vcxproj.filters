@@ -260,6 +260,12 @@
     <ClCompile Include="SourceCode\GameObject\Health.cpp">
       <Filter>Sources\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Component\BoxCollider.cpp">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\BoxMeshRenderer.cpp">
+      <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\imgui\imconfig.h">
@@ -477,6 +483,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\GameObject\Health.h">
       <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\BoxCollider.h">
+      <Filter>Sources\Component\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\BoxMeshRenderer.h">
+      <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
