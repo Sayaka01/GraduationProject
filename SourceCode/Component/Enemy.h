@@ -122,7 +122,7 @@ private:
 	//-----< 定数 >-----//
 
 	//攻撃を開始する範囲
-	const float attackRange{ 13.0f };
+	const float attackRange{ 8.0f };
 
 	//追跡を開始する範囲
 	const float pursuitRange{ 80.0f };

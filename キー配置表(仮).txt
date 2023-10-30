@@ -1,0 +1,16 @@
+キー配置表(仮)
+
+(コントローラー：キーボード)
+
+A：Enter
+B：space
+X：Q
+Y：E
+
+十字キー、Lスティック：WASD、↑←↓→
+Rスティック：IJKL
+
+ZR：Y
+R：H
+ZL：T
+L：G

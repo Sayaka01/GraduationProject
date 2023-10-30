@@ -131,10 +131,10 @@ void SceneTitle::Update()
 		}
 	}
 
-
+	//ƒ{ƒ^ƒ“‘€ì‚É‚æ‚é‹““®‚Ìê‡•ª‚¯
 	switch (operateType)
 	{
-	case OperateType::None:
+	case OperateType::None://‘€ì‚È‚µ
 		currentSelectDegree = targetMenuDegreeList[selectMenuType];
 		currentUISelectDegree = targetMenuDegreeList[selectMenuType];
 
@@ -146,34 +146,40 @@ void SceneTitle::Update()
 			sprBackGears[i]->Update();
 		}
 		break;
-	case OperateType::Up:
+	case OperateType::Up://ã•ûŒü‚Ö‘€ì
 		uiTime += deltaTime;//Œo‰ßŠÔ
 		currentSelectDegree = oldTarget;
 		currentUISelectDegree = oldTarget;
 		//Bounce‚Ì‚æ‚é•Ï‰»—Ê‚ª•Ô‚Á‚Ä‚­‚é‚½‚ß‚Ç‚±‚©‚ç‚Ç‚ê‚¾‚¯•Ï‰»‚·‚é‚©
 		currentSelectDegree -= easing::Quad::easeOut(uiTime, 0, currentSelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
 		currentUISelectDegree -= easing::Elastic::easeOut(uiTime, 0, currentUISelectDegree - targetMenuDegreeList[selectMenuType], changeMaxTime);
+		
+		//ƒMƒA‚Ì‰ñ“]
 		for (int i = 1; i < 5; i++)
 		{
 			sprBackGears[i]->GetComponent<SpriteRenderer>()->degree = currentUISelectDegree + 40;
 			sprBackGears[i]->Update();
 		}
 
+		//ˆÚ“®‚µI‚í‚Á‚½‚ç‘€ì‚È‚µ‚Ì‹““®‚Ö‘JˆÚ
 		if (uiTime > changeMaxTime)
 			operateType = OperateType::None;
 		break;
-	case OperateType::Down:
+	case OperateType::Down://‰º•ûŒü‚ÖˆÚ“®
 		uiTime += deltaTime;//Œo‰ßŠÔ
 		currentSelectDegree = oldTarget;
 		currentUISelectDegree = oldTarget;
 		//Bounce‚Ì‚æ‚é•Ï‰»—Ê‚ª•Ô‚Á‚Ä‚­‚é‚½‚ß‚Ç‚±‚©‚ç‚Ç‚ê‚¾‚¯•Ï‰»‚·‚é‚©
 		currentSelectDegree += easing::Quad::easeOut(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentSelectDegree, changeMaxTime);
 		currentUISelectDegree += easing::Elastic::easeOut(uiTime, 0, targetMenuDegreeList[selectMenuType] - currentUISelectDegree, changeMaxTime);
+		
+		//ƒMƒA‚Ì‰ñ“]
 		for (int i = 1; i < 5; i++)
 		{
 			sprBackGears[i]->GetComponent<SpriteRenderer>()->degree = currentUISelectDegree + 40;
 			sprBackGears[i]->Update();
 		}
+		//ˆÚ“®‚µI‚í‚Á‚½‚ç‘€ì‚È‚µ‚Ì‹““®‚Ö‘JˆÚ
 		if (uiTime > changeMaxTime)
 			operateType = OperateType::None;
 		break;
@@ -184,16 +190,18 @@ void SceneTitle::Update()
 	sprMenuText[menuNameList[(int)MenuTextString::StartGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 40,currentSelectDegree + 40 }, menuRadius);
 	sprMenuText[menuNameList[(int)MenuTextString::FinishGame_mst]]->GetComponent<SpriteRenderer>()->pos = moveRoundFloat2(circlePivot, { currentSelectDegree + 80,currentSelectDegree + 80 }, menuRadius);
 
+	//”wŒi‚ÌƒMƒA‰ñ“]
 	sprBackGears[0]->GetComponent<SpriteRenderer>()->degree = currentUISelectDegree + 40;
 	sprBackGears[0]->Update();
 
+	//UI‚ÉF•t‚¯
 	for (int i = 0; i < 3; i++)
 	{
+		//‘I‘ğ‚µ‚Ä‚¢‚éUI‚ÌF‚ğ•ÏX
 		if(selectMenuType == i)
 			sprMenuText[menuNameList[i]]->GetComponent<SpriteRenderer>()->color = { 0.6f,0.8f,0.96f,1 };
 		else
 			sprMenuText[menuNameList[i]]->GetComponent<SpriteRenderer>()->color = { 0.6f,0.8f,0.96f,0.5f };
-
 	}
 
 #ifdef USE_IMGUI
