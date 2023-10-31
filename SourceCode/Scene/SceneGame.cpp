@@ -51,6 +51,9 @@ void SceneGame::Initialize()
 	objectManager->AddChild(stage);
 	objectManager->AddChild(player);
 	objectManager->AddChild(enemy);
+
+
+	CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
 
 void SceneGame::Finalize()

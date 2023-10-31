@@ -449,3 +449,15 @@ inline XMFLOAT4X4 operator* (const XMFLOAT4X4 a, const XMFLOAT4X4 b)
 
     return ans;
 }
+
+// Š|‚¯ŽZ(XMFLOAT3*XMFLOAT4X4)
+inline XMFLOAT3 operator* (const XMFLOAT3 a, const XMFLOAT4X4 b)
+{
+    XMVECTOR A = XMLoadFloat3(&a);
+    XMMATRIX B = XMLoadFloat4x4(&b);
+
+    XMFLOAT3 ans{};
+    XMStoreFloat3(&ans, XMVector3TransformCoord(A, B));
+
+    return ans;
+}

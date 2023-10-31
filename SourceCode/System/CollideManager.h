@@ -9,6 +9,8 @@ class BoxCollider;
 class CapsuleMeshRenderer;
 class CapsuleCollider;
 
+class ModelRenderer;
+
 class CollideManager
 {
 private:
@@ -39,6 +41,9 @@ public:
 	void AddBoxCollider(BoxCollider* boxCollider) { boxColliders.emplace_back(boxCollider); }
 	//CapsuleColliderÇÃí«â¡
 	void AddCapsuleCollider(CapsuleCollider* capsuleCollider) { capsuleColliders.emplace_back(capsuleCollider); }
+
+	//BoundingBoxÇÃçÏê¨
+	void CreateBoundingBox(ModelRenderer* modelRenderer);
 
 private:
 	SphereMeshRenderer* sphereMesh = nullptr;
