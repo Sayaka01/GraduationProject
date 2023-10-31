@@ -34,6 +34,7 @@ private:
 	DirectionLight* directionLight = nullptr;
 
 	// ÉvÉåÉCÉÑÅ[ÇÃUIån
+	GameObject* spriteManager = nullptr;
 	GameObject* sprUiFrame{ nullptr };
 	GameObject* sprBoxBar{ nullptr };
 	GameObject* sprCircleBar{ nullptr };

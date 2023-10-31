@@ -122,13 +122,13 @@ private:
 	//-----< 定数 >-----//
 
 	//攻撃を開始する範囲
-	const float attackRange{ 8.0f };
+	float attackRange{ 8.0f };
 
 	//追跡を開始する範囲
-	const float pursuitRange{ 80.0f };
+	float pursuitRange{ 80.0f };
 
 	//徘徊を開始する範囲
-	const float wanderRange{ 60.0f };
+	float wanderRange{ 60.0f };
 
 	float rotateRatio = 0.75f;
 

@@ -137,7 +137,7 @@ void Enemy::Finalize()
 
 void Enemy::DebugGui()
 {
-	if (ImGui::TreeNode(name.c_str()))
+	if (ImGui::TreeNode("AI"))
 	{
 		std::string stateStr = "";
 		std::string parentStateStr = "";
@@ -148,6 +148,10 @@ void Enemy::DebugGui()
 		}
 		ImGui::Text("Behavior :%s : %s", parentStateStr.c_str(), stateStr.c_str());
 		//ImGui::InputFloat3("right hand position", &pos.x);
+
+		ImGui::SliderFloat("AttackRange", &attackRange, 1,100);
+		ImGui::SliderFloat("PursuitRange", &pursuitRange, 1,100);
+		ImGui::SliderFloat("WanderRange", &wanderRange, 1,100);
 		ImGui::TreePop();
 	}
 }

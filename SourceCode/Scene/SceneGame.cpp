@@ -51,6 +51,14 @@ void SceneGame::Initialize()
 	objectManager->AddChild(stage);
 	objectManager->AddChild(player);
 	objectManager->AddChild(enemy);
+
+	spriteManager = new GameObject("spriteManager");
+
+	SpriteInitialze();
+
+	spriteManager->AddChild(sprBoxBar);
+	spriteManager->AddChild(sprCircleBar);
+	spriteManager->AddChild(sprUiFrame);
 }
 
 void SceneGame::Finalize()
@@ -59,6 +67,9 @@ void SceneGame::Finalize()
 
 	objectManager->Finalize();
 	delete objectManager;
+
+	spriteManager->Finalize();
+	delete spriteManager;
 }
 
 void SceneGame::Update()
@@ -66,6 +77,8 @@ void SceneGame::Update()
 	objectManager->Update();
 
 	CollideManager::Instance().Collide();
+
+	spriteManager->Update();
 }
 
 void SceneGame::Draw()
@@ -74,6 +87,7 @@ void SceneGame::Draw()
 
 	CollideManager::Instance().Draw();
 
+	spriteManager->Draw();
 }
 
 void SceneGame::PlayerInitialize()
@@ -146,13 +160,19 @@ void SceneGame::EnemyInitialize()
 void SceneGame::SpriteInitialze()
 {
 	//ƒ^ƒCƒgƒ‹ƒƒS‰æ‘œ‚Ì“Ç‚Ýž‚Ý
+	sprBoxBar = new GameObject("boxBar");
+	sprBoxBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/box_bar.png"));
+	sprBoxBar->GetComponent<SpriteRenderer>()->pos = { 147.4f,48.7f};
+	sprBoxBar->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
+	sprBoxBar->GetComponent<SpriteRenderer>()->color = { 1,0,0,1 };
+	sprCircleBar = new GameObject("circleBar");
+	sprCircleBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/circle_bar_satisfy.png"));
+	sprCircleBar->GetComponent<SpriteRenderer>()->pos = { -7.12f,-17.56f };
+	sprCircleBar->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
+	sprCircleBar->GetComponent<SpriteRenderer>()->color = { 1,1,0,1 };
 	sprUiFrame = new GameObject("uiFrame");
 	sprUiFrame->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
-	sprUiFrame->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
-	sprBoxBar = new GameObject("uiFrame");
-	sprBoxBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
-	sprBoxBar->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
-	sprCircleBar = new GameObject("uiFrame");
-	sprCircleBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
-	sprCircleBar->GetComponent<SpriteRenderer>()->pos = { 400,-100 };
+	sprUiFrame->GetComponent<SpriteRenderer>()->pos = { 0,0 };
+	sprUiFrame->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
+
 }
