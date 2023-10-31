@@ -60,28 +60,22 @@ void CollideManager::Collide()
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
 			{
-				DirectX::XMFLOAT3 centerA = colliderA->GetCenter();
-				DirectX::XMFLOAT3 centerB = colliderA->GetCenter();
-
 				if (colliderA->priority > colliderB->priority)
 				{
 					//colliderAを押し出す
-					centerA += result.normal * result.penetration;
+					colliderA->center += result.normal * result.penetration;
 				}
 				else if(colliderA->priority < colliderB->priority)
 				{
 					//colliderBを押し出す
-					centerB -= result.normal * result.penetration;
+					colliderB->center -= result.normal * result.penetration;
 				}
 				else
 				{
 					//半分ずつ押し出す
-					centerA += result.normal * result.penetration * 0.5f;
-					centerB -= result.normal * result.penetration * 0.5f;
+					colliderA->center += result.normal * result.penetration * 0.5f;
+					colliderB->center -= result.normal * result.penetration * 0.5f;
 				}
-
-				colliderA->SetCenter(centerA);
-				colliderB->SetCenter(centerB);
 				
 				colliderA->OnCollisionEnter(colliderB);
 				colliderB->OnCollisionEnter(colliderA);
@@ -103,8 +97,6 @@ void CollideManager::Collide()
 
 			if (Physics::IntersectSphereVsCapsule(sphere, capsule, &result))
 			{
-				DirectX::XMFLOAT3 sphereCenter = sphere->GetCenter();
-
 				if (capsule->priority > sphere->priority)
 				{
 					//capsuleを押し出す
@@ -114,17 +106,15 @@ void CollideManager::Collide()
 				else if(capsule->priority < sphere->priority)
 				{
 					//colliderBを押し出す
-					sphereCenter += result.normal * result.penetration;
+					sphere->center += result.normal * result.penetration;
 				}
 				else
 				{
 					//半分ずつ押し出す
 					capsule->begin -= result.normal * result.penetration;
 					capsule->end -= result.normal * result.penetration;
-					sphereCenter += result.normal * result.penetration * 0.5f;
+					sphere->center += result.normal * result.penetration * 0.5f;
 				}
-
-				sphere->SetCenter(sphereCenter);
 				
 				capsule->OnCollisionEnter(sphere);
 				sphere->OnCollisionEnter(capsule);
@@ -208,7 +198,7 @@ void CollideManager::CreateBoundingBox(ModelRenderer* modelRenderer)
 		//ボックスの作成
 		BoxCollider* box = new BoxCollider("Box" + std::to_string(meshIndex));
 		box->size = max - min;
-		box->SetCenter(min + box->size * 0.5f);
+		box->center = min + box->size * 0.5f;
 
 		modelRenderer->GetParent()->AddComponent(box);
 	}

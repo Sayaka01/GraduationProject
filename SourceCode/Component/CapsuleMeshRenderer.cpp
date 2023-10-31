@@ -272,7 +272,7 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 
 	DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(capsuleCollider->radius,capsuleCollider->cylinderSize + correctionY,capsuleCollider->radius) };
 	DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(capsuleCollider->radian.x,capsuleCollider->radian.y,capsuleCollider->radian.z) };
-	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(capsuleCollider->GetCenter().x,capsuleCollider->GetCenter().y,capsuleCollider->GetCenter().z) };
+	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(capsuleCollider->center.x,capsuleCollider->center.y,capsuleCollider->center.z) };
 	DirectX::XMFLOAT4X4 world;
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 	constants.world = world;
@@ -288,7 +288,7 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 	DirectX::XMStoreFloat3(&correction, DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&correction), R));
 
 	S = DirectX::XMMatrixScaling(capsuleCollider->radius, capsuleCollider->radius, capsuleCollider->radius);
-	T = DirectX::XMMatrixTranslation(capsuleCollider->GetCenter().x + correction.x, capsuleCollider->GetCenter().y + correction.y, capsuleCollider->GetCenter().z + correction.z);
+	T = DirectX::XMMatrixTranslation(capsuleCollider->center.x + correction.x, capsuleCollider->center.y + correction.y, capsuleCollider->center.z + correction.z);
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 	constants.world = world;
 	constantBuffer.SetConstantBuffer(dc, ConstantBuffer::ShaderType::ALL, ConstantBuffer::UsageType::Object, &constants);
@@ -299,7 +299,7 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 	dc->IASetVertexBuffers(0, 1, halfSphereDownVertexBuffer.GetAddressOf(), &stride, &offset);
 
 	S = DirectX::XMMatrixScaling(capsuleCollider->radius, capsuleCollider->radius, capsuleCollider->radius);
-	T = DirectX::XMMatrixTranslation(capsuleCollider->GetCenter().x - correction.x, capsuleCollider->GetCenter().y - correction.y, capsuleCollider->GetCenter().z - correction.z);
+	T = DirectX::XMMatrixTranslation(capsuleCollider->center.x - correction.x, capsuleCollider->center.y - correction.y, capsuleCollider->center.z - correction.z);
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 	constants.world = world;
 	constants.color = color;

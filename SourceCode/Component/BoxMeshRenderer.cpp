@@ -64,10 +64,9 @@ void BoxMeshRenderer::DrawPrepare()
 void BoxMeshRenderer::Draw(BoxCollider* boxCollider)
 {
 	//ƒ[ƒ‹ƒhs—ñ‚Ìì¬
-	DirectX::XMFLOAT3 center = boxCollider->GetCenter();
 	DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(boxCollider->size.x,boxCollider->size.y,boxCollider->size.z) };
 	DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(0.0f,0.0f,0.0f) };
-	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(center.x,center.y,center.z) };
+	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(boxCollider->center.x,boxCollider->center.y,boxCollider->center.z) };
 	DirectX::XMFLOAT4X4 world;
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 

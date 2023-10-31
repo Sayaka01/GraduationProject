@@ -77,14 +77,9 @@ void CapsuleCollider::CalcCapsuleParam()
 
 void CapsuleCollider::UpdateCenter()
 {
-	DirectX::XMFLOAT3 center = GetCenter();
-
 	XMFLOAT3 vec = end - begin;//begin->end
 	float length = LengthFloat3(vec);
 	vec = NormalizeFloat3(vec);
 
 	center = begin + vec * length * 0.5f;
-
-	SetCenter(center);
-
 }
