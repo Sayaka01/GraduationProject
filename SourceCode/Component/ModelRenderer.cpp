@@ -36,8 +36,9 @@ void ModelRenderer::Draw()
 	if (!modelData->animationClips.empty())
 	{
 		//アニメ―ションがある
-		if (interpolationAnim)keyframe = interpolationKeyframe;
-		else keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
+		//if (interpolationAnim)
+		//	keyframe = interpolationKeyframe;
+		/*else*/ keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
 	}
 	modelData->Draw(parent->GetComponent<Transform>()->world, &keyframe, materialColor);
 
