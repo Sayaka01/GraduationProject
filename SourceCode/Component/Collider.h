@@ -21,10 +21,10 @@ public:
 
 
 	//-----< getter, setter >-----//
-	DirectX::XMFLOAT3 GetCenter() { return center; }
-	void SetCenter(DirectX::XMFLOAT3 center) { this->center = center; }
+
 
 	//-----< 変数 >-----//
+	DirectX::XMFLOAT3 center = {};//コライダーの中央位置（カプセルでは不使用）
 	bool drawDebugPrimitive = true;//デバッグ描画を行うか
 	int priority = 0;//当たり判定の優先度（０が一番優先度高い）
 
@@ -32,5 +32,4 @@ private:
 	void (Component::*HitProcessFunc)(Collider* collider);
 	Component* component = nullptr;
 
-	DirectX::XMFLOAT3 center = {};
 };

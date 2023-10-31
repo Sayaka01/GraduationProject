@@ -334,9 +334,10 @@ public:
 	bool AppendAnimation(const char* animationFilename, float samplingRate = 0.0f);
 
 
-	//Raycast‚ÉŽg‚¤Getter
+	//Getter
 	[[nodiscard]] int GetVerticesSize(int meshIndex) const { return static_cast<int>(meshes.at(meshIndex).vertices.capacity()); }
 	[[nodiscard]] int GetMeshesSize() const { return static_cast<int>(meshes.size()); }
+	Mesh& GetMesh(int meshIndex) { return meshes.at(meshIndex); }
 	Vertex& GetVertex(int meshIndex, int vertexIndex) { return meshes.at(meshIndex).vertices.at(vertexIndex); }
 	DirectX::XMFLOAT4X4 GetMeshGlobalTransform(int meshIndex) const { return meshes.at(meshIndex).defaultGlobalTransform; }
 	//BoundingBox* GetMeshBoundingBox(int meshIndex) { return meshes.at(meshIndex).boundingBox.get(); }

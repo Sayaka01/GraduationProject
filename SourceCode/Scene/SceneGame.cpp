@@ -59,6 +59,8 @@ void SceneGame::Initialize()
 	spriteManager->AddChild(sprBoxBar);
 	spriteManager->AddChild(sprCircleBar);
 	spriteManager->AddChild(sprUiFrame);
+
+	CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
 
 void SceneGame::Finalize()

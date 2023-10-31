@@ -9,6 +9,11 @@
 #include "Component/CapsuleMeshRenderer.h"
 #include "Component/CapsuleCollider.h"
 
+#include "Component/ModelRenderer.h"
+#include "Component/Transform.h"
+
+#include "GameObject/GameObject.h"
+
 #include "System/PhysicsFunction.h"
 #include "System/UserFunction.h"
 
@@ -55,28 +60,22 @@ void CollideManager::Collide()
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
 			{
-				DirectX::XMFLOAT3 centerA = colliderA->GetCenter();
-				DirectX::XMFLOAT3 centerB = colliderA->GetCenter();
-
 				if (colliderA->priority > colliderB->priority)
 				{
 					//colliderAを押し出す
-					centerA += result.normal * result.penetration;
+					colliderA->center += result.normal * result.penetration;
 				}
 				else if(colliderA->priority < colliderB->priority)
 				{
 					//colliderBを押し出す
-					centerB -= result.normal * result.penetration;
+					colliderB->center -= result.normal * result.penetration;
 				}
 				else
 				{
 					//半分ずつ押し出す
-					centerA += result.normal * result.penetration * 0.5f;
-					centerB -= result.normal * result.penetration * 0.5f;
+					colliderA->center += result.normal * result.penetration * 0.5f;
+					colliderB->center -= result.normal * result.penetration * 0.5f;
 				}
-
-				colliderA->SetCenter(centerA);
-				colliderB->SetCenter(centerB);
 				
 				colliderA->OnCollisionEnter(colliderB);
 				colliderB->OnCollisionEnter(colliderA);
@@ -98,8 +97,6 @@ void CollideManager::Collide()
 
 			if (Physics::IntersectSphereVsCapsule(sphere, capsule, &result))
 			{
-				DirectX::XMFLOAT3 sphereCenter = sphere->GetCenter();
-
 				if (capsule->priority > sphere->priority)
 				{
 					//capsuleを押し出す
@@ -109,17 +106,15 @@ void CollideManager::Collide()
 				else if(capsule->priority < sphere->priority)
 				{
 					//colliderBを押し出す
-					sphereCenter += result.normal * result.penetration;
+					sphere->center += result.normal * result.penetration;
 				}
 				else
 				{
 					//半分ずつ押し出す
 					capsule->begin -= result.normal * result.penetration;
 					capsule->end -= result.normal * result.penetration;
-					sphereCenter += result.normal * result.penetration * 0.5f;
+					sphere->center += result.normal * result.penetration * 0.5f;
 				}
-
-				sphere->SetCenter(sphereCenter);
 				
 				capsule->OnCollisionEnter(sphere);
 				sphere->OnCollisionEnter(capsule);
@@ -156,5 +151,55 @@ void CollideManager::Draw()
 			collider->CalcCapsuleParam();
 			capsuleMesh->Draw(collider);
 		}
+	}
+}
+
+void CollideManager::CreateBoundingBox(ModelRenderer* modelRenderer)
+{
+	//モデルデータの取得
+	ModelData* data = modelRenderer->GetModelResource();
+
+	//メッシュ数の取得
+	int meshCount = data->GetMeshesSize();
+
+	for (int meshIndex = 0; meshIndex < meshCount; meshIndex++)
+	{
+		//頂点数の取得
+		int vertexCount = data->GetVerticesSize(meshIndex);
+
+		DirectX::XMFLOAT3 min{ +D3D11_FLOAT32_MAX, +D3D11_FLOAT32_MAX, +D3D11_FLOAT32_MAX };
+		DirectX::XMFLOAT3 max{ -D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX, -D3D11_FLOAT32_MAX };
+
+		//最大、最小位置の頂点を算出
+		for (int vertexIndex = 0; vertexIndex < vertexCount; vertexIndex++)
+		{
+			//頂点の取得
+			ModelData::Vertex& vertex = data->GetVertex(meshIndex, vertexIndex);
+
+			min.x = std::min<float>(min.x, vertex.position.x);
+			min.y = std::min<float>(min.y, vertex.position.y);
+			min.z = std::min<float>(min.z, vertex.position.z);
+								   	   
+			max.x = std::max<float>(max.x, vertex.position.x);
+			max.y = std::max<float>(max.y, vertex.position.y);
+			max.z = std::max<float>(max.z, vertex.position.z);
+		}
+
+		//ワールド行列の作成
+		Transform* transform = modelRenderer->GetParent()->GetComponent<Transform>();
+		transform->Update();
+
+		DirectX::XMFLOAT4X4 world = data->GetMeshGlobalTransform(meshIndex) * transform->world;
+
+		//算出した頂点をワールド空間に変換
+		min = min * world;
+		max = max * world;
+		
+		//ボックスの作成
+		BoxCollider* box = new BoxCollider("Box" + std::to_string(meshIndex));
+		box->size = max - min;
+		box->center = min + box->size * 0.5f;
+
+		modelRenderer->GetParent()->AddComponent(box);
 	}
 }
