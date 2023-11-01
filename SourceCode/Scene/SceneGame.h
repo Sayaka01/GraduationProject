@@ -26,7 +26,7 @@ private:
 	// 2D‰æ‘œ‚Ì‰Šúİ’è
 	void SpriteInitialze();
 
-	void SpriteLoad(GameObject* spr, std::string name, const wchar_t* filepath, 
+	void SpriteLoad(GameObject** spr, std::string name, const wchar_t* filepath, 
 		DirectX::SimpleMath::Vector2 pos, DirectX::SimpleMath::Vector2 scale, DirectX::SimpleMath::Vector4 color);
 
 	// UI‚Ì§Œä

@@ -167,30 +167,30 @@ void SceneGame::EnemyInitialize()
 void SceneGame::SpriteInitialze()
 {
 	//É^ÉCÉgÉãÉçÉSâÊëúÇÃì«Ç›çûÇ›
-	SpriteLoad(sprBoxBar,	  "boxBar",	    (L"./Resources/Sprite/box_bar.png"),
+	SpriteLoad(&sprBoxBar,	  "boxBar",	    (L"./Resources/Sprite/box_bar.png"),
 		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
 
-	SpriteLoad(sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),			
+	SpriteLoad(&sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),			
 		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
 
-	SpriteLoad(sprCircleBar,  "circleBar",  (L"./Resources/Sprite/circle_bar_satisfy.png"), 
+	SpriteLoad(&sprCircleBar,  "circleBar",  (L"./Resources/Sprite/circle_bar_satisfy.png"), 
 		{ -7.12f,-17.56f },	{ 0.5f,0.5f }, { 1.0f,1.0f,0.0f,1.0f });//pos,scale,color
 
-	SpriteLoad(sprUiFrame,	  "uiFrame",	(L"./Resources/Sprite/hp_bar.png"),				
+	SpriteLoad(&sprUiFrame,	  "uiFrame",	(L"./Resources/Sprite/hp_bar.png"),				
 		{ 0.0f,0.0f },      { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
 
 }
 
-void SceneGame::SpriteLoad(GameObject* spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
+void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
 {
 	if (name == "")
-		spr = new GameObject();
+		(*spr) = new GameObject();
 	else
-		spr = new GameObject(name);
-	spr->AddComponent(new SpriteRenderer(filepath));
-	spr->GetComponent<SpriteRenderer>()->pos = pos;
-	spr->GetComponent<SpriteRenderer>()->scale = scale;
-	spr->GetComponent<SpriteRenderer>()->color = color;
+		(*spr) = new GameObject(name);
+	(*spr)->AddComponent(new SpriteRenderer(filepath));
+	(*spr)->GetComponent<SpriteRenderer>()->pos = pos;
+	(*spr)->GetComponent<SpriteRenderer>()->scale = scale;
+	(*spr)->GetComponent<SpriteRenderer>()->color = color;
 }
 
 // UIÇÃêßå‰
