@@ -28,9 +28,7 @@ public:
 	void OnCollisionEnter(Collider* collider) override;
 
 	//-----< Getter, Setter >-----//
-	DirectX::XMFLOAT3 GetMoveVelocity() { return moveVelocity; }
-	void SetMoveVelocity(DirectX::XMFLOAT3 velocity) { moveVelocity = velocity; }
-
+	float GetRunSpeed() { return runSpeed; }
 
 private:
 
@@ -42,5 +40,6 @@ private:
 	std::vector<PlayerState::Default*> states;//ó‘Ô
 	PlayerState::Default* currentState = nullptr;
 
-	DirectX::XMFLOAT3 moveVelocity = {};//ˆÚ“®ƒxƒNƒgƒ‹
+	float runSpeed = 30.0f;
+
 };

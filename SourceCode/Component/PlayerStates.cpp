@@ -8,6 +8,7 @@
 #include "Component/Transform.h"
 #include "Component/ModelRenderer.h"
 #include "Component/Camera.h"
+#include "Component/RigidBody.h"
 #include "Component/Player.h"
 
 #include "System/SystemManager.h"
@@ -19,7 +20,7 @@ using namespace PlayerState;
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//プレイヤーコンポーネントにMoveVelocityを設定
-	parent->GetComponent<Player>()->SetMoveVelocity(velocity);
+	parent->GetComponent<RigidBody>()->AddForce(velocity);
 }
 DirectX::XMFLOAT3 Default::CalcMoveVec()
 {
@@ -160,7 +161,7 @@ void Run::Enter()
 void Run::Update()
 {
 	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
-	moveVelocity *= runSpeed * SystemManager::Instance().GetElapsedTime();
+	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
 
 	SetMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);

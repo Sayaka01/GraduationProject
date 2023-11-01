@@ -95,7 +95,6 @@ void SceneGame::Draw()
 void SceneGame::PlayerInitialize()
 {
 	player = new GameObject("player");
-	//gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
 
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
@@ -117,9 +116,13 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new CapsuleCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
+	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->GetComponent<RigidBody>()->mass = 10.0f;
+
 	player->AddComponent(new Player());
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
+
 
 	player->AddComponent(new Health(30));
 

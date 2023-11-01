@@ -33,9 +33,9 @@ void Player::Update()
 {
 	//ステートの更新
 	currentState->Update();
-	
-	//位置の更新
-	parent->GetComponent<Transform>()->pos += moveVelocity;
+
+	//pos.y < 0.0f なら補正
+	if (parent->GetComponent<Transform>()->pos.y < 0.0f)parent->GetComponent<Transform>()->pos.y = 0.0f;
 
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
 	capsuleCollider->begin = parent->GetComponent<Transform>()->pos;
@@ -47,6 +47,7 @@ void Player::Update()
 	std::string nextStateName = currentState->Judge();
 	//nextStateNameが""じゃなければステートが変更される
 	ChangeState(nextStateName);
+
 }
 
 void Player::Draw()
@@ -81,7 +82,7 @@ void Player::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
-		ImGui::DragFloat3("moveVelocity", &moveVelocity.x);
+		ImGui::DragFloat("runSpeed", &runSpeed);
 		ImGui::TreePop();
 	}
 }
