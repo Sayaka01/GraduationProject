@@ -36,7 +36,7 @@ public:
 
 	void AddGravity()
 	{
-		AddForce({0,gravity * mass ,0});
+		AddForce({0,-gravity * mass ,0});
 	};
 
 	void AddDrag()
@@ -68,5 +68,5 @@ private:
 	DirectX::SimpleMath::Vector3 resultant;//速度を加算合成し計算に使う
 	float coefficient;//抵抗
 
-	float gravity = 2.0f;//重力
+	float gravity = 9.8f;//重力
 };

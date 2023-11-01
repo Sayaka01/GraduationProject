@@ -96,6 +96,6 @@ namespace PlayerState
 		std::string Judge()override;
 
 	private:
-		float runSpeed = 30.0f;
+
 	};
 }

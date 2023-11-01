@@ -85,89 +85,86 @@ bool Physics::IntersectRayVsAABB(Ray& ray, BoxCollider* boxCollider, CastResult*
 	// ループ処理するため、xyz成分を配列に代入する
 	float start[3] = { ray.start.x, ray.start.y ,ray.start.z };
 	float end[3] = { ray.end.x, ray.end.y ,ray.end.z };
-	//float center[3] = {boxCollider->center.x,
+	float rayLength = LengthFloat3(ray.end - ray.start);
+	DirectX::XMFLOAT3 rayDir = NormalizeFloat3(ray.end - ray.start);
+	float dir[3] = { rayDir.x, rayDir.y, rayDir.z };
+	float center[3] = { boxCollider->center.x, boxCollider->center.y, boxCollider->center.z };
+	float size[3] = { boxCollider->size.x, boxCollider->size.y, boxCollider->size.z };
 
+	// 直線とスラブの２交点までの距離をtminとtmaxと定義
+	float tmin = 0.0f;
+	float tmax = FLT_MAX;
+	int minAxis = 0;
 
+	bool ret = true;
 
-	//float startPosArray[3] = { DirectX::XMVectorGetX(rayStart), DirectX::XMVectorGetY(rayStart), DirectX::XMVectorGetZ(rayStart) };
-	//float slubCenterArray[3] = { DirectX::XMVectorGetX(slubCenter), DirectX::XMVectorGetY(slubCenter), DirectX::XMVectorGetZ(slubCenter) };
-	//float slubRadiiArray[3] = { DirectX::XMVectorGetX(slubRadii), DirectX::XMVectorGetY(slubRadii), DirectX::XMVectorGetZ(slubRadii) };
-	//float dArray[3] = { DirectX::XMVectorGetX(rayDirection), DirectX::XMVectorGetY(rayDirection), DirectX::XMVectorGetZ(rayDirection) };
+	// スラブとの距離を算出し交差しているかの確認と最近点の算出を行う
+	for (int i = 0; i < 3; i++)
+	{
+		//xyz軸との平行確認
+		if (fabsf(dir[i]) < FLT_EPSILON)
+		{
+			// 平行の場合、位置関係の比較を行い範囲内になければ交差なし
+			if (start[i] < center[i] - size[i] || start[i] > center[i] + size[i])
+			{
+				ret = false;
+			}
+		}
+		else
+		{
+			// t1が近スラブ、t2が遠スラブとの距離
+			float ood = 1.0f / dir[i];
+			float t1 = (center[i] - size[i] - start[i]) * ood;
+			float t2 = (center[i] + size[i] - start[i]) * ood;
 
-	//// 直線とスラブの２交点までの距離をtminとtmaxと定義
-	//float tmin = 0.0f;
-	//float tmax = FLT_MAX;
-	//int minAxis = 0;
+			// 遠近が逆転している場合があるので、その場合入れ替えておく
+			if (t1 > t2)
+			{
+				float tmp = t1;
+				t1 = t2;
+				t2 = tmp;
+			}
 
-	//bool ret = true;
+			// t1がtminよりも大きい場合、tminをt1で更新する
+			if (t1 > tmin)
+			{
+				tmin = t1;
+				minAxis = i;
+			}
 
-	//// スラブとの距離を算出し交差しているかの確認と最近点の算出を行う
-	//for (int i = 0; i < 3; i++)
-	//{
-	//	//xyz軸との平行確認
-	//	if (fabsf(dArray[i]) < FLT_EPSILON)
-	//	{
-	//		// 平行の場合、位置関係の比較を行い範囲内になければ交差なし
-	//		if (startPosArray[i] < slubCenterArray[i] - slubRadiiArray[i] || startPosArray[i] > slubCenterArray[i] + slubRadiiArray[i])
-	//		{
-	//			ret = false;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		// t1が近スラブ、t2が遠スラブとの距離
-	//		float ood = 1.0f / dArray[i];
-	//		float t1 = (slubCenterArray[i] - slubRadiiArray[i] - startPosArray[i]) * ood;
-	//		float t2 = (slubCenterArray[i] + slubRadiiArray[i] - startPosArray[i]) * ood;
+			// t2がtmaxよりも小さい場合、tmaxをt2で更新する
+			if (t2 < tmax)
+			{
+				tmax = t2;
+			}
+		}
+	}
 
-	//		// 遠近が逆転している場合があるので、その場合入れ替えておく
-	//		if (t1 > t2)
-	//		{
-	//			float tmp = t1;
-	//			t1 = t2;
-	//			t2 = tmp;
-	//		}
+	if (result)
+	{
+		result->distance = tmin;
+		result->point = ray.start + rayDir * result->distance;
+		DirectX::XMFLOAT3 norm = { static_cast<float>(minAxis == 0),   static_cast<float>(minAxis == 1),  static_cast<float>(minAxis == 2) };
 
-	//		// t1がtminよりも大きい場合、tminをt1で更新する
-	//		if (t1 > tmin)
-	//		{
-	//			tmin = t1;
-	//			minAxis = i;
-	//		}
+		if (dir[minAxis] > 0)
+		{
+			norm = { -norm.x, -norm.y, -norm.z };
+		}
 
-	//		// t2がtmaxよりも小さい場合、tmaxをt2で更新する
-	//		if (t2 < tmax)
-	//		{
-	//			tmax = t2;
-	//		}
-	//	}
-	//}
+		result->normal = norm;
 
-	//if (resultNear)
-	//{
-	//	resultNear->distance = tmin;
-	//	resultNear->point = DirectX::XMVectorAdd(rayStart, DirectX::XMVectorScale(rayDirection, resultNear->distance));
-	//	DirectX::XMVECTOR norm = { static_cast<float>(minAxis == 0),   static_cast<float>(minAxis == 1),  static_cast<float>(minAxis == 2) };
-	//	if (dArray[minAxis] > 0)
-	//	{
-	//		norm = DirectX::XMVectorNegate(norm);
-	//	}
-	//	resultNear->normal = norm;
+		//if (resultFar)
+		//{
+		//	resultFar->distance = tmax;
+		//	resultFar->point = DirectX::XMVectorAdd(rayStart, DirectX::XMVectorScale(rayDirection, resultFar->distance));
+		//	DirectX::XMVECTOR norm = { static_cast<float>(minAxis == 0),   static_cast<float>(minAxis == 1),  static_cast<float>(minAxis == 2) };
+		//	if (dArray[minAxis] > 0)
+		//	{
+		//		norm = DirectX::XMVectorNegate(norm);
+		//	}
+		//	resultFar->normal = norm;
+		//}
+	}
 
-	//	if (resultFar)
-	//	{
-	//		resultFar->distance = tmax;
-	//		resultFar->point = DirectX::XMVectorAdd(rayStart, DirectX::XMVectorScale(rayDirection, resultFar->distance));
-	//		DirectX::XMVECTOR norm = { static_cast<float>(minAxis == 0),   static_cast<float>(minAxis == 1),  static_cast<float>(minAxis == 2) };
-	//		if (dArray[minAxis] > 0)
-	//		{
-	//			norm = DirectX::XMVectorNegate(norm);
-	//		}
-	//		resultFar->normal = norm;
-	//	}
-	//}
-
-	//return ret && (rayDist >= tmin);
-
-	return false;
+	return ret && (rayLength >= tmin);
 }
