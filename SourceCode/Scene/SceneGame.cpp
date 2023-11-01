@@ -56,6 +56,7 @@ void SceneGame::Initialize()
 
 	SpriteInitialze();
 
+	spriteManager->AddChild(sprBoxBarBack);
 	spriteManager->AddChild(sprBoxBar);
 	spriteManager->AddChild(sprCircleBar);
 	spriteManager->AddChild(sprUiFrame);
@@ -80,6 +81,7 @@ void SceneGame::Update()
 
 	CollideManager::Instance().Collide();
 
+	PlayerUIUpdate();
 	spriteManager->Update();
 }
 
@@ -155,26 +157,47 @@ void SceneGame::EnemyInitialize()
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
 
-	enemy->AddComponent(new Health(20));
+	enemy->AddComponent(new Health(10));
 }
 
 // 2D画像の初期設定
 void SceneGame::SpriteInitialze()
 {
 	//タイトルロゴ画像の読み込み
-	sprBoxBar = new GameObject("boxBar");
-	sprBoxBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/box_bar.png"));
-	sprBoxBar->GetComponent<SpriteRenderer>()->pos = { 147.4f,48.7f};
-	sprBoxBar->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
-	sprBoxBar->GetComponent<SpriteRenderer>()->color = { 1,0,0,1 };
-	sprCircleBar = new GameObject("circleBar");
-	sprCircleBar->AddComponent(new SpriteRenderer(L"./Resources/Sprite/circle_bar_satisfy.png"));
-	sprCircleBar->GetComponent<SpriteRenderer>()->pos = { -7.12f,-17.56f };
-	sprCircleBar->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
-	sprCircleBar->GetComponent<SpriteRenderer>()->color = { 1,1,0,1 };
-	sprUiFrame = new GameObject("uiFrame");
-	sprUiFrame->AddComponent(new SpriteRenderer(L"./Resources/Sprite/hp_bar.png"));
-	sprUiFrame->GetComponent<SpriteRenderer>()->pos = { 0,0 };
-	sprUiFrame->GetComponent<SpriteRenderer>()->scale = { 0.5f,0.5f };
+	SpriteLoad(sprBoxBar,	  "boxBar",	    (L"./Resources/Sprite/box_bar.png"),
+		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
+
+	SpriteLoad(sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),			
+		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+
+	SpriteLoad(sprCircleBar,  "circleBar",  (L"./Resources/Sprite/circle_bar_satisfy.png"), 
+		{ -7.12f,-17.56f },	{ 0.5f,0.5f }, { 1.0f,1.0f,0.0f,1.0f });//pos,scale,color
+
+	SpriteLoad(sprUiFrame,	  "uiFrame",	(L"./Resources/Sprite/hp_bar.png"),				
+		{ 0.0f,0.0f },      { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+
+}
+
+void SceneGame::SpriteLoad(GameObject* spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
+{
+	if (name == "")
+		spr = new GameObject();
+	else
+		spr = new GameObject(name);
+	spr->AddComponent(new SpriteRenderer(filepath));
+	spr->GetComponent<SpriteRenderer>()->pos = pos;
+	spr->GetComponent<SpriteRenderer>()->scale = scale;
+	spr->GetComponent<SpriteRenderer>()->color = color;
+}
+
+// UIの制御
+void SceneGame::PlayerUIUpdate()
+{
+	float spriteSizeX = sprBoxBar->GetComponent<SpriteRenderer>()->GetSpriteSize().x;
+	// 描画サイズをHPに合わせて変更
+	sprBoxBar->GetComponent<SpriteRenderer>()->texSize.x = spriteSizeX*player->GetComponent<Health>()->GetHpRate();
+	// HPの割合から描画位置をずらす
+	float rate = player->GetComponent<Health>()->GetHpRate();
+	sprBoxBar->GetComponent<SpriteRenderer>()->texPos.x = spriteSizeX * (1 - rate);
 
 }

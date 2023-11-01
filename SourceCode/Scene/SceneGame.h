@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 #include "GameObject/GameObject.h"
+#include <SimpleMath.h>
 
 class CameraController;
 class DirectionLight;
@@ -25,6 +26,12 @@ private:
 	// 2DâÊëúÇÃèâä˙ê›íË
 	void SpriteInitialze();
 
+	void SpriteLoad(GameObject* spr, std::string name, const wchar_t* filepath, 
+		DirectX::SimpleMath::Vector2 pos, DirectX::SimpleMath::Vector2 scale, DirectX::SimpleMath::Vector4 color);
+
+	// UIÇÃêßå‰
+	void PlayerUIUpdate();
+
 	GameObject* objectManager = nullptr;
 	GameObject* player = nullptr;
 	GameObject* enemy = nullptr;
@@ -37,5 +44,6 @@ private:
 	GameObject* spriteManager = nullptr;
 	GameObject* sprUiFrame{ nullptr };
 	GameObject* sprBoxBar{ nullptr };
+	GameObject* sprBoxBarBack{ nullptr };
 	GameObject* sprCircleBar{ nullptr };
 };
