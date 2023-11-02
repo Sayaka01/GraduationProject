@@ -7,6 +7,21 @@
 //{
 //}
 //
-//void Health::DebugGui()
-//{
-//}
+
+void Health::Update()
+{
+	DebugGui();
+}
+
+void Health::DebugGui()
+{
+	if (ImGui::TreeNode(name.c_str()))
+	{
+		ImGui::DragFloat("current Hp", &currentHp);
+		ImGui::DragFloat("max Hp", &maxHp);
+		ImGui::TreePop();
+	}
+}
+
+
+

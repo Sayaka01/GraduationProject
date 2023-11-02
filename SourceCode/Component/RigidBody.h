@@ -54,15 +54,17 @@ public:
 	void SetGravity(float g) { gravity = g; }
 	float GetGravity() { return gravity; }
 
+	DirectX::SimpleMath::Vector3 GetVelocity() { return velocity; }
+
 	//-----< 変数 >-----//
 
 	//RigidBodyが重力の影響をうけるかどうか
 	bool useGravity{ true };
 
-	DirectX::SimpleMath::Vector3 velocity = { 0.0f, 0.0f, 0.0f };//速度
 	float mass;//質量
 
 private:
+	DirectX::SimpleMath::Vector3 velocity = { 0.0f, 0.0f, 0.0f };//速度
 	DirectX::SimpleMath::Vector3 acceleration;//加速度
 	DirectX::SimpleMath::Vector3 resultant;//速度を加算合成し計算に使う
 	float coefficient;//抵抗

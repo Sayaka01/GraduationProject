@@ -8,12 +8,17 @@
 class Health : public Component
 {
 public:
-	Health(float maxHp) :maxHp(maxHp) { currentHp = maxHp; }
+	Health(float maxHp) :maxHp(maxHp) { name = "hp"; currentHp = maxHp; }
+	Health(std::string compName, float maxHp) :maxHp(maxHp) { name = compName; currentHp = maxHp; }
 	~Health()override = default;
 
 	//ä÷êî
 	//void Draw()override;
-	//void DebugGui()override;
+	
+	void Update() override;
+
+	//ImGui
+	void DebugGui() override;
 
 	void SetHealth(float value) { maxHp = value; }
 
