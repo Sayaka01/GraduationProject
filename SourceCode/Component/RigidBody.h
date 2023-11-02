@@ -17,6 +17,7 @@ public:
 		velocity = {};
 		acceleration = {};
 		resultant = {};
+		coefficient = 0.999f;
 	}
 	~RigidBody() override = default;
 
@@ -36,13 +37,13 @@ public:
 
 	void AddGravity()
 	{
-		AddForce({0,-gravity * mass ,0});
+		AddForce({0, -gravity * mass ,0});
 	};
 
 	void AddDrag()
 	{
 		DirectX::XMVECTOR Velo = DirectX::XMLoadFloat3(&velocity);
-		DirectX::XMVECTOR Drag = DirectX::XMVectorScale(Velo, -coefficient);
+		DirectX::XMVECTOR Drag = DirectX::XMVectorScale(Velo, -coefficient * mass);
 		AddForce(Drag);
 	}
 

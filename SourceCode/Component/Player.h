@@ -29,6 +29,7 @@ public:
 
 	//-----< Getter, Setter >-----//
 	float GetRunSpeed() { return runSpeed; }
+	float GetJumpSpeed() { return jumpSpeed; }
 
 private:
 
@@ -40,6 +41,6 @@ private:
 	std::vector<PlayerState::Default*> states;//ó‘Ô
 	PlayerState::Default* currentState = nullptr;
 
-	float runSpeed = 30.0f;
-
+	float runSpeed = 200.0f;//‘–‚é‘¬‚³
+	float jumpSpeed = 500.0f;//ƒWƒƒƒ“ƒv‚Ì‚‚³
 };

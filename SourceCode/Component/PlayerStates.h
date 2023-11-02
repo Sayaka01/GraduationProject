@@ -22,7 +22,7 @@ namespace PlayerState
 		Walking,
 		Punching,
 	};
-
+	
 	//基底クラス
 	class Default
 	{
@@ -37,7 +37,7 @@ namespace PlayerState
 		//終了処理
 		virtual void Exit() {}
 		//ステート変更するかどうか
-		virtual std::string Judge() { return ""; }
+		virtual std::string GetNext() { return ""; }
 
 		//名前の取得
 		std::string GetName() { return name; }
@@ -51,6 +51,14 @@ namespace PlayerState
 		DirectX::XMFLOAT2 GetLStickVec();
 		//移動ベクトルに応じたY軸回転
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
+
+		//待機ステートの遷移条件
+		bool JudgeIdleState();
+		//走りステートの遷移条件
+		bool JudgeRunState();
+		//ジャンプステートの遷移条件
+		bool JudgeJumpState();
+
 
 		std::string name = "";//ステートの名前
 
@@ -75,7 +83,7 @@ namespace PlayerState
 		//終了処理
 		void Exit()override;
 		//ステート変更するかどうか
-		std::string Judge()override;
+		std::string GetNext()override;
 	};
 
 	//走り
@@ -93,9 +101,60 @@ namespace PlayerState
 		//終了処理
 		void Exit()override;
 		//ステート変更するかどうか
-		std::string Judge()override;
+		std::string GetNext()override;
+	};
 
-	private:
+	//ジャンプ
+	class Jump : public Default
+	{
+	public:
+		Jump();
+		Jump(GameObject* parent);
+		~Jump() = default;
 
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
+	//落下
+	class Falling : public Default
+	{
+	public:
+		Falling();
+		Falling(GameObject* parent);
+		~Falling() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
+	//落下
+	class Landing : public Default
+	{
+	public:
+		Landing();
+		Landing(GameObject* parent);
+		~Landing() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
 	};
 }
