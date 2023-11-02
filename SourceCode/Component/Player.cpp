@@ -18,6 +18,10 @@ void Player::Initialize()
 	//ステートの追加
 	states.emplace_back(new Idle(parent));//待機
 	states.emplace_back(new Run(parent));//走り
+	states.emplace_back(new Walk(parent));//走り
+	states.emplace_back(new Jump(parent));//ジャンプ
+	states.emplace_back(new Falling(parent));//落下
+	states.emplace_back(new Landing(parent));//着地
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -33,6 +37,11 @@ void Player::Update()
 {
 	//ステートの更新
 	currentState->Update();
+	
+	//ステート変更か判定
+	std::string nextStateName = currentState->GetNext();
+	//nextStateNameが""じゃなければステートが変更される
+	ChangeState(nextStateName);
 
 	//pos.y < 0.0f なら補正
 	if (parent->GetComponent<Transform>()->pos.y < 0.0f)parent->GetComponent<Transform>()->pos.y = 0.0f;
@@ -42,11 +51,6 @@ void Player::Update()
 	capsuleCollider->begin.y += capsuleCollider->radius + capsuleCollider->cylinderSize;
 	capsuleCollider->end = parent->GetComponent<Transform>()->pos;
 	capsuleCollider->end.y += capsuleCollider->radius;
-	
-	//ステート変更か判定
-	std::string nextStateName = currentState->Judge();
-	//nextStateNameが""じゃなければステートが変更される
-	ChangeState(nextStateName);
 
 }
 
@@ -83,6 +87,7 @@ void Player::DebugGui()
 	if (ImGui::TreeNode(name.c_str()))
 	{
 		ImGui::DragFloat("runSpeed", &runSpeed);
+		ImGui::DragFloat("jumpSpeed", &jumpSpeed);
 		ImGui::TreePop();
 	}
 }

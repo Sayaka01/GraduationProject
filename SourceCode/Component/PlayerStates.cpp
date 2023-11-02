@@ -16,7 +16,7 @@
 
 using namespace PlayerState;
 
-//基底クラス
+//-----< 基底クラス >-----//
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//プレイヤーコンポーネントにMoveVelocityを設定
@@ -106,7 +106,37 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
 
-//待機
+bool PlayerState::Default::JudgeIdleState()
+{
+	////Lスティックの入力値を取得
+	//DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	////Lスティックの入力がないなら待機ステートへ遷移
+	//return (LengthFloat2(lStickVec) < FLT_EPSILON);
+	
+	//自身の移動ベクトルを取得
+	DirectX::XMFLOAT3 velocity = parent->GetComponent<RigidBody>()->GetVelocity();
+	//XZ平面の移動量を用いるためY方向は無視する
+	velocity.y = 0.0f;
+	//移動ベクトルに数値が入っていないなら待機ステートへ
+	float walkThreshold = 1.0f;
+	return (LengthFloat3(velocity) < walkThreshold);
+}
+bool PlayerState::Default::JudgeRunState()
+{
+	//Lスティックの入力値を取得
+	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	//Lスティックの入力があるなら走りステートへ遷移
+	return (LengthFloat2(lStickVec) > 0.0f);
+}
+bool PlayerState::Default::JudgeJumpState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+	//Aボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_A);
+}
+
+//-----< 待機 >-----//
 Idle::Idle()
 {
 	name = "Idle";
@@ -119,7 +149,6 @@ Idle::Idle(GameObject* parent)
 void Idle::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Idle, true);
-	SetMoveVelocity({ 0.0f,0.0f,0.0f });
 }
 void Idle::Update()
 {
@@ -129,13 +158,16 @@ void Idle::Exit()
 {
 
 }
-std::string Idle::Judge()
+std::string Idle::GetNext()
 {
-	//Lスティックの入力値を取得
-	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
 
-	//Lスティックの入力があるなら走りステートへ遷移
-	if (LengthFloat2(lStickVec) > 0.0f)
+	//走りステートへ遷移できるか
+	if (JudgeRunState())
 	{
 		return "Run";
 	}
@@ -144,7 +176,7 @@ std::string Idle::Judge()
 	return "";
 }
 
-//走り
+//-----< 走り >-----//
 Run::Run()
 {
 	name = "Run";
@@ -170,13 +202,166 @@ void Run::Exit()
 {
 
 }
-std::string Run::Judge()
+std::string Run::GetNext()
 {
-	//Lスティックの入力値を取得
-	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
 
-	//Lスティックの入力がないなら待機ステートへ遷移
-	if (LengthFloat2(lStickVec) < FLT_EPSILON)
+	//歩きステートへ遷移できるかどうか（走りステートを継続できないか）
+	if (!JudgeRunState() && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Walk";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 歩き >-----//
+Walk::Walk()
+{
+	name = "Walk";
+}
+Walk::Walk(GameObject* parent)
+{
+	name = "Walk";
+	this->parent = parent;
+}
+void Walk::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Walking, true);
+}
+void Walk::Update()
+{
+
+}
+void Walk::Exit()
+{
+
+}
+std::string Walk::GetNext()
+{
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
+	//走りステートへ遷移できるか
+	if (JudgeRunState())
+	{
+		return "Run";
+	}
+
+	//待機ステートへ遷移できるかどうか
+	if (JudgeIdleState())
+	{
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< ジャンプ >-----//
+Jump::Jump()
+{
+	name = "Jump";
+}
+Jump::Jump(GameObject* parent)
+{
+	name = "Jump";
+	this->parent = parent;
+}
+void Jump::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+	SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
+}
+void Jump::Update()
+{
+	SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
+}
+void Jump::Exit()
+{
+
+}
+std::string Jump::GetNext()
+{
+	//アニメーション再生が終わったら落下ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Falling";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 落下 >-----//
+Falling::Falling()
+{
+	name = "Falling";
+}
+Falling::Falling(GameObject* parent)
+{
+	name = "Falling";
+	this->parent = parent;
+}
+void Falling::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
+
+}
+void Falling::Update()
+{
+
+}
+void Falling::Exit()
+{
+
+}
+std::string Falling::GetNext()
+{
+	//pos.y < 0.0f なら着地ステートへ
+	if (parent->GetComponent<Transform>()->pos.y < 0.0f)
+	{
+		return "Landing";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 着地 >-----//
+Landing::Landing()
+{
+	name = "Landing";
+}
+Landing::Landing(GameObject* parent)
+{
+	name = "Landing";
+	this->parent = parent;
+}
+void Landing::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Landing, false);
+}
+void Landing::Update()
+{
+
+}
+void Landing::Exit()
+{
+
+}
+std::string Landing::GetNext()
+{
+	//アニメーション再生が終わったら落下ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
 		return "Idle";
 	}
