@@ -5,6 +5,7 @@
 #include "Component/Transform.h"
 #include "GameObject/GameObject.h"
 #include "Component/ModelRenderer.h"
+#include "Component/SphereCollider.h"
 #include <SimpleMath.h>
 
 // 打撃行動のアクション
@@ -56,6 +57,12 @@ void PunchAction::Exit()
 // 重撃行動のアクション
 ActionBase::State SkillAction::Run(float elapsedTime)
 {
+    // 骨の位置の取得
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
+    // sphereColliderの位置を設定
+    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
+
+
     // アニメーションが再生し終わったら重撃行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
@@ -99,11 +106,17 @@ ActionBase::State SkillAction::Run(float elapsedTime)
 void SkillAction::Enter()
 {
     owner->ChangeAnimation(Enemy::AnimationName::RightClawAttack, false);
+    
+    // 攻撃する手の骨の位置を計算し当たり判定をONにする
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
+    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(true);
 }
 
 // 重撃行動の終了処理
 void SkillAction::Exit()
 {
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = false;
+    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
 }
 
 // 休憩行動のアクション

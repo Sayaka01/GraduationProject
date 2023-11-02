@@ -58,8 +58,6 @@ void Enemy::Initialize()
 
 	aiTree->AddNode("Discovery", "Pursuit", 1, BehaviorTree::Rule::Non, nullptr, new PursuitAction(this));
 	
-	parent->AddComponent(new RigidBody());
-
 	//"待機アニメーション"を再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
 	
@@ -72,13 +70,14 @@ void Enemy::Initialize()
 
 	//攻撃用に腕の関節位置を取得
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "RigRArm2");
-	//取得したい骨の位置の計算をオンにする
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
 	//腰の位置を取得
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("waist", "RigMain");
 	//取得したい骨の位置の計算をオンにする
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("waist")->isCalc = true;
 	parent->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+
+	parent->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
+
 }
 
 void Enemy::Update()
@@ -90,8 +89,6 @@ void Enemy::Update()
 		activeNode = aiTree->Run(activeNode, behaviorData,SystemManager::Instance().GetElapsedTime());
 		//activeNode = aiTree->Run(activeNode, behaviorData,elapsedTime);
 
-	// 骨の位置の取得
-	DirectX::SimpleMath::Vector3 bonePos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
 	// 腰の位置の取得
 	DirectX::SimpleMath::Vector3 waistPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("waist");
 	DirectX::SimpleMath::Vector3 forward = parent->GetComponent<Transform>()->GetForward();
@@ -99,7 +96,6 @@ void Enemy::Update()
 
 
 	// sphereColliderの位置を設定
-	parent->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
 	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
 
 }
