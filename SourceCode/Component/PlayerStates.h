@@ -104,6 +104,24 @@ namespace PlayerState
 		std::string GetNext()override;
 	};
 
+	//歩き
+	class Walk : public Default
+	{
+	public:
+		Walk();
+		Walk(GameObject* parent);
+		~Walk() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
 	//ジャンプ
 	class Jump : public Default
 	{

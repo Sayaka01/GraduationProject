@@ -18,6 +18,7 @@ void Player::Initialize()
 	//ステートの追加
 	states.emplace_back(new Idle(parent));//待機
 	states.emplace_back(new Run(parent));//走り
+	states.emplace_back(new Walk(parent));//走り
 	states.emplace_back(new Jump(parent));//ジャンプ
 	states.emplace_back(new Falling(parent));//落下
 	states.emplace_back(new Landing(parent));//着地

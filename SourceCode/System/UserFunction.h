@@ -186,6 +186,13 @@ inline void OutputDebugLog(std::string str)
     debugStr << str;
     OutputDebugStringA(debugStr.str().c_str());
 }
+inline void OutputDebugLog(std::string str, float val)
+{
+    str = str + " = " + std::to_string(val) + "\n";
+    std::stringstream debugStr;
+    debugStr << str;
+    OutputDebugStringA(debugStr.str().c_str());
+}
 inline void OutputDebugLog(std::string str, DirectX::XMFLOAT3 val)
 {
     str = str + " = { " + std::to_string(val.x) + ", " + std::to_string(val.y) + ", " + std::to_string(val.z) + " }\n";

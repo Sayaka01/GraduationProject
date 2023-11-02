@@ -21,7 +21,6 @@ void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//プレイヤーコンポーネントにMoveVelocityを設定
 	parent->GetComponent<RigidBody>()->AddForce(velocity);
-	OutputDebugLog("velocity", velocity);
 }
 DirectX::XMFLOAT3 Default::CalcMoveVec()
 {
@@ -109,10 +108,18 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 
 bool PlayerState::Default::JudgeIdleState()
 {
-	//Lスティックの入力値を取得
-	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
-	//Lスティックの入力がないなら待機ステートへ遷移
-	return (LengthFloat2(lStickVec) < FLT_EPSILON);
+	////Lスティックの入力値を取得
+	//DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	////Lスティックの入力がないなら待機ステートへ遷移
+	//return (LengthFloat2(lStickVec) < FLT_EPSILON);
+	
+	//自身の移動ベクトルを取得
+	DirectX::XMFLOAT3 velocity = parent->GetComponent<RigidBody>()->GetVelocity();
+	//XZ平面の移動量を用いるためY方向は無視する
+	velocity.y = 0.0f;
+	//移動ベクトルに数値が入っていないなら待機ステートへ
+	float walkThreshold = 1.0f;
+	return (LengthFloat3(velocity) < walkThreshold);
 }
 bool PlayerState::Default::JudgeRunState()
 {
@@ -142,7 +149,6 @@ Idle::Idle(GameObject* parent)
 void Idle::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Idle, true);
-	SetMoveVelocity({ 0.0f,0.0f,0.0f });
 }
 void Idle::Update()
 {
@@ -202,6 +208,52 @@ std::string Run::GetNext()
 	if (JudgeJumpState())
 	{
 		return "Jump";
+	}
+
+	//歩きステートへ遷移できるかどうか（走りステートを継続できないか）
+	if (!JudgeRunState() && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Walk";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 歩き >-----//
+Walk::Walk()
+{
+	name = "Walk";
+}
+Walk::Walk(GameObject* parent)
+{
+	name = "Walk";
+	this->parent = parent;
+}
+void Walk::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Walking, true);
+}
+void Walk::Update()
+{
+
+}
+void Walk::Exit()
+{
+
+}
+std::string Walk::GetNext()
+{
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
+	//走りステートへ遷移できるか
+	if (JudgeRunState())
+	{
+		return "Run";
 	}
 
 	//待機ステートへ遷移できるかどうか
