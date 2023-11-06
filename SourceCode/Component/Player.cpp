@@ -6,6 +6,8 @@
 
 #include "Component/Transform.h"
 #include "Component/CapsuleCollider.h"
+#include "Component/SphereCollider.h"
+#include "Component/ModelRenderer.h"
 
 #include "System/UserFunction.h"
 
@@ -32,6 +34,14 @@ void Player::Initialize()
 	capsuleCollider->radius = 2.0f;
 	capsuleCollider->cylinderSize = 5.0f;
 	capsuleCollider->SetHitProcessFunc(this, &Component::OnCollisionEnter);
+
+	//骨の位置と名前を登録
+	//右手
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "mixamorig:RightHandIndex4");
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
+	//左手
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
 }
 
 void Player::Update()
@@ -47,6 +57,15 @@ void Player::Update()
 	//pos.y < 0.0f なら補正
 	if (parent->GetComponent<Transform>()->pos.y < 0.0f)parent->GetComponent<Transform>()->pos.y = 0.0f;
 
+	//右手の球
+	DirectX::SimpleMath::Vector3 rightHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
+	parent->GetComponent<SphereCollider>("RightHand")->center = rightHandPos;
+
+	//左手の球
+	DirectX::SimpleMath::Vector3 leftHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
+	parent->GetComponent<SphereCollider>("LeftHand")->center = leftHandPos;
+
+	//カプセルの位置補正
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
 	capsuleCollider->begin = parent->GetComponent<Transform>()->pos;
 	capsuleCollider->begin.y += capsuleCollider->radius + capsuleCollider->cylinderSize;

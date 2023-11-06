@@ -23,6 +23,7 @@ void Camera::Initialize()
 
 	cameraData->Initialize();
 
+	cameraData->SetTargetCorrection(targetCorrection);
 }
 
 //XV
@@ -80,6 +81,5 @@ void Camera::Tracking() const
 {
 	if (!tracking)return;
 
-	cameraData->SetTargetCorrection(targetCorrection);
 	cameraData->SetTarget(targetObj->GetComponent<Transform>()->pos);
 }

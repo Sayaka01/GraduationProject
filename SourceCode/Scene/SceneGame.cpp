@@ -126,6 +126,9 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new CapsuleCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
+	player->AddComponent(new SphereCollider("RightHand"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->AddComponent(new SphereCollider("LeftHand"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;
 
