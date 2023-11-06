@@ -8,7 +8,7 @@ namespace PlayerState
 	//アニメーション
 	enum class Animation
 	{
-		Attack,
+		Attack,//左
 		Death,
 		Falling,
 		GetHit1,
@@ -17,10 +17,10 @@ namespace PlayerState
 		Jump,
 		JumpFlip,
 		Landing,
-		Revive,
+		Revive,//復活
 		Running,
 		Walking,
-		Punching,
+		Punching,//右
 	};
 	
 	//基底クラス
@@ -33,7 +33,7 @@ namespace PlayerState
 		//ステート遷移時の処理
 		virtual void Enter() {}
 		//更新
-		virtual void Update() {}
+		virtual void Update();
 		//終了処理
 		virtual void Exit() {}
 		//ステート変更するかどうか
@@ -58,6 +58,10 @@ namespace PlayerState
 		bool JudgeRunState();
 		//ジャンプステートの遷移条件
 		bool JudgeJumpState();
+		//パンチ（右）ステートの遷移条件
+		bool JudgePunchRightState();
+		//パンチ（左）ステートの遷移条件
+		bool JudgePunchLeftState();
 
 
 		std::string name = "";//ステートの名前
@@ -66,6 +70,12 @@ namespace PlayerState
 
 		float rotateSpeed = DirectX::XMConvertToRadians(720);
 		float rotateRatio = 0.75f;
+
+		static float attackInterval;
+		float acceptAttackTime = 1.5f;
+
+		static bool acceptAttackButton;
+		static bool pushAttackButton;
 	};
 
 	//待機
@@ -93,24 +103,6 @@ namespace PlayerState
 		Run();
 		Run(GameObject* parent);
 		~Run() = default;
-
-		//ステート遷移時の処理
-		void Enter()override;
-		//更新
-		void Update()override;
-		//終了処理
-		void Exit()override;
-		//ステート変更するかどうか
-		std::string GetNext()override;
-	};
-
-	//歩き
-	class Walk : public Default
-	{
-	public:
-		Walk();
-		Walk(GameObject* parent);
-		~Walk() = default;
 
 		//ステート遷移時の処理
 		void Enter()override;
@@ -158,7 +150,7 @@ namespace PlayerState
 		std::string GetNext()override;
 	};
 
-	//落下
+	//着地
 	class Landing : public Default
 	{
 	public:
@@ -175,4 +167,41 @@ namespace PlayerState
 		//ステート変更するかどうか
 		std::string GetNext()override;
 	};
+
+	//パンチ（右）
+	class PunchRight : public Default
+	{
+	public:
+		PunchRight();
+		PunchRight(GameObject* parent);
+		~PunchRight() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
+	//パンチ（左）
+	class PunchLeft : public Default
+	{
+	public:
+		PunchLeft();
+		PunchLeft(GameObject* parent);
+		~PunchLeft() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
 }

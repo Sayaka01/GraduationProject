@@ -18,10 +18,11 @@ void Player::Initialize()
 	//ステートの追加
 	states.emplace_back(new Idle(parent));//待機
 	states.emplace_back(new Run(parent));//走り
-	states.emplace_back(new Walk(parent));//走り
 	states.emplace_back(new Jump(parent));//ジャンプ
 	states.emplace_back(new Falling(parent));//落下
 	states.emplace_back(new Landing(parent));//着地
+	states.emplace_back(new PunchRight(parent));//パンチ（右）
+	states.emplace_back(new PunchLeft(parent));//パンチ（左）
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -108,6 +109,9 @@ void Player::ChangeState(std::string nextStateName)
 	{
 		if (state->GetName() == nextStateName)
 		{
+			if (currentState)
+				currentState->Exit();//変更前ステートの終了処理
+
 			currentState = state;//ステートの変更
 			currentState->Enter();//ステート遷移時の処理
 			changeState = true;

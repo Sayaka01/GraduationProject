@@ -16,7 +16,34 @@
 
 using namespace PlayerState;
 
+//static変数の初期化
+float Default::attackInterval = 0.0f;
+bool Default::acceptAttackButton = false;
+bool Default::pushAttackButton = false;
+
+
 //-----< 基底クラス >-----//
+void PlayerState::Default::Update()
+{
+	//攻撃ボタンが押されているかどうか
+	if (acceptAttackButton && attackInterval > FLT_EPSILON)
+	{
+		//ゲームパッドの取得
+		GamePad gamePad = SystemManager::Instance().GetGamePad();
+		if (gamePad.GetButtonDown() & GamePad::BTN_B)
+		{
+			pushAttackButton = true;
+		}
+	}
+
+	attackInterval += SystemManager::Instance().GetElapsedTime();
+
+	if (pushAttackButton && attackInterval > acceptAttackTime)
+	{
+		pushAttackButton = false;
+	}
+}
+
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//プレイヤーコンポーネントにMoveVelocityを設定
@@ -108,18 +135,10 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 
 bool PlayerState::Default::JudgeIdleState()
 {
-	////Lスティックの入力値を取得
-	//DirectX::XMFLOAT2 lStickVec = GetLStickVec();
-	////Lスティックの入力がないなら待機ステートへ遷移
-	//return (LengthFloat2(lStickVec) < FLT_EPSILON);
-	
-	//自身の移動ベクトルを取得
-	DirectX::XMFLOAT3 velocity = parent->GetComponent<RigidBody>()->GetVelocity();
-	//XZ平面の移動量を用いるためY方向は無視する
-	velocity.y = 0.0f;
-	//移動ベクトルに数値が入っていないなら待機ステートへ
-	float walkThreshold = 1.0f;
-	return (LengthFloat3(velocity) < walkThreshold);
+	//Lスティックの入力値を取得
+	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
+	//Lスティックの入力がないなら待機ステートへ遷移
+	return (LengthFloat2(lStickVec) < FLT_EPSILON);
 }
 bool PlayerState::Default::JudgeRunState()
 {
@@ -134,6 +153,20 @@ bool PlayerState::Default::JudgeJumpState()
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 	//Aボタンが押されていたらtrue
 	return (gamePad.GetButtonDown() & GamePad::BTN_A);
+}
+bool PlayerState::Default::JudgePunchRightState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+	//Aボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_B);
+}
+bool PlayerState::Default::JudgePunchLeftState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+	//Aボタンが押されていたらtrue
+	return (pushAttackButton && (attackInterval < acceptAttackTime));
 }
 
 //-----< 待機 >-----//
@@ -152,7 +185,7 @@ void Idle::Enter()
 }
 void Idle::Update()
 {
-
+	Default::Update();
 }
 void Idle::Exit()
 {
@@ -160,6 +193,18 @@ void Idle::Exit()
 }
 std::string Idle::GetNext()
 {
+	//パンチ（左）ステートへ遷移できるか
+	if (JudgePunchLeftState())
+	{
+		return "PunchLeft";
+	}
+
+	//パンチ（右）ステートへ遷移できるか
+	if (JudgePunchRightState())
+	{
+		return "PunchRight";
+	}
+
 	//ジャンプステートへ遷移できるか
 	if (JudgeJumpState())
 	{
@@ -197,6 +242,8 @@ void Run::Update()
 
 	SetMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
+
+	Default::Update();
 }
 void Run::Exit()
 {
@@ -204,56 +251,22 @@ void Run::Exit()
 }
 std::string Run::GetNext()
 {
+	//パンチ（左）ステートへ遷移できるか
+	if (JudgePunchLeftState())
+	{
+		return "PunchLeft";
+	}
+
+	//パンチ（右）ステートへ遷移できるか
+	if (JudgePunchRightState())
+	{
+		return "PunchRight";
+	}
+
 	//ジャンプステートへ遷移できるか
 	if (JudgeJumpState())
 	{
 		return "Jump";
-	}
-
-	//歩きステートへ遷移できるかどうか（走りステートを継続できないか）
-	if (!JudgeRunState() && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
-	{
-		return "Walk";
-	}
-
-	//変更なし
-	return "";
-}
-
-//-----< 歩き >-----//
-Walk::Walk()
-{
-	name = "Walk";
-}
-Walk::Walk(GameObject* parent)
-{
-	name = "Walk";
-	this->parent = parent;
-}
-void Walk::Enter()
-{
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Walking, true);
-}
-void Walk::Update()
-{
-
-}
-void Walk::Exit()
-{
-
-}
-std::string Walk::GetNext()
-{
-	//ジャンプステートへ遷移できるか
-	if (JudgeJumpState())
-	{
-		return "Jump";
-	}
-
-	//走りステートへ遷移できるか
-	if (JudgeRunState())
-	{
-		return "Run";
 	}
 
 	//待機ステートへ遷移できるかどうか
@@ -283,7 +296,7 @@ void Jump::Enter()
 }
 void Jump::Update()
 {
-	SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
+	Default::Update();
 }
 void Jump::Exit()
 {
@@ -318,7 +331,7 @@ void Falling::Enter()
 }
 void Falling::Update()
 {
-
+	Default::Update();
 }
 void Falling::Exit()
 {
@@ -352,13 +365,100 @@ void Landing::Enter()
 }
 void Landing::Update()
 {
-
+	Default::Update();
 }
 void Landing::Exit()
 {
 
 }
 std::string Landing::GetNext()
+{
+	//アニメーション再生が終わったら落下ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< パンチ（右） >-----//
+PunchRight::PunchRight()
+{
+	name = "PunchRight";
+}
+PunchRight::PunchRight(GameObject* parent)
+{
+	name = "PunchRight";
+	this->parent = parent;
+}
+void PunchRight::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Punching, false);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+	
+	attackInterval = 0.0f;
+	
+	acceptAttackButton = true;
+}
+void PunchRight::Update()
+{
+	OutputDebugLog("attackInterval", attackInterval);
+	Default::Update();
+}
+void PunchRight::Exit()
+{
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+}
+std::string PunchRight::GetNext()
+{
+
+	//アニメーション再生が終わったら
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		//パンチ（左）ステートへ遷移できるか
+		if (JudgePunchLeftState())
+		{
+			return "PunchLeft";
+		}
+
+		//待機ステートへ遷移
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< パンチ（左） >-----//
+PunchLeft::PunchLeft()
+{
+	name = "PunchLeft";
+}
+PunchLeft::PunchLeft(GameObject* parent)
+{
+	name = "PunchLeft";
+	this->parent = parent;
+}
+void PunchLeft::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Attack, false);
+
+	attackInterval = 0.0f;
+
+	acceptAttackButton = false;
+	pushAttackButton = false;
+}
+void PunchLeft::Update()
+{
+	Default::Update();
+}
+void PunchLeft::Exit()
+{
+
+}
+std::string PunchLeft::GetNext()
 {
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
