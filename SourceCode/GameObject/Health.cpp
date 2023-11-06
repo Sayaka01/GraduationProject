@@ -10,7 +10,7 @@
 
 void Health::Update()
 {
-	DebugGui();
+	//DebugGui();
 }
 
 void Health::DebugGui()

@@ -46,4 +46,18 @@ private:
 	GameObject* sprBoxBar{ nullptr };
 	GameObject* sprBoxBarBack{ nullptr };
 	GameObject* sprCircleBar{ nullptr };
+
+	// GameOver時のUI
+	GameObject* sprOverBack{ nullptr };
+	GameObject* sprOverText{ nullptr };
+
+	enum class GameState
+	{
+		Ready = -1,//プレイ準備中
+		Playing,//プレイ中
+		Clear,//ゲームクリア
+		Over,//ゲームオーバー
+	};
+
+	char gameResult{ (char)GameState::Ready };
 };

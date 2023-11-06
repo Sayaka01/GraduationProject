@@ -73,6 +73,10 @@ void SceneGame::Finalize()
 
 	spriteManager->Finalize();
 	delete spriteManager;
+	sprOverBack->Finalize();
+	delete sprOverBack;
+	sprOverText->Finalize();
+	delete sprOverText;
 }
 
 void SceneGame::Update()
@@ -92,6 +96,10 @@ void SceneGame::Draw()
 	CollideManager::Instance().Draw();
 
 	spriteManager->Draw();
+
+	// GameOverŽž‚É•`‰æ
+	//sprOverBack->Draw();
+	//sprOverText->Draw();
 }
 
 void SceneGame::PlayerInitialize()
@@ -155,6 +163,8 @@ void SceneGame::EnemyInitialize()
 
 	enemy->AddComponent(new SphereCollider("waist"));
 	enemy->AddComponent(new SphereCollider("attackRightHand"));
+	enemy->AddComponent(new RigidBody());
+
 	enemy->AddComponent(new Enemy());
 
 	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
@@ -179,6 +189,14 @@ void SceneGame::SpriteInitialze()
 	SpriteLoad(&sprUiFrame,	  "uiFrame",	(L"./Resources/Sprite/hp_bar.png"),				
 		{ 0.0f,0.0f },      { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
 
+	// GameOver‰æ‘œ‚Ì“Ç‚Ýž‚Ý
+	SpriteLoad(&sprOverBack, "gameOverBack", (L"./Resources/Sprite/gameOverBack.png"),
+		{ 0.0f,0.0f }, { 1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+
+	SpriteLoad(&sprOverText, "gameOverBack", (L"./Resources/Sprite/text_dead.png"),
+		{ SCREEN_WIDTH*0.5f,SCREEN_HEIGHT*0.5f }, { 1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+	//Šî€“_‚ð‰æ‘œ‚Ì^‚ñ’†‚ÉÝ’è
+	sprOverText->GetComponent<SpriteRenderer>()->pivot = sprOverText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
 }
 
 void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
