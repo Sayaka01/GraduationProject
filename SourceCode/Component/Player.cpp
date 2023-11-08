@@ -27,6 +27,7 @@ void Player::Initialize()
 	states.emplace_back(new PunchRight(parent));//パンチ（右）
 	states.emplace_back(new PunchLeft(parent));//パンチ（左）
 	states.emplace_back(new Damage(parent));//パンチ（左）
+	states.emplace_back(new Death(parent));//パンチ（左）
 
 	//待機ステートに
 	ChangeState("Idle");

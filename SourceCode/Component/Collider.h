@@ -20,6 +20,14 @@ public:
 	void OnCollisionEnter(Collider* collider);
 
 
+	//-----< \‘¢‘Ì >----//
+	enum class Type
+	{
+		Offense,//UŒ‚”»’è—p
+		Deffense,//‚­‚ç‚¢”»’è—p
+	};
+	Type type = Type::Deffense;
+
 	//-----< getter, setter >-----//
 
 

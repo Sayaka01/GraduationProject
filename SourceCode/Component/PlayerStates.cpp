@@ -549,3 +549,31 @@ std::string Damage::GetNext()
 	//•ÏX‚È‚µ
 	return "";
 }
+
+//-----< €–S >-----//
+Death::Death()
+{
+	name = "Death";
+}
+Death::Death(GameObject* parent)
+{
+	name = "Death";
+	this->parent = parent;
+}
+void Death::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Death, false);
+}
+void Death::Update()
+{
+
+}
+void Death::Exit()
+{
+
+}
+std::string Death::GetNext()
+{
+	//•ÏX‚È‚µ
+	return "";
+}
