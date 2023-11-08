@@ -52,4 +52,6 @@ private:
 	std::vector<BoxCollider*> boxColliders;
 	CapsuleMeshRenderer* capsuleMesh = nullptr;
 	std::vector<CapsuleCollider*> capsuleColliders;
+
+	bool firstUpdate = false;
 };

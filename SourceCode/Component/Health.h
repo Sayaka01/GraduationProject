@@ -31,6 +31,9 @@ public:
 	//Œ»İ‚ÌHP‚ÌŠ„‡
 	float GetHpRate() { return currentHp / maxHp; }
 
+	//¶€
+	bool GetIsAlive() { return (currentHp > 0.0f); }
+
 	enum class HealthState
 	{
 		health,//Œ’N

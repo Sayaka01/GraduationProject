@@ -10,6 +10,7 @@
 #include "Component/Camera.h"
 #include "Component/RigidBody.h"
 #include "Component/Player.h"
+#include "Component/SphereCollider.h"
 
 #include "System/SystemManager.h"
 #include "System/UserFunction.h"
@@ -184,6 +185,7 @@ Idle::Idle(GameObject* parent)
 void Idle::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Idle, true);
+	jumpCount = 0;
 }
 void Idle::Update()
 {
@@ -300,11 +302,16 @@ void Jump::Enter()
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
 
 	parent->GetComponent<RigidBody>()->Jump(parent->GetComponent<Player>()->GetJumpSpeed());
-	//SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
 
 }
 void Jump::Update()
 {
+	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
+	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
+
+	SetMoveVelocity(moveVelocity);
+	YAxisRotate(moveVelocity);
+
 	Default::Update();
 }
 void Jump::Exit()
@@ -346,6 +353,12 @@ void Falling::Enter()
 }
 void Falling::Update()
 {
+	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
+	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
+
+	SetMoveVelocity(moveVelocity);
+	YAxisRotate(moveVelocity);
+
 	Default::Update();
 }
 void Falling::Exit()
@@ -425,6 +438,10 @@ void PunchRight::Enter()
 	attackInterval = 0.0f;
 	
 	acceptAttackButton = true;
+
+	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(true);
+
+	attackPower = 1.0f;
 }
 void PunchRight::Update()
 {
@@ -434,6 +451,7 @@ void PunchRight::Update()
 void PunchRight::Exit()
 {
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 }
 std::string PunchRight::GetNext()
 {
@@ -473,6 +491,10 @@ void PunchLeft::Enter()
 
 	acceptAttackButton = false;
 	pushAttackButton = false;
+
+	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(true);
+
+	attackPower = 3.0f;
 }
 void PunchLeft::Update()
 {
@@ -480,7 +502,7 @@ void PunchLeft::Update()
 }
 void PunchLeft::Exit()
 {
-
+	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 }
 std::string PunchLeft::GetNext()
 {
@@ -490,6 +512,68 @@ std::string PunchLeft::GetNext()
 		return "Idle";
 	}
 
+	//変更なし
+	return "";
+}
+
+//-----< ダメージ >-----//
+Damage::Damage()
+{
+	name = "Damage";
+}
+Damage::Damage(GameObject* parent)
+{
+	name = "Damage";
+	this->parent = parent;
+}
+void Damage::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::GetHit2, false);
+}
+void Damage::Update()
+{
+	Default::Update();
+}
+void Damage::Exit()
+{
+
+}
+std::string Damage::GetNext()
+{
+	//アニメーション再生が終わったら待機ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 死亡 >-----//
+Death::Death()
+{
+	name = "Death";
+}
+Death::Death(GameObject* parent)
+{
+	name = "Death";
+	this->parent = parent;
+}
+void Death::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Death, false);
+}
+void Death::Update()
+{
+
+}
+void Death::Exit()
+{
+
+}
+std::string Death::GetNext()
+{
 	//変更なし
 	return "";
 }

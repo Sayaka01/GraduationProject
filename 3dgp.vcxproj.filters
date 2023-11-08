@@ -257,14 +257,14 @@
     <ClCompile Include="SourceCode\Component\CapsuleCollider.cpp">
       <Filter>Sources\Component\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\GameObject\Health.cpp">
-      <Filter>Sources\GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\Component\BoxCollider.cpp">
       <Filter>Sources\Component\Collider</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Component\BoxMeshRenderer.cpp">
       <Filter>Sources\Component\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component\Health.cpp">
+      <Filter>Sources\Component\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -481,14 +481,14 @@
     <ClInclude Include="SourceCode\Component\CapsuleCollider.h">
       <Filter>Sources\Component\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\GameObject\Health.h">
-      <Filter>Sources\GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="SourceCode\Component\BoxCollider.h">
       <Filter>Sources\Component\Collider</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Component\BoxMeshRenderer.h">
       <Filter>Sources\Component\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\Health.h">
+      <Filter>Sources\Component\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

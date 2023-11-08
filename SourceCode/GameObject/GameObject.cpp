@@ -19,6 +19,8 @@ GameObject::GameObject(std::string name) : name(std::move(name))
 //‰Šú‰»
 void GameObject::Initialize()
 {
+	components.clear();
+
 	//Transform Component‚Ì’Ç‰Á
 	AddComponent(new Transform());
 }
