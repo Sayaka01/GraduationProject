@@ -207,4 +207,22 @@ namespace PlayerState
 		std::string GetNext()override;
 	};
 
+	//ダメージ
+	class Damage : public Default
+	{
+	public:
+		Damage();
+		Damage(GameObject* parent);
+		~Damage() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
 }

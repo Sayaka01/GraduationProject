@@ -172,7 +172,7 @@ void Enemy::MoveToTargetPosition(float elapsedTime)
 	//ownerTransform->velocity +=  vector* length;
 	//ownerTransform->pos += vector * 5.0f * elapsedTime;
 	DirectX::SimpleMath::Vector3 velocity = vector * moveSpeed;
-	parent->GetComponent<RigidBody>()->AddForce({ velocity.x ,0.0f,velocity.z });
+	parent->GetComponent<RigidBody>()->AddVelocity({ velocity.x ,0.0f,velocity.z });
 }
 
 

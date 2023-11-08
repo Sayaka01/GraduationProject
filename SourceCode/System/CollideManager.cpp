@@ -55,8 +55,7 @@ void CollideManager::Collide()
 		{
 			if (!colliderA->GetEnable())continue;
 			if (!colliderB->GetEnable())continue;
-			if (colliderA->GetParentName() == colliderB->GetParentName())continue;
-			if (colliderA == colliderB)continue;
+			if (colliderA->GetParent()->GetTag() == colliderB->GetParent()->GetTag())continue;
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
 			{
@@ -92,7 +91,7 @@ void CollideManager::Collide()
 			if (!capsule->GetEnable())continue;
 			if (!sphere->GetEnable())continue;
 
-			if (capsule->GetParentName() == sphere->GetParentName())continue;
+			if (capsule->GetParent()->GetTag() == sphere->GetParent()->GetTag())continue;
 
 
 			if (Physics::IntersectSphereVsCapsule(sphere, capsule, &result))

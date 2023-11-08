@@ -25,6 +25,7 @@ void Player::Initialize()
 	states.emplace_back(new Landing(parent));//着地
 	states.emplace_back(new PunchRight(parent));//パンチ（右）
 	states.emplace_back(new PunchLeft(parent));//パンチ（左）
+	states.emplace_back(new Damage(parent));//パンチ（左）
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -119,6 +120,8 @@ void Player::OnCollisionEnter(Collider* collider)
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
 	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
 	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
+
+	ChangeState("Damage");//ダメージステートに遷移
 }
 
 void Player::ChangeState(std::string nextStateName)

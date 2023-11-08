@@ -493,3 +493,37 @@ std::string PunchLeft::GetNext()
 	//変更なし
 	return "";
 }
+
+//-----< ダメージ >-----//
+Damage::Damage()
+{
+	name = "Damage";
+}
+Damage::Damage(GameObject* parent)
+{
+	name = "Damage";
+	this->parent = parent;
+}
+void Damage::Enter()
+{
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::GetHit2, false);
+}
+void Damage::Update()
+{
+	Default::Update();
+}
+void Damage::Exit()
+{
+
+}
+std::string Damage::GetNext()
+{
+	//アニメーション再生が終わったら待機ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
