@@ -132,6 +132,7 @@ void CollideManager::Collide()
 
 void CollideManager::Draw()
 {
+#ifdef _DEBUG
 	//‹…•`‰æ
 	sphereMesh->DrawPrepare();
 	for (SphereCollider* collider : sphereColliders)
@@ -158,6 +159,7 @@ void CollideManager::Draw()
 			capsuleMesh->Draw(collider);
 		}
 	}
+#endif
 }
 
 void CollideManager::CreateBoundingBox(ModelRenderer* modelRenderer)

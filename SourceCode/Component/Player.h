@@ -44,5 +44,5 @@ private:
 	PlayerState::Default* currentState = nullptr;
 
 	float runSpeed = 40.0f;//走る速さ
-	float jumpSpeed = 60.0f;//ジャンプの高さ
+	float jumpSpeed = 50.0f;//ジャンプの高さ
 };

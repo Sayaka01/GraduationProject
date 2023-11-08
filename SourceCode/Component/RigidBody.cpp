@@ -33,7 +33,7 @@ void RigidBody::Update()
 	Transform* ownerTransform = parent->GetComponent<Transform>();
 
 	if (useGravity && ownerTransform->pos.y > 0)
-		AddGravity();
+		AddGravity(SystemManager::Instance().GetElapsedTime());
 
 	assert(mass > 0);
 	//AddDragY();

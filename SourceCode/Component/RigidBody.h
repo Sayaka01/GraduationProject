@@ -37,9 +37,9 @@ public:
 
 	void AddVelocity(DirectX::SimpleMath::Vector3 velocity);
 
-	void AddGravity()
+	void AddGravity(float elapsedTime)
 	{
-		AddVelocity({0, -gravity/** mass*/ ,0});
+		AddVelocity({0, -gravity * elapsedTime ,0});
 	};
 
 	void SetVelocity(DirectX::SimpleMath::Vector3 vec)
@@ -93,5 +93,5 @@ private:
 	DirectX::SimpleMath::Vector3 resultant;//速度を加算合成し計算に使う
 	float coefficient;//抵抗
 
-	float gravity = 0.98f;//重力
+	float gravity = 98.0f;//重力
 };

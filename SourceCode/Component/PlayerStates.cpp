@@ -332,6 +332,13 @@ std::string Jump::GetNext()
 		return "Falling";
 	}
 
+	//pos.y < 0.0f なら着地ステートへ
+	if (parent->GetComponent<Transform>()->pos.y < 0.0f)
+	{
+		return "Landing";
+	}
+
+
 	//変更なし
 	return "";
 }
