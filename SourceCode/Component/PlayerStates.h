@@ -11,8 +11,8 @@ namespace PlayerState
 		Attack,//左
 		Death,
 		Falling,
-		GetHit1,
-		GetHit2,
+		GetHit1,//ダメージ小
+		GetHit2,//ダメージ大
 		Idle,
 		Jump,
 		JumpFlip,
@@ -76,6 +76,9 @@ namespace PlayerState
 
 		static bool acceptAttackButton;
 		static bool pushAttackButton;
+
+		static int jumpCount;
+		const int maxJumpCount = 2;
 	};
 
 	//待機

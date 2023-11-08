@@ -149,6 +149,8 @@ bool PlayerState::Default::JudgeRunState()
 }
 bool PlayerState::Default::JudgeJumpState()
 {
+	if (jumpCount >= maxJumpCount)return false;
+
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 	//Aボタンが押されていたらtrue
@@ -291,9 +293,15 @@ Jump::Jump(GameObject* parent)
 }
 void Jump::Enter()
 {
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+	jumpCount++;
+	if (jumpCount == 1)//ジャンプ一回目
+		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+	else//それ以降
+		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
+
 	parent->GetComponent<RigidBody>()->Jump(parent->GetComponent<Player>()->GetJumpSpeed());
 	//SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
+
 }
 void Jump::Update()
 {
@@ -305,6 +313,12 @@ void Jump::Exit()
 }
 std::string Jump::GetNext()
 {
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
@@ -346,6 +360,13 @@ std::string Falling::GetNext()
 		return "Landing";
 	}
 
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
+
 	//変更なし
 	return "";
 }
@@ -363,6 +384,8 @@ Landing::Landing(GameObject* parent)
 void Landing::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Landing, false);
+
+	jumpCount = 0;
 }
 void Landing::Update()
 {
