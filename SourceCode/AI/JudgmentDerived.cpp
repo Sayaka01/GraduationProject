@@ -1,6 +1,6 @@
 #include "Stdafx.h"
 #include "JudgmentDerived.h"
-#include "GameObject/Health.h"
+#include "Component/Health.h"
 
 bool BattleJudgment::Judgment()
 {    

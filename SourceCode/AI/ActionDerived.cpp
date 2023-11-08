@@ -7,7 +7,7 @@
 #include "Component/ModelRenderer.h"
 #include "Component/SphereCollider.h"
 #include <SimpleMath.h>
-#include <GameObject/Health.h>
+#include <Component/Health.h>
 
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
