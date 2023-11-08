@@ -252,6 +252,7 @@
     <ClCompile Include="SourceCode\Component\Component.cpp" />
     <ClCompile Include="SourceCode\Component\DirectionLight.cpp" />
     <ClCompile Include="SourceCode\Component\Enemy.cpp" />
+    <ClCompile Include="SourceCode\Component\Health.cpp" />
     <ClCompile Include="SourceCode\Component\ModelData.cpp" />
     <ClCompile Include="SourceCode\Component\ModelRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\Player.cpp" />
@@ -265,7 +266,6 @@
     <ClCompile Include="SourceCode\Component\Transform.cpp" />
     <ClCompile Include="SourceCode\GameObject\CameraController.cpp" />
     <ClCompile Include="SourceCode\GameObject\GameObject.cpp" />
-    <ClCompile Include="SourceCode\GameObject\Health.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneCommunicate.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneGame.cpp" />
     <ClCompile Include="SourceCode\Scene\SceneLoading.cpp" />
@@ -324,6 +324,7 @@
     <ClInclude Include="SourceCode\Component\Component.h" />
     <ClInclude Include="SourceCode\Component\DirectionLight.h" />
     <ClInclude Include="SourceCode\Component\Enemy.h" />
+    <ClInclude Include="SourceCode\Component\Health.h" />
     <ClInclude Include="SourceCode\Component\ModelData.h" />
     <ClInclude Include="SourceCode\Component\ModelRenderer.h" />
     <ClInclude Include="SourceCode\Component\Player.h" />
@@ -337,7 +338,6 @@
     <ClInclude Include="SourceCode\Component\Transform.h" />
     <ClInclude Include="SourceCode\GameObject\CameraController.h" />
     <ClInclude Include="SourceCode\GameObject\GameObject.h" />
-    <ClInclude Include="SourceCode\GameObject\Health.h" />
     <ClInclude Include="SourceCode\Scene\Scene.h" />
     <ClInclude Include="SourceCode\Scene\SceneCommunicate.h" />
     <ClInclude Include="SourceCode\Scene\SceneGame.h" />

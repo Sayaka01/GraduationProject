@@ -31,6 +31,8 @@ public:
 	float GetRunSpeed() { return runSpeed; }
 	float GetJumpSpeed() { return jumpSpeed; }
 
+	float GetAttackPower() { return currentState->GetAttackPower(); }
+
 private:
 
 	//-----< ŠÖ” >-----//

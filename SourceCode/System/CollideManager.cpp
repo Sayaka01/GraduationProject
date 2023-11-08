@@ -44,6 +44,13 @@ void CollideManager::Finalize()
 
 void CollideManager::Collide()
 {
+	//1‰ñ–Ú‚¾‚¯’Ê‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+	if (!firstUpdate)
+	{
+		firstUpdate = true;
+		return;
+	}
+
 	//“–‚½‚è”»’è‚ğs‚¤
 
 	Physics::IntersectionResult result;

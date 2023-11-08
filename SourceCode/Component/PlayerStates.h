@@ -42,6 +42,9 @@ namespace PlayerState
 		//名前の取得
 		std::string GetName() { return name; }
 
+		//攻撃力の取得
+		float GetAttackPower() { return attackPower; }
+
 	protected:
 		//移動ベクトルをプレイヤーコンポーネントに保存
 		void SetMoveVelocity(DirectX::XMFLOAT3 velocity);
@@ -79,6 +82,8 @@ namespace PlayerState
 
 		static int jumpCount;
 		const int maxJumpCount = 2;
+
+		float attackPower = 0.0f;
 	};
 
 	//待機

@@ -8,6 +8,7 @@
 #include "Component/CapsuleCollider.h"
 #include "Component/SphereCollider.h"
 #include "Component/ModelRenderer.h"
+#include "Component/Health.h"
 
 #include "System/UserFunction.h"
 
@@ -115,13 +116,27 @@ void Player::DebugGui()
 
 void Player::OnCollisionEnter(Collider* collider)
 {
+	if (!parent->GetComponent<Health>()->GetIsAlive())return;
 	if (collider->GetParent()->GetTag() != Tag::Enemy)return;
 
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
 	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
 	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
 
-	ChangeState("Damage");//ダメージステートに遷移
+	if (currentState->GetName() != "Damage" && currentState->GetName() != "Death")
+	{
+		//HPを減らす
+		parent->GetComponent<Health>()->SubtructHp(1);
+
+		if (parent->GetComponent<Health>()->GetIsAlive())
+		{
+			ChangeState("Damage");//ダメージステートに遷移
+		}
+		else
+		{
+			ChangeState("Death");//死亡ステートに遷移
+		}
+	}
 }
 
 void Player::ChangeState(std::string nextStateName)
