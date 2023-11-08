@@ -35,16 +35,40 @@ public:
 	//RigidBodyに力を加える
 	void AddForce(DirectX::SimpleMath::Vector3 force);
 
+	void AddVelocity(DirectX::SimpleMath::Vector3 velocity);
+
 	void AddGravity()
 	{
-		AddForce({0, -gravity * mass ,0});
+		AddVelocity({0, -gravity/** mass*/ ,0});
 	};
+
+	void SetVelocity(DirectX::SimpleMath::Vector3 vec)
+	{
+		velocity = vec;
+	}
 
 	void AddDrag()
 	{
 		DirectX::XMVECTOR Velo = DirectX::XMLoadFloat3(&velocity);
 		DirectX::XMVECTOR Drag = DirectX::XMVectorScale(Velo, -coefficient * mass);
 		AddForce(Drag);
+	}
+
+	void AddDragY()
+	{
+		//DirectX::XMVECTOR Velo = DirectX::XMLoadFloat3(&velocity);
+		//DirectX::XMVECTOR Drag = DirectX::XMVectorScale(Velo, -coefficient * mass);
+		//DirectX::XMFLOAT3 drag;
+		//DirectX::XMStoreFloat3(&drag, Drag);
+		//drag.x = 0.0f;
+		//drag.z = 0.0f;
+		//AddVelocity(DirectX::XMLoadFloat3(&drag));
+	}
+
+	void Jump(float jumpSpeed)
+	{
+		velocity.y = 0;
+		AddVelocity({ 0,jumpSpeed,0 });
 	}
 
 	//-----< Getter, Setter >-----//
@@ -69,5 +93,5 @@ private:
 	DirectX::SimpleMath::Vector3 resultant;//速度を加算合成し計算に使う
 	float coefficient;//抵抗
 
-	float gravity = 9.8f;//重力
+	float gravity = 0.98f;//重力
 };
