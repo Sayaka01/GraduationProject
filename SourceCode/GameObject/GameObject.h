@@ -5,9 +5,11 @@
 
 class Component;
 
-enum class Tag
+enum class Tag//タグ（当たり判定などオブジェクトを特定するために使用）
 {
 	Untagged,
+	Player,
+	Enemy,
 };
 
 enum class Layer
@@ -93,7 +95,6 @@ public:
 	//子オブジェクト数の取得
 	[[nodiscard]] size_t GetChildrenCount()const;
 
-	
 
 	//オブジェクトの名前の取得
 	std::string GetName() { return name; }
@@ -106,6 +107,10 @@ public:
 		this->parent = parent;
 	}
 
+	//タグの取得
+	Tag GetTag() { return tag; }
+	//タグの設定
+	void SetTag(Tag tag) { this->tag = tag; }
 
 protected:
 	std::string name{};//オブジェクトの名前

@@ -61,10 +61,6 @@ void Enemy::Initialize()
 	//"待機アニメーション"を再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)AnimationName::Idle1, true);
 	
-	//姿勢設定
-	parent->GetComponent<Transform>()->pos = { 2.0f,-2.9f,-2.0f };
-	parent->GetComponent<Transform>()->scale = { 0.04f,0.04f,0.04f };
-
 	//重力を一旦無視する
 	parent->GetComponent<RigidBody>()->SetUseGravity(false);
 

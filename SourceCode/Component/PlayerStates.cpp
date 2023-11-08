@@ -20,7 +20,7 @@ using namespace PlayerState;
 float Default::attackInterval = 0.0f;
 bool Default::acceptAttackButton = false;
 bool Default::pushAttackButton = false;
-
+int Default::jumpCount = 0;
 
 //-----< Šî’êƒNƒ‰ƒX >-----//
 void PlayerState::Default::Update()

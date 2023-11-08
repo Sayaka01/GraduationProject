@@ -106,6 +106,8 @@ void SceneGame::PlayerInitialize()
 {
 	player = new GameObject("player");
 
+	player->SetTag(Tag::Player);
+
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
@@ -126,8 +128,8 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new CapsuleCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
-	player->AddComponent(new SphereCollider("RightHand"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->AddComponent(new SphereCollider("LeftHand"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->AddComponent(new SphereCollider("RightHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->AddComponent(new SphereCollider("LeftHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;
@@ -144,7 +146,8 @@ void SceneGame::PlayerInitialize()
 void SceneGame::EnemyInitialize()
 {
 	enemy = new GameObject("enemy");
-	//gameObject->AddComponent(new SpriteRenderer(L"./Resources/Sprite/optionBack.png"));
+
+	enemy->SetTag(Tag::Enemy);
 
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Enemy/miniRobotOrange.fbx");
 
@@ -170,7 +173,7 @@ void SceneGame::EnemyInitialize()
 
 	enemy->AddComponent(new Enemy());
 
-	enemy->GetComponent<Transform>()->scale = { 0.05f, 0.05f, 0.05f };
+	enemy->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
 
 	enemy->AddComponent(new Health(10));

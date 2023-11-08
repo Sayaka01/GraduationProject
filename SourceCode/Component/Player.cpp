@@ -59,11 +59,11 @@ void Player::Update()
 
 	//右手の球
 	DirectX::SimpleMath::Vector3 rightHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
-	parent->GetComponent<SphereCollider>("RightHand")->center = rightHandPos;
+	parent->GetComponent<SphereCollider>("RightHandSphere")->center = rightHandPos;
 
 	//左手の球
 	DirectX::SimpleMath::Vector3 leftHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
-	parent->GetComponent<SphereCollider>("LeftHand")->center = leftHandPos;
+	parent->GetComponent<SphereCollider>("LeftHandSphere")->center = leftHandPos;
 
 	//カプセルの位置補正
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
@@ -114,9 +114,13 @@ void Player::DebugGui()
 
 void Player::OnCollisionEnter(Collider* collider)
 {
+	if (collider->GetParent()->GetTag() != Tag::Enemy)return;
+
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
 	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
 	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
+
+
 }
 
 void Player::ChangeState(std::string nextStateName)
