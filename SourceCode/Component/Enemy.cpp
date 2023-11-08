@@ -74,10 +74,13 @@ void Enemy::Initialize()
 
 	parent->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
 
+	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
+
 }
 
 void Enemy::Update()
 {
+
 	//ビヘイビアツリー
 	if (activeNode == nullptr)
 		activeNode = aiTree->ActiveNodeInference(behaviorData);
@@ -93,6 +96,9 @@ void Enemy::Update()
 
 	// sphereColliderの位置を設定
 	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
+
+	// 当たりフラグを初期化させてEnterの処理
+	hitFlag = false;
 
 }
 
@@ -172,7 +178,7 @@ void Enemy::MoveToTargetPosition(float elapsedTime)
 	//ownerTransform->velocity +=  vector* length;
 	//ownerTransform->pos += vector * 5.0f * elapsedTime;
 	DirectX::SimpleMath::Vector3 velocity = vector * moveSpeed;
-	parent->GetComponent<RigidBody>()->AddForce({ velocity.x ,0.0f,velocity.z });
+	parent->GetComponent<RigidBody>()->AddVelocity({ velocity.x ,0.0f,velocity.z });
 }
 
 
@@ -270,4 +276,14 @@ void Enemy::RotateTransform(float elapsedTime)
 
 	parent->GetComponent<Transform>()->orientation = orientation;
 
+}
+
+void Enemy::OnCollisionEnter(Collider* collider)
+{
+	if (collider->GetParent()->GetTag() != Tag::Player)return;
+
+	hitFlag = true;
+
+	//SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
+	//parent->GetComponent<Transform>()->pos = spCollider->center;
 }

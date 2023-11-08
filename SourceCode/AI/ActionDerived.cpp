@@ -7,6 +7,7 @@
 #include "Component/ModelRenderer.h"
 #include "Component/SphereCollider.h"
 #include <SimpleMath.h>
+#include <GameObject/Health.h>
 
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
@@ -324,6 +325,9 @@ ActionBase::State DamageAction::Run(float elapsedTime)
 // 被弾行動の初期処理
 void DamageAction::Enter()
 {
+    // HP処理
+    owner->GetParent()->GetComponent<Health>()->SubtructHp(2.0f);
+
     owner->ChangeAnimation(Enemy::AnimationName::TakeDamege, false);
 }
 

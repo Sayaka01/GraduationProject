@@ -1,5 +1,6 @@
 #include "Stdafx.h"
 #include "JudgmentDerived.h"
+#include "GameObject/Health.h"
 
 bool BattleJudgment::Judgment()
 {    
@@ -78,9 +79,10 @@ bool DamageJudgment::Judgment()
     //}
     //ダメージ通知を受けていた場合はDamageノードへ
     //if (owner->GetIsDamaged())
+    if(owner->GetParent()->GetComponent<Enemy>()->GetHitFlag())
     {
         //owner->SetIsDamaged(false);
-        //return true;
+        return true;
     }
     return false;
 }
@@ -89,8 +91,9 @@ bool DeathJudgment::Judgment()
 {
     //HPが０以下になったらDeathノードへ
     //if (owner->GetHp() <= 0)
+    if(owner->GetParent()->GetComponent<Health>()->GetHpRate()<=0.0f)
     {
-        //return true;
+        return true;
     }
     return false;
 }
