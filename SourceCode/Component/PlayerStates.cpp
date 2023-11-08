@@ -47,7 +47,7 @@ void PlayerState::Default::Update()
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//プレイヤーコンポーネントにMoveVelocityを設定
-	parent->GetComponent<RigidBody>()->AddForce(velocity);
+	parent->GetComponent<RigidBody>()->AddVelocity(velocity);
 }
 DirectX::XMFLOAT3 Default::CalcMoveVec()
 {
@@ -292,7 +292,8 @@ Jump::Jump(GameObject* parent)
 void Jump::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
-	SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
+	parent->GetComponent<RigidBody>()->Jump(parent->GetComponent<Player>()->GetJumpSpeed());
+	//SetMoveVelocity({ 0.0f, parent->GetComponent<Player>()->GetJumpSpeed(), 0.0f });
 }
 void Jump::Update()
 {

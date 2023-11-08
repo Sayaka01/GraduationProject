@@ -114,9 +114,9 @@ void Player::DebugGui()
 
 void Player::OnCollisionEnter(Collider* collider)
 {
-	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
-	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
-	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
+	//CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	//parent->GetComponent<Transform>()->pos = capsuleCollider->end;
+	//parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
 }
 
 void Player::ChangeState(std::string nextStateName)

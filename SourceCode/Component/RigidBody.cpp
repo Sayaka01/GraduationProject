@@ -30,19 +30,27 @@ void RigidBody::Finalize()
 //XV
 void RigidBody::Update()
 {
-	if(useGravity)
-		AddGravity();
-
-	AddDrag();
-
-	assert(mass > 0);
-
 	Transform* ownerTransform = parent->GetComponent<Transform>();
 
-	acceleration =  resultant * (1.0f / mass);
-	velocity += acceleration * SystemManager::Instance().GetElapsedTime();
-	ownerTransform->pos += velocity * SystemManager::Instance().GetElapsedTime();
-	resultant = {};
+	if (useGravity && ownerTransform->pos.y > 0)
+		AddGravity();
+
+	assert(mass > 0);
+	//AddDragY();
+
+	if (resultant.Length() > 0)
+	{
+		//AddDrag();
+		acceleration = resultant * (1.0f / mass);
+		velocity += acceleration * SystemManager::Instance().GetElapsedTime();
+		ownerTransform->pos += velocity * SystemManager::Instance().GetElapsedTime();
+		resultant = {};
+	}
+	else
+	{
+		ownerTransform->pos += velocity * SystemManager::Instance().GetElapsedTime();
+		velocity = { 0,velocity.y,0 };
+	}
 }
 
 //ImGui
@@ -53,6 +61,7 @@ void RigidBody::DebugGui()
 		ImGui::DragFloat3("velocity", &velocity.x, 0.1f);
 		ImGui::DragFloat3("acceleration", &acceleration.x, 0.1f);
 		ImGui::DragFloat("mass", &mass, 0.1f);
+		ImGui::DragFloat("coefficient", &coefficient, 0.1f);
 		ImGui::Checkbox("useGravity", &useGravity);
 		ImGui::TreePop();
 	}
@@ -61,5 +70,10 @@ void RigidBody::DebugGui()
 void RigidBody::AddForce(DirectX::SimpleMath::Vector3 force)
 {
 	resultant += force;
+}
+
+void RigidBody::AddVelocity(DirectX::SimpleMath::Vector3 velo)
+{
+	velocity += velo;
 }
 
