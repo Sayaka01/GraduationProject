@@ -83,6 +83,9 @@ public:
 	// épê®âÒì]
 	void RotateTransform(float elapsedTime);
 
+	// îªíËÇ™ìñÇΩÇ¡ÇΩÇÁ
+	void OnCollisionEnter(Collider* collider);
+
 	//-----< Getter, Setter >-----//
 
 	void SetRunTimer(float time) { runTimer = time; }
@@ -94,6 +97,8 @@ public:
 
 	void SetTargetPosition(DirectX::XMFLOAT3 pos) { targetPosition = pos; }
 	DirectX::XMFLOAT3 GetTargetPosition() { return targetPosition; }
+
+	bool GetHitFlag() { return hitFlag; }
 private:
 
 	//-----< ä÷êî >-----//
@@ -131,5 +136,7 @@ private:
 	float wanderRange{ 60.0f };
 
 	float rotateRatio = 0.75f;
+
+	bool hitFlag{ false };
 
 };

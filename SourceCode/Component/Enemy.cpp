@@ -74,10 +74,13 @@ void Enemy::Initialize()
 
 	parent->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
 
+	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
+
 }
 
 void Enemy::Update()
 {
+
 	//ビヘイビアツリー
 	if (activeNode == nullptr)
 		activeNode = aiTree->ActiveNodeInference(behaviorData);
@@ -93,6 +96,9 @@ void Enemy::Update()
 
 	// sphereColliderの位置を設定
 	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
+
+	// 当たりフラグを初期化させてEnterの処理
+	hitFlag = false;
 
 }
 
@@ -270,4 +276,14 @@ void Enemy::RotateTransform(float elapsedTime)
 
 	parent->GetComponent<Transform>()->orientation = orientation;
 
+}
+
+void Enemy::OnCollisionEnter(Collider* collider)
+{
+	if (collider->GetParent()->GetTag() != Tag::Player)return;
+
+	hitFlag = true;
+
+	//SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
+	//parent->GetComponent<Transform>()->pos = spCollider->center;
 }
