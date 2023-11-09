@@ -45,4 +45,5 @@ private:
 
 	float runSpeed = 40.0f;//走る速さ
 	float jumpSpeed = 50.0f;//ジャンプの高さ
+	float knockBackSpeed = 10.0f;//ノックバックの強さ
 };

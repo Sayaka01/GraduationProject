@@ -8,6 +8,7 @@
 #include "Component/CapsuleCollider.h"
 #include "Component/SphereCollider.h"
 #include "Component/ModelRenderer.h"
+#include "Component/RigidBody.h"
 #include "Component/Health.h"
 
 #include "System/UserFunction.h"
@@ -19,6 +20,7 @@ void Player::Initialize()
 	name = "Player";
 
 	//ステートの追加
+	states.clear();
 	states.emplace_back(new Idle(parent));//待機
 	states.emplace_back(new Run(parent));//走り
 	states.emplace_back(new Jump(parent));//ジャンプ
@@ -111,6 +113,8 @@ void Player::DebugGui()
 	{
 		ImGui::DragFloat("runSpeed", &runSpeed);
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed);
+		ImGui::DragFloat("knockBackSpeed", &knockBackSpeed);
+		ImGui::Text(currentState->GetName().c_str());
 		ImGui::TreePop();
 	}
 }
@@ -132,6 +136,10 @@ void Player::OnCollisionEnter(Collider* collider)
 		if (parent->GetComponent<Health>()->GetIsAlive())
 		{
 			ChangeState("Damage");//ダメージステートに遷移
+			DirectX::XMFLOAT3 knockBackVec = (capsuleCollider->end + (capsuleCollider->cylinderSize * 0.5f)) - collider->center;
+			parent->GetComponent<RigidBody>()->AddVelocity({ 0.0f,NormalizeFloat3(knockBackVec).y * knockBackSpeed,0.0f });
+			knockBackVec.y = 0.0f;
+			currentState->SetParameter(NormalizeFloat3(knockBackVec) * knockBackSpeed);
 		}
 		else
 		{

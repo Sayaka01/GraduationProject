@@ -45,6 +45,9 @@ namespace PlayerState
 		//攻撃力の取得
 		float GetAttackPower() { return attackPower; }
 
+		//パラメーターの設定
+		void SetParameter(DirectX::XMFLOAT3 param) { parameter = param; }
+
 	protected:
 		//移動ベクトルをプレイヤーコンポーネントに保存
 		void SetMoveVelocity(DirectX::XMFLOAT3 velocity);
@@ -84,6 +87,8 @@ namespace PlayerState
 		const int maxJumpCount = 2;
 
 		float attackPower = 0.0f;
+
+		DirectX::XMFLOAT3 parameter = { 0.0f,0.0f,0.0f };//凡庸パラメータ
 	};
 
 	//待機

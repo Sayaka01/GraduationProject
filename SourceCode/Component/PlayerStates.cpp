@@ -417,6 +417,12 @@ void Landing::Exit()
 }
 std::string Landing::GetNext()
 {
+	//走りステートへ遷移できるか
+	if (JudgeRunState())
+	{
+		return "Run";
+	}
+
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
@@ -439,15 +445,20 @@ PunchRight::PunchRight(GameObject* parent)
 }
 void PunchRight::Enter()
 {
+	//アニメーションスピードの調整
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Punching, false);
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
 	
+	//今から攻撃するので初期化
 	attackInterval = 0.0f;
 	
+	//2段以降の攻撃の入力の取得を開始
 	acceptAttackButton = true;
 
+	//攻撃用当たり判定のコンポーネントを有効化
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(true);
 
+	//攻撃力を設定
 	attackPower = 1.0f;
 }
 void PunchRight::Update()
@@ -539,6 +550,9 @@ void Damage::Enter()
 }
 void Damage::Update()
 {
+	//ノックバックのvelocity
+	SetMoveVelocity(parameter);
+
 	Default::Update();
 }
 void Damage::Exit()
