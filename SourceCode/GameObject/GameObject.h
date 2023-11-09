@@ -57,6 +57,27 @@ public:
 		}
 		return nullptr;
 	}
+	//コンポーネントの取得（複数）
+	template<class T>
+	std::vector<T*> GetComponents()
+	{
+		std::vector<T*> comVec;
+		comVec.clear();
+
+		const std::string compName = typeid(T).name();
+		for (Component* component : components)
+		{
+			if (typeid(*component).name() == compName)
+			{
+				T* com = dynamic_cast<T*>(component);
+				if (com != nullptr)
+				{
+					comVec.push_back(com);
+				}
+			}
+		}
+		return comVec;
+	}
 	template<class T>
 	//コンポーネントの取得（名前検索）（1つずつ）
 	T* GetComponent(std::string compName)
