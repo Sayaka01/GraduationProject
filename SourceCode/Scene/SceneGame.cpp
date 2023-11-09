@@ -130,11 +130,11 @@ void SceneGame::PlayerInitialize()
 	player->GetComponent<CapsuleCollider>()->priority = 1;
 
 	player->AddComponent(new SphereCollider("RightHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.0f;
+	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightHandSphere")->type = Collider::Type::Offense;
 	player->AddComponent(new SphereCollider("LeftHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.0f;
+	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("LeftHandSphere")->type = Collider::Type::Offense;
 

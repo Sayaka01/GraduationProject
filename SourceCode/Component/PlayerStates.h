@@ -57,6 +57,8 @@ namespace PlayerState
 		DirectX::XMFLOAT2 GetLStickVec();
 		//移動ベクトルに応じたY軸回転
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
+		//一番近い敵を取得
+		void CalcEnemyDistance();
 
 		//待機ステートの遷移条件
 		bool JudgeIdleState();
@@ -74,7 +76,7 @@ namespace PlayerState
 
 		GameObject* parent = nullptr;//親オブジェクト
 
-		float rotateSpeed = DirectX::XMConvertToRadians(720);
+		float rotateSpeed = DirectX::XMConvertToRadians(1440);
 		float rotateRatio = 0.75f;
 
 		static float attackInterval;
@@ -197,6 +199,10 @@ namespace PlayerState
 		void Exit()override;
 		//ステート変更するかどうか
 		std::string GetNext()override;
+
+	private:
+		float attackRangeMin = 8.0f;
+		float attackRangeMax = 20.0f;
 	};
 
 	//パンチ（左）
@@ -215,6 +221,9 @@ namespace PlayerState
 		void Exit()override;
 		//ステート変更するかどうか
 		std::string GetNext()override;
+	private:
+		float attackRangeMin = 8.0f;
+		float attackRangeMax = 15.0f;
 	};
 
 	//ダメージ

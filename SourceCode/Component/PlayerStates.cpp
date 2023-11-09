@@ -133,6 +133,12 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
+void PlayerState::Default::CalcEnemyDistance()
+{
+	//今は敵が1体なのでこのやり方。後で頑張る
+	GameObject* enemy = parent->GetParent()->GetChild("enemy");
+	parameter = enemy->GetComponent<Transform>()->pos;
+}
 
 bool PlayerState::Default::JudgeIdleState()
 {
@@ -445,8 +451,9 @@ PunchRight::PunchRight(GameObject* parent)
 }
 void PunchRight::Enter()
 {
-	//アニメーションスピードの調整
+	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Punching, false);
+	//アニメーションスピードの調整
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
 	
 	//今から攻撃するので初期化
@@ -460,10 +467,21 @@ void PunchRight::Enter()
 
 	//攻撃力を設定
 	attackPower = 1.0f;
+
+	//一番近い敵の位置をparameterに格納
+	CalcEnemyDistance();
 }
 void PunchRight::Update()
 {
-	OutputDebugLog("attackInterval", attackInterval);
+	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
+	vec.y = 0.0f;
+	float length = LengthFloat3(vec);
+	if (length < attackRangeMax && length > attackRangeMin)
+	{
+		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
+		YAxisRotate(vec);
+	}
+
 	Default::Update();
 }
 void PunchRight::Exit()
@@ -503,19 +521,36 @@ PunchLeft::PunchLeft(GameObject* parent)
 }
 void PunchLeft::Enter()
 {
+	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Attack, false);
 
+	//今から攻撃するので初期化
 	attackInterval = 0.0f;
 
+	//攻撃の入力フラグなどを初期化
 	acceptAttackButton = false;
 	pushAttackButton = false;
 
+	//攻撃用当たり判定のコンポーネントを有効化
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(true);
 
+	//攻撃力を設定
 	attackPower = 3.0f;
+
+	//一番近い敵の位置をparameterに格納
+	CalcEnemyDistance();
 }
 void PunchLeft::Update()
 {
+	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
+	vec.y = 0.0f;
+	float length = LengthFloat3(vec);
+	if (length < attackRangeMax && length > attackRangeMin)
+	{
+		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
+		YAxisRotate(vec);
+	}
+
 	Default::Update();
 }
 void PunchLeft::Exit()

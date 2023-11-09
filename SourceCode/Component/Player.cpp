@@ -28,15 +28,15 @@ void Player::Initialize()
 	states.emplace_back(new Landing(parent));//着地
 	states.emplace_back(new PunchRight(parent));//パンチ（右）
 	states.emplace_back(new PunchLeft(parent));//パンチ（左）
-	states.emplace_back(new Damage(parent));//パンチ（左）
-	states.emplace_back(new Death(parent));//パンチ（左）
+	states.emplace_back(new Damage(parent));//ダメージ
+	states.emplace_back(new Death(parent));//死亡
 
 	//待機ステートに
 	ChangeState("Idle");
 
 	//HitEventの設定
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
-	capsuleCollider->radius = 2.0f;
+	capsuleCollider->radius = 1.5f;
 	capsuleCollider->cylinderSize = 5.0f;
 	capsuleCollider->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 
