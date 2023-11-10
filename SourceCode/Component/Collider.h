@@ -37,6 +37,8 @@ public:
 	int priority = 0;//当たり判定の優先度（０が一番優先度高い）
 	bool useHitEvent = true;//当たり判定を行うかどうか
 
+	DirectX::XMFLOAT4 debugColor = { 1,1,1,1 };
+
 private:
 	void (Component::*HitProcessFunc)(Collider* collider);
 	Component* component = nullptr;

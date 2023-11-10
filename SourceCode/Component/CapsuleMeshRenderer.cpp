@@ -276,7 +276,7 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 	DirectX::XMFLOAT4X4 world;
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 	constants.world = world;
-	constants.color = color;
+	constants.color = capsuleCollider->debugColor;
 	constantBuffer.SetConstantBuffer(dc, ConstantBuffer::ShaderType::ALL, ConstantBuffer::UsageType::Object, &constants);
 
 	dc->Draw(cylinderVertexCount, 0);
@@ -302,7 +302,6 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 	T = DirectX::XMMatrixTranslation(capsuleCollider->center.x - correction.x, capsuleCollider->center.y - correction.y, capsuleCollider->center.z - correction.z);
 	DirectX::XMStoreFloat4x4(&world, S * R * T);
 	constants.world = world;
-	constants.color = color;
 	constantBuffer.SetConstantBuffer(dc, ConstantBuffer::ShaderType::ALL, ConstantBuffer::UsageType::Object, &constants);
 
 	dc->Draw(halfSphereVertexCount, 0);

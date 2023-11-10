@@ -112,7 +112,7 @@ void SphereMeshRenderer::Draw(SphereCollider* sphereCollider)
 
 	//定数バッファ更新
 	constants.world = world;
-	constants.color = color;
+	constants.color = sphereCollider->debugColor;
 	ID3D11DeviceContext* dc = SystemManager::Instance().GetDeviceContext();
 	constantBuffer.SetConstantBuffer(dc, ConstantBuffer::ShaderType::ALL, ConstantBuffer::UsageType::Object, &constants);
 

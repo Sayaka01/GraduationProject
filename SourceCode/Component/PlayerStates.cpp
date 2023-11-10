@@ -807,6 +807,10 @@ void SwingWire::Update()
 	pos.y += parent->GetComponent<CapsuleCollider>("BodyCapsule")->radius + parent->GetComponent<CapsuleCollider>("BodyCapsule")->cylinderSize * 0.5f;
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
+	parent->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1,0,0,1 };
+	parent->GetComponent<SphereCollider>("DebugSphere")->center = pos;
+
+
 	Default::Update();
 }
 void SwingWire::Exit()

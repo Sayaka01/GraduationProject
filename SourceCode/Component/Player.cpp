@@ -49,6 +49,12 @@ void Player::Initialize()
 	//¶Žè
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
+
+	//Debug
+	parent->AddComponent(new SphereCollider("DebugSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	parent->GetComponent<SphereCollider>("DebugSphere")->radius = 1.0f;
+
+
 }
 
 void Player::Update()

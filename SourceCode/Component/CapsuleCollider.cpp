@@ -76,7 +76,7 @@ void CapsuleCollider::CalcCapsuleParam()
 
 	cylinderSize = length;
 
-	UpdateCenter();
+	//UpdateCenter();
 }
 
 void CapsuleCollider::UpdateCenter()

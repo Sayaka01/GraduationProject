@@ -72,7 +72,7 @@ void BoxMeshRenderer::Draw(BoxCollider* boxCollider)
 
 	//定数バッファ更新
 	constants.world = world;
-	constants.color = color;
+	constants.color = boxCollider->debugColor;
 	ID3D11DeviceContext* dc = SystemManager::Instance().GetDeviceContext();
 	constantBuffer.SetConstantBuffer(dc, ConstantBuffer::ShaderType::ALL, ConstantBuffer::UsageType::Object, &constants);
 
