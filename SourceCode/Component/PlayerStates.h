@@ -51,6 +51,10 @@ namespace PlayerState
 	protected:
 		//移動ベクトルをプレイヤーコンポーネントに保存
 		void SetMoveVelocity(DirectX::XMFLOAT3 velocity);
+		//カメラの前方向を取得
+		DirectX::XMFLOAT3 GetCameraFront();
+		//カメラの右方向を取得
+		DirectX::XMFLOAT3 GetCameraRight();
 		//移動ベクトルを計算
 		DirectX::XMFLOAT3 CalcMoveVec();
 		//コントローラーのLスティックの入力値を取得
@@ -70,6 +74,10 @@ namespace PlayerState
 		bool JudgePunchRightState();
 		//パンチ（左）ステートの遷移条件
 		bool JudgePunchLeftState();
+		//ワイヤーでの直線移動ステートの遷移条件
+		bool JudgeAimWireState();
+		//ワイヤーでの弧を書いた移動ステートの遷移条件
+		bool JudgeSwingWireState();
 
 
 		std::string name = "";//ステートの名前
@@ -260,6 +268,47 @@ namespace PlayerState
 		void Exit()override;
 		//ステート変更するかどうか
 		std::string GetNext()override;
+	};
+
+	//狙った位置にワイヤーを刺す、直線的なワイヤー移動
+	class AimWire : public Default
+	{
+	public:
+		AimWire();
+		AimWire(GameObject* parent);
+		~AimWire() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	};
+
+	//ワイヤーでの弧を書いた移動
+	class SwingWire : public Default
+	{
+	public:
+		SwingWire();
+		SwingWire(GameObject* parent);
+		~SwingWire() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		float maxWireLength = 30.0f;
+		DirectX::XMFLOAT3 oldPosition[2]{};
+
 	};
 
 }

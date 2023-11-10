@@ -30,6 +30,7 @@ public:
 	//-----< Getter, Setter >-----//
 	float GetRunSpeed() { return runSpeed; }
 	float GetJumpSpeed() { return jumpSpeed; }
+	float GetWireSpeed() { return wireSpeed; }
 
 	float GetAttackPower() { return currentState->GetAttackPower(); }
 
@@ -46,4 +47,6 @@ private:
 	float runSpeed = 40.0f;//走る速さ
 	float jumpSpeed = 50.0f;//ジャンプの高さ
 	float knockBackSpeed = 10.0f;//ノックバックの強さ
+	float wireSpeed = 75.0f;//ワイヤー移動のスピード
+
 };

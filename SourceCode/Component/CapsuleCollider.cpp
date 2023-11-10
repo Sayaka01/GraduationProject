@@ -30,6 +30,8 @@ void CapsuleCollider::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		ImGui::DragFloat3("center", &center.x);
+
 		ImGui::DragFloat3("begin", &begin.x);
 		ImGui::DragFloat3("end", &end.x);
 
@@ -63,9 +65,11 @@ void CapsuleCollider::CalcCapsuleParam()
 	float rad = cosf(dot);
 	if (rad < FLT_EPSILON)return;
 
+
+
 	DirectX::XMVECTOR Q = DirectX::XMQuaternionRotationAxis(DirectX::XMLoadFloat3(&axis), rad);
 
-	Q = DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&quaternion), Q);
+	//Q = DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&quaternion), Q);
 
 	DirectX::XMStoreFloat4(&quaternion, Q);
 	radian = QuaternionToEuler(quaternion);

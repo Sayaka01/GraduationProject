@@ -30,12 +30,14 @@ void Player::Initialize()
 	states.emplace_back(new PunchLeft(parent));//パンチ（左）
 	states.emplace_back(new Damage(parent));//ダメージ
 	states.emplace_back(new Death(parent));//死亡
+	states.emplace_back(new AimWire(parent));//ワイヤーでの直線移動
+	states.emplace_back(new SwingWire(parent));//ワイヤーでの弧を書いた移動
 
 	//待機ステートに
 	ChangeState("Idle");
 
 	//HitEventの設定
-	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>("BodyCapsule");
 	capsuleCollider->radius = 1.5f;
 	capsuleCollider->cylinderSize = 5.0f;
 	capsuleCollider->SetHitProcessFunc(this, &Component::OnCollisionEnter);
@@ -71,7 +73,7 @@ void Player::Update()
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->center = leftHandPos;
 
 	//カプセルの位置補正
-	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>("BodyCapsule");
 	capsuleCollider->begin = parent->GetComponent<Transform>()->pos;
 	capsuleCollider->begin.y += capsuleCollider->radius + capsuleCollider->cylinderSize;
 	capsuleCollider->end = parent->GetComponent<Transform>()->pos;
@@ -114,6 +116,7 @@ void Player::DebugGui()
 		ImGui::DragFloat("runSpeed", &runSpeed);
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed);
 		ImGui::DragFloat("knockBackSpeed", &knockBackSpeed);
+		ImGui::DragFloat("wireSpeed", &wireSpeed);
 		ImGui::Text(currentState->GetName().c_str());
 		ImGui::TreePop();
 	}
@@ -124,7 +127,7 @@ void Player::OnCollisionEnter(Collider* collider)
 	if (!parent->GetComponent<Health>()->GetIsAlive())return;
 	if (collider->GetParent()->GetTag() != Tag::Enemy)return;
 
-	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>();
+	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>("BodyCapsule");
 	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
 	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
 

@@ -11,6 +11,7 @@
 #include "Component/RigidBody.h"
 #include "Component/Player.h"
 #include "Component/SphereCollider.h"
+#include "Component/CapsuleCollider.h"
 
 #include "System/SystemManager.h"
 #include "System/UserFunction.h"
@@ -50,7 +51,7 @@ void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 	//プレイヤーコンポーネントにMoveVelocityを設定
 	parent->GetComponent<RigidBody>()->AddVelocity(velocity);
 }
-DirectX::XMFLOAT3 Default::CalcMoveVec()
+DirectX::XMFLOAT3 Default::GetCameraFront()
 {
 	//カメラの取得
 	Camera* camera = parent->GetParent()->GetChild("CameraController")->GetComponent<Camera>();
@@ -58,11 +59,26 @@ DirectX::XMFLOAT3 Default::CalcMoveVec()
 	//カメラの前方向ベクトルを取得
 	DirectX::XMFLOAT3 cameraFront = camera->GetCameraFront();
 	cameraFront.y = 0.0f;
-	cameraFront = NormalizeFloat3(cameraFront);
+
+	return NormalizeFloat3(cameraFront);
+}
+DirectX::XMFLOAT3 PlayerState::Default::GetCameraRight()
+{
+	//カメラの取得
+	Camera* camera = parent->GetParent()->GetChild("CameraController")->GetComponent<Camera>();
+
 	//カメラの右方向ベクトルを取得
 	DirectX::XMFLOAT3 cameraRight = camera->GetCameraRight();
 	cameraRight.y = 0.0f;
-	cameraRight = NormalizeFloat3(cameraRight);
+
+	return NormalizeFloat3(cameraRight);
+}
+DirectX::XMFLOAT3 Default::CalcMoveVec()
+{
+	//カメラの前方向ベクトルを取得
+	DirectX::XMFLOAT3 cameraFront = GetCameraFront();
+	//カメラの右方向ベクトルを取得
+	DirectX::XMFLOAT3 cameraRight = GetCameraRight();
 
 	//Lスティックの入力値を取得
 	DirectX::XMFLOAT2 lStickVec = GetLStickVec();
@@ -177,6 +193,22 @@ bool PlayerState::Default::JudgePunchLeftState()
 	//Aボタンが押されていたらtrue
 	return (pushAttackButton && (attackInterval < acceptAttackTime));
 }
+bool PlayerState::Default::JudgeAimWireState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+
+	//ZLボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_LEFT_SHOULDER);
+}
+bool PlayerState::Default::JudgeSwingWireState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+
+	//ZRボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_SHOULDER);
+}
 
 //-----< 待機 >-----//
 Idle::Idle()
@@ -213,6 +245,12 @@ std::string Idle::GetNext()
 	if (JudgePunchRightState())
 	{
 		return "PunchRight";
+	}
+
+	//ワイヤーでの直線移動ステートに遷移できるか
+	if (JudgeAimWireState())
+	{
+		return "AimWire";
 	}
 
 	//ジャンプステートへ遷移できるか
@@ -273,6 +311,12 @@ std::string Run::GetNext()
 		return "PunchRight";
 	}
 
+	//ワイヤーでの直線移動ステートに遷移できるか
+	if (JudgeAimWireState())
+	{
+		return "AimWire";
+	}
+
 	//ジャンプステートへ遷移できるか
 	if (JudgeJumpState())
 	{
@@ -302,7 +346,7 @@ Jump::Jump(GameObject* parent)
 void Jump::Enter()
 {
 	jumpCount++;
-	if (jumpCount == 1)//ジャンプ一回目
+	if (jumpCount <= 1)//ジャンプ一回目
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
 	else//それ以降
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
@@ -326,6 +370,18 @@ void Jump::Exit()
 }
 std::string Jump::GetNext()
 {
+	//ワイヤーでの弧を書いた移動ステートに遷移できるか
+	if (JudgeSwingWireState())
+	{
+		return "SwingWire";
+	}
+
+	//ワイヤーでの直線移動ステートに遷移できるか
+	if (JudgeAimWireState())
+	{
+		return "AimWire";
+	}
+
 	//ジャンプステートへ遷移できるか
 	if (JudgeJumpState())
 	{
@@ -343,7 +399,6 @@ std::string Jump::GetNext()
 	{
 		return "Landing";
 	}
-
 
 	//変更なし
 	return "";
@@ -380,6 +435,18 @@ void Falling::Exit()
 }
 std::string Falling::GetNext()
 {
+	//ワイヤーでの弧を書いた移動ステートに遷移できるか
+	if (JudgeSwingWireState())
+	{
+		return "SwingWire";
+	}
+
+	//ワイヤーでの直線移動ステートに遷移できるか
+	if (JudgeAimWireState())
+	{
+		return "AimWire";
+	}
+
 	//pos.y < 0.0f なら着地ステートへ
 	if (parent->GetComponent<Transform>()->pos.y < 0.0f)
 	{
@@ -423,6 +490,12 @@ void Landing::Exit()
 }
 std::string Landing::GetNext()
 {
+	//ワイヤーでの直線移動ステートに遷移できるか
+	if (JudgeAimWireState())
+	{
+		return "AimWire";
+	}
+
 	//走りステートへ遷移できるか
 	if (JudgeRunState())
 	{
@@ -599,7 +672,10 @@ std::string Damage::GetNext()
 	//アニメーション再生が終わったら待機ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
-		return "Idle";
+		if (parent->GetComponent<Transform>()->pos.y > 0.0f)
+			return "Falling";
+		else
+			return "Idle";
 	}
 
 	//変更なし
@@ -633,3 +709,138 @@ std::string Death::GetNext()
 	//変更なし
 	return "";
 }
+
+//-----< 狙った位置にワイヤーを刺す、直線的なワイヤー移動 >-----//
+AimWire::AimWire()
+{
+	name = "AimWire";
+}
+AimWire::AimWire(GameObject* parent)
+{
+	name = "AimWire";
+	this->parent = parent;
+}
+void AimWire::Enter()
+{
+	jumpCount = 0;
+
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+
+}
+void AimWire::Update()
+{
+	Default::Update();
+}
+void AimWire::Exit()
+{
+
+}
+std::string AimWire::GetNext()
+{
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
+	//アニメーション再生が終わったら落下ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Falling";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< ワイヤーでの弧を書いた移動 >-----//
+SwingWire::SwingWire()
+{
+	name = "SwingWire";
+}
+SwingWire::SwingWire(GameObject* parent)
+{
+	name = "SwingWire";
+	this->parent = parent;
+}
+void SwingWire::Enter()
+{
+	jumpCount = 0;
+
+	//カメラの前方向ベクトルを取得
+	DirectX::XMFLOAT3 cameraFront = GetCameraFront();
+
+	//ワイヤーの刺す位置（仮）
+	//ワイヤーを斜辺とした90°,30°,60°の直角三角形とみて計算する
+	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
+	parameter = pos + (cameraFront * maxWireLength * 0.5f);//自分の位置からワイヤーを刺すXZ平面上の点
+	parameter.y += (maxWireLength * 0.5f * sqrtf(3.0f));//ワイヤーを刺す位置
+
+	//Debug描画
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(true);
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->begin = parameter;
+
+	parent->GetComponent<RigidBody>()->SetUseGravity(false);
+}
+void SwingWire::Update()
+{	
+	//位置の保存
+	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
+	oldPosition[0] = oldPosition[1];
+	oldPosition[1] = pos;
+
+	//カメラの前方向に進む(XZ平面）
+	DirectX::XMFLOAT3 velocity = GetCameraFront() * parent->GetComponent<Player>()->GetWireSpeed();
+	SetMoveVelocity(velocity);
+	YAxisRotate(velocity);
+
+	//ワイヤーの長さに基づいて補正
+	DirectX::XMFLOAT3 vec = pos - parameter;
+	vec = NormalizeFloat3(vec) * maxWireLength;
+	pos = parameter + vec;
+	parent->GetComponent<Transform>()->pos = pos;
+
+	//前フレームから移動量を計算
+
+
+	//Debug描画
+	pos.y += parent->GetComponent<CapsuleCollider>("BodyCapsule")->radius + parent->GetComponent<CapsuleCollider>("BodyCapsule")->cylinderSize * 0.5f;
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
+
+	Default::Update();
+}
+void SwingWire::Exit()
+{
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
+
+	parent->GetComponent<RigidBody>()->SetUseGravity(true);
+
+}
+std::string SwingWire::GetNext()
+{
+	//ジャンプステートへ遷移できるか
+	if (JudgeJumpState())
+	{
+		return "Jump";
+	}
+
+	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
+	float length = LengthFloat3(oldPosition[1] - oldPosition[0]);
+	OutputDebugLog("length", length);
+	if (length < 0.15f)
+	{
+		return "Jump";
+	}
+
+	//ZRボタンを離したらJumpステートに遷移
+	if (SystemManager::Instance().GetGamePad().GetButtonUp() & GamePad::BTN_RIGHT_SHOULDER)
+	{
+		return "Jump";
+	}
+
+
+
+	//変更なし
+	return "";
+}
+

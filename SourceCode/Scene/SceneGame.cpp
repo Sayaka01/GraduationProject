@@ -126,8 +126,8 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(modelRenderer);
 
-	player->AddComponent(new CapsuleCollider());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->GetComponent<CapsuleCollider>()->priority = 1;
+	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 1;
 
 	player->AddComponent(new SphereCollider("RightHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
@@ -148,6 +148,10 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new Health(30));
 
+	player->AddComponent(new CapsuleCollider("WireCapsule"));
+	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.1f;
+	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
+	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 }
 
 void SceneGame::EnemyInitialize()

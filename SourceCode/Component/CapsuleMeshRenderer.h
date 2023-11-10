@@ -19,7 +19,7 @@ public:
 	//•`‰æ€”õ
 	void DrawPrepare();
 	//•`‰æ
-	void Draw(CapsuleCollider* sphereCollider);
+	void Draw(CapsuleCollider* capsuleCollider);
 
 private:
 	//-----< •Ï” >-----//
