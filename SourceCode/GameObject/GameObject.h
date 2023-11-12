@@ -133,6 +133,8 @@ public:
 	//タグの設定
 	void SetTag(Tag tag) { this->tag = tag; }
 
+	void SetActive(bool b) { active = b; }
+
 protected:
 	std::string name{};//オブジェクトの名前
 	Tag tag = Tag::Untagged;//タグ（当たり判定などオブジェクトを特定するために使用）

@@ -52,6 +52,9 @@ public:
 	//ImGui
 	void DebugGui() override;
 
+	// AIのツリー設定
+	void SetBehaviorTree();
+
 	// アニメーションの切り替え
 	void ChangeAnimation(AnimationName animeIndex, bool isLoop);
 
@@ -99,6 +102,12 @@ public:
 	DirectX::XMFLOAT3 GetTargetPosition() { return targetPosition; }
 
 	bool GetHitFlag() { return hitFlag; }
+
+	float GetAttackPower() { return currentAttackPower; }
+	void SetAttackPower(float power) { currentAttackPower = power; }
+
+	float GetPunchAttackPower() { return punchPower; }
+	float GetSlashAttackPower() { return slashPower; }
 private:
 
 	//-----< 関数 >-----//
@@ -108,7 +117,7 @@ private:
 	//std::vector<PlayerState::Default*> states;//状態
 	//PlayerState::Default* currentState = nullptr;
 
-	DirectX::XMFLOAT3 moveVelocity = {};//移動ベクトル
+	//DirectX::XMFLOAT3 moveVelocity = {};//移動ベクトル
 
 	BehaviorTree* aiTree{ nullptr };
 	BehaviorData* behaviorData{ nullptr };
@@ -117,12 +126,18 @@ private:
 	float runTimer = 0.0f;//行動時間
 	DirectX::XMFLOAT3 targetPosition{ 0.0f,0.0f,0.0f };
 
+	//現在の攻撃力
+	float currentAttackPower{ 0.0f };
+
 
 	//回転速度
 	float rotateSpeed = 5.0f;
 
 	// 移動速度
 	float moveSpeed = 10.0f;
+
+	bool hitFlag{ false };
+
 
 	//-----< 定数 >-----//
 
@@ -135,8 +150,12 @@ private:
 	//徘徊を開始する範囲
 	float wanderRange{ 60.0f };
 
-	float rotateRatio = 0.75f;
+	//姿勢回転の量
+	float rotateRatio{ 0.75f };
 
-	bool hitFlag{ false };
+	//それぞれの攻撃力
+	float punchPower{ 3 };
+	float slashPower{ 6 };
+
 
 };
