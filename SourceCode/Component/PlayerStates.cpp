@@ -779,6 +779,8 @@ void SwingWire::Enter()
 	//Debug•`‰æ
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(true);
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->begin = parameter;
+	pos.y += parent->GetComponent<Player>()->GetHeight();
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
 	parent->GetComponent<RigidBody>()->SetUseGravity(false);
 
