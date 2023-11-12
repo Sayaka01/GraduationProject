@@ -28,6 +28,7 @@ public:
 	void OnCollisionEnter(Collider* collider) override;
 
 	//-----< Getter, Setter >-----//
+	float GetHeight() { return height; }
 	float GetRunSpeed() { return runSpeed; }
 	float GetJumpSpeed() { return jumpSpeed; }
 	float GetWireSpeed() { return wireSpeed; }
@@ -43,6 +44,8 @@ private:
 	//-----< 変数 >-----//
 	std::vector<PlayerState::Default*> states;//状態
 	PlayerState::Default* currentState = nullptr;
+
+	float height = 10.0f;//プレイヤーの身長
 
 	float runSpeed = 40.0f;//走る速さ
 	float jumpSpeed = 50.0f;//ジャンプの高さ

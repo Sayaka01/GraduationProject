@@ -308,7 +308,8 @@ namespace PlayerState
 	private:
 		float maxWireLength = 30.0f;
 		DirectX::XMFLOAT3 oldPosition[2]{};
-
+		float swingTimer = 0.0f;
+		float maxSwingTime = 1.0f;
 	};
 
 }

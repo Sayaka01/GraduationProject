@@ -149,9 +149,12 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(new Health(30));
 
 	player->AddComponent(new CapsuleCollider("WireCapsule"));
-	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.1f;
+	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.05f;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
+
+	player->AddComponent(new SphereCollider("DebugSphere"));
+	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
 }
 
 void SceneGame::EnemyInitialize()

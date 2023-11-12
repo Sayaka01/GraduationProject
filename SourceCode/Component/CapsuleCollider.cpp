@@ -3,6 +3,10 @@
 #include "Stdafx.h"
 #include "CapsuleCollider.h"
 
+#include "Component/Camera.h"
+
+#include "GameObject/GameObject.h"
+
 #include "System/CollideManager.h"
 #include "System/UserFunction.h"
 
@@ -65,8 +69,15 @@ void CapsuleCollider::CalcCapsuleParam()
 	float rad = cosf(dot);
 	if (rad < FLT_EPSILON)return;
 
+	//カメラの取得
+	Camera* camera = parent->GetParent()->GetChild("CameraController")->GetComponent<Camera>();
+	//カメラの右方向ベクトルを取得
+	DirectX::XMFLOAT3 cameraRight = camera->GetCameraRight();
+	cameraRight.y = 0.0f;
+	//カメラの右ベクトルと内積を取り左右判定を行う
+	if (DotFloat3(NormalizeFloat3(cameraRight), axis) >= 0.0f)rad = -rad;
 
-
+	//クオータニオンの作成
 	DirectX::XMVECTOR Q = DirectX::XMQuaternionRotationAxis(DirectX::XMLoadFloat3(&axis), rad);
 
 	//Q = DirectX::XMQuaternionMultiply(DirectX::XMLoadFloat4(&quaternion), Q);

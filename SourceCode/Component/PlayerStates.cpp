@@ -781,9 +781,14 @@ void SwingWire::Enter()
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->begin = parameter;
 
 	parent->GetComponent<RigidBody>()->SetUseGravity(false);
+
+	swingTimer = 0.0f;
 }
 void SwingWire::Update()
 {	
+	//経過時間
+	swingTimer += SystemManager::Instance().GetElapsedTime();
+
 	//位置の保存
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	oldPosition[0] = oldPosition[1];
@@ -802,14 +807,11 @@ void SwingWire::Update()
 
 	//前フレームから移動量を計算
 
-
 	//Debug描画
-	pos.y += parent->GetComponent<CapsuleCollider>("BodyCapsule")->radius + parent->GetComponent<CapsuleCollider>("BodyCapsule")->cylinderSize * 0.5f;
+	pos.y += parent->GetComponent<Player>()->GetHeight();
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
-	parent->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1,0,0,1 };
 	parent->GetComponent<SphereCollider>("DebugSphere")->center = pos;
-
 
 	Default::Update();
 }
@@ -831,8 +833,9 @@ std::string SwingWire::GetNext()
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	float length = LengthFloat3(oldPosition[1] - oldPosition[0]);
 	OutputDebugLog("length", length);
-	if (length < 0.15f)
+	if (length < 0.15f || swingTimer > maxSwingTime)
 	{
+		OutputDebugLog("swingTimer", swingTimer);
 		return "Jump";
 	}
 
