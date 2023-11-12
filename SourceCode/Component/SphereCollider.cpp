@@ -21,6 +21,7 @@ SphereCollider::SphereCollider(std::string compName)
 
 SphereCollider::~SphereCollider()
 {
+	CollideManager::Instance().RemoveSphereCollider(this);
 }
 
 void SphereCollider::DebugGui()

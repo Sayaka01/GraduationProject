@@ -42,6 +42,13 @@ public:
 	//CapsuleCollider‚Ì’Ç‰Á
 	void AddCapsuleCollider(CapsuleCollider* capsuleCollider) { capsuleColliders.emplace_back(capsuleCollider); }
 
+	//SphereCollider‚Ìíœ
+	void RemoveSphereCollider(SphereCollider* sphereCollider);
+	//BoxCollider‚Ìíœ
+	void RemoveBoxCollider(BoxCollider* boxCollider);
+	//CapsuleCollider‚Ìíœ
+	void RemoveCapsuleCollider(CapsuleCollider* capsuleCollider);
+
 	//BoundingBox‚Ìì¬
 	void CreateBoundingBox(ModelRenderer* modelRenderer);
 

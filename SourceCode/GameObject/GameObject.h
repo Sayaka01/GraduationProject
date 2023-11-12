@@ -133,7 +133,8 @@ public:
 	//タグの設定
 	void SetTag(Tag tag) { this->tag = tag; }
 
-	void SetActive(bool b) { active = b; }
+	//オブジェクトのアクティブ状態の変更
+	void SetActive(bool flag) { active = flag; }
 
 protected:
 	std::string name{};//オブジェクトの名前

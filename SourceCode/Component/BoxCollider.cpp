@@ -21,6 +21,7 @@ BoxCollider::BoxCollider(std::string compName)
 
 BoxCollider::~BoxCollider()
 {
+	CollideManager::Instance().RemoveBoxCollider(this);
 }
 
 void BoxCollider::DebugGui()

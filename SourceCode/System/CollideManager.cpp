@@ -162,6 +162,36 @@ void CollideManager::Draw()
 #endif
 }
 
+void CollideManager::RemoveSphereCollider(SphereCollider* sphereCollider)
+{
+	std::vector<SphereCollider*>::iterator it = std::find(sphereColliders.begin(), sphereColliders.end(), sphereCollider);
+	if (it != sphereColliders.end())
+	{
+		sphereCollider->Finalize();
+		sphereColliders.erase(it);
+	}
+}
+
+void CollideManager::RemoveBoxCollider(BoxCollider* boxCollider)
+{
+	std::vector<BoxCollider*>::iterator it = std::find(boxColliders.begin(), boxColliders.end(), boxCollider);
+	if (it != boxColliders.end())
+	{
+		boxCollider->Finalize();
+		boxColliders.erase(it);
+	}
+}
+
+void CollideManager::RemoveCapsuleCollider(CapsuleCollider* capsuleCollider)
+{
+	std::vector<CapsuleCollider*>::iterator it = std::find(capsuleColliders.begin(), capsuleColliders.end(), capsuleCollider);
+	if (it != capsuleColliders.end())
+	{
+		capsuleCollider->Finalize();
+		capsuleColliders.erase(it);
+	}
+}
+
 void CollideManager::CreateBoundingBox(ModelRenderer* modelRenderer)
 {
 	//モデルデータの取得

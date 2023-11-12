@@ -28,6 +28,7 @@ CapsuleCollider::CapsuleCollider(std::string compName)
 
 CapsuleCollider::~CapsuleCollider()
 {
+	CollideManager::Instance().RemoveCapsuleCollider(this);
 }
 
 void CapsuleCollider::DebugGui()
