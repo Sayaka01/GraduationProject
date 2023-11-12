@@ -47,6 +47,10 @@ ActionBase::State PunchAction::Run(float elapsedTime)
 // 打撃行動の初期処理
 void PunchAction::Enter()
 {
+    // 攻撃力の設定
+    owner->SetAttackPower(owner->GetPunchAttackPower());
+
+    // アニメーションの設定
     owner->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
 }
 
@@ -106,6 +110,9 @@ ActionBase::State SkillAction::Run(float elapsedTime)
 // 重撃行動の初期処理
 void SkillAction::Enter()
 {
+    // 攻撃力の設定
+    owner->SetAttackPower(owner->GetSlashAttackPower());
+
     owner->ChangeAnimation(Enemy::AnimationName::RightClawAttack, false);
     
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
@@ -308,7 +315,7 @@ void DieAction::Enter()
 void DieAction::Exit()
 {
     // activeフラグを消す
-    //owner->GetParent()->GetComponent<GameObject>()->SetActive(false);
+    owner->GetParent()->SetActive(false);
 }
 
 // 被弾行動のアクション

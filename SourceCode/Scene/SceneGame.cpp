@@ -178,15 +178,22 @@ void SceneGame::EnemyInitialize()
 
 	enemy->AddComponent(modelRenderer);
 
+	// ˜‚Ì“–‚½‚è”»’è—p‹…‚ÌÝ’è
 	enemy->AddComponent(new SphereCollider("waist"));
+	// ‰EŽè‚ÌUŒ‚—p“–‚½‚è”»’è‹…‚ÌÝ’è
 	enemy->AddComponent(new SphereCollider("attackRightHand"));
+	enemy->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
+	enemy->GetComponent<SphereCollider>("attackRightHand")->type = Collider::Type::Offense;
+	// ˆÚ“®Ý’è
 	enemy->AddComponent(new RigidBody());
 
 	enemy->AddComponent(new Enemy());
 
+	// Žp¨“™‚ÌÝ’è
 	enemy->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
 	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
 
+	// HPÝ’è
 	enemy->AddComponent(new Health(10));
 }
 
