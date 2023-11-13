@@ -83,9 +83,15 @@ void CollideManager::Collide()
 					colliderB->center -= result.normal * result.penetration * 0.5f;
 				}
 				
-				colliderA->OnCollisionEnter(colliderB);
-				colliderB->OnCollisionEnter(colliderA);
-
+				if (colliderA->type == Collider::Type::Deffense && colliderB->type == Collider::Type::Offense)
+					colliderA->OnCollisionEnter(colliderB);
+				else if (colliderA->type == Collider::Type::Offense && colliderB->type == Collider::Type::Deffense)
+					colliderB->OnCollisionEnter(colliderA);
+				else
+				{
+					colliderA->OnCollisionEnter(colliderB);
+					colliderB->OnCollisionEnter(colliderA);
+				}
 			}
 		}
 	}
