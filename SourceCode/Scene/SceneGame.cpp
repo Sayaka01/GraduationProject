@@ -56,10 +56,6 @@ void SceneGame::Initialize()
 
 	SpriteInitialze();
 
-	spriteManager->AddChild(sprBoxBarBack);
-	spriteManager->AddChild(sprBoxBar);
-	spriteManager->AddChild(sprCircleBar);
-	spriteManager->AddChild(sprUiFrame);
 
 	CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
@@ -73,20 +69,35 @@ void SceneGame::Finalize()
 
 	spriteManager->Finalize();
 	delete spriteManager;
-	sprOverBack->Finalize();
-	delete sprOverBack;
-	sprOverText->Finalize();
-	delete sprOverText;
 }
 
 void SceneGame::Update()
 {
+	//プレイヤーのHPが0になったらGameOverへ画面を遷移
+	if (player->GetComponent<Player>()->GetIsDead())
+	{
+		sprOverText->GetComponent<SpriteRenderer>()->SetEnable(true);
+		sprOverBack->GetComponent<SpriteRenderer>()->SetEnable(true);
+		spriteManager->Update();
+		return;
+	}
+	//クエストをクリアしたらGameClearへ画面を変更
+	else if (isQuestClear)
+	{
+		sprClearText->GetComponent<SpriteRenderer>()->SetEnable(true);
+		sprClearBack->GetComponent<SpriteRenderer>()->SetEnable(true);
+		spriteManager->Update();
+		return;
+	}
+
+
 	objectManager->Update();
 
 	CollideManager::Instance().Collide();
 
 	PlayerUIUpdate();
 	spriteManager->Update();
+
 }
 
 void SceneGame::Draw()
@@ -97,9 +108,9 @@ void SceneGame::Draw()
 
 	spriteManager->Draw();
 
-	// GameOver時に描画
-	//sprOverBack->Draw();
-	//sprOverText->Draw();
+	ImGui::Begin("Game");
+	ImGui::Checkbox("clear button", &isQuestClear);
+	ImGui::End();
 }
 
 void SceneGame::PlayerInitialize()
@@ -183,10 +194,12 @@ void SceneGame::EnemyInitialize()
 
 	// 腰の当たり判定用球の設定
 	enemy->AddComponent(new SphereCollider("waist"));
-	// 右手の攻撃用当たり判定球の設定
-	enemy->AddComponent(new SphereCollider("attackRightHand"));
-	enemy->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
-	enemy->GetComponent<SphereCollider>("attackRightHand")->type = Collider::Type::Offense;
+	enemy->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+
+	// 攻撃用当たり判定球の設定
+	enemy->AddComponent(new SphereCollider("HandCollider"));
+	enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+	enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
 	// 移動設定
 	enemy->AddComponent(new RigidBody());
 
@@ -203,7 +216,7 @@ void SceneGame::EnemyInitialize()
 // 2D画像の初期設定
 void SceneGame::SpriteInitialze()
 {
-	//タイトルロゴ画像の読み込み
+	// プレイヤーUI画像の読み込み
 	SpriteLoad(&sprBoxBar,	  "boxBar",	    (L"./Resources/Sprite/box_bar.png"),
 		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
 
@@ -218,12 +231,25 @@ void SceneGame::SpriteInitialze()
 
 	// GameOver画像の読み込み
 	SpriteLoad(&sprOverBack, "gameOverBack", (L"./Resources/Sprite/gameOverBack.png"),
-		{ 0.0f,0.0f }, { 1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+		{ 0.0f,0.0f });//pos
+	sprOverBack->GetComponent<SpriteRenderer>()->SetEnable(false);
 
-	SpriteLoad(&sprOverText, "gameOverBack", (L"./Resources/Sprite/text_dead.png"),
-		{ SCREEN_WIDTH*0.5f,SCREEN_HEIGHT*0.5f }, { 1.0f,1.0f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+	SpriteLoad(&sprOverText, "deadText", (L"./Resources/Sprite/text_dead.png"),
+		{ SCREEN_WIDTH*0.5f,SCREEN_HEIGHT*0.5f });//pos
 	//基準点を画像の真ん中に設定
 	sprOverText->GetComponent<SpriteRenderer>()->pivot = sprOverText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
+	sprOverText->GetComponent<SpriteRenderer>()->SetEnable(false);
+	
+	// GameClear画像の読み込み
+	SpriteLoad(&sprClearBack, "gameClearBack", (L"./Resources/Sprite/gameClearBack.png"),
+		{ 0.0f,0.0f });//pos
+	sprClearBack->GetComponent<SpriteRenderer>()->SetEnable(false);
+
+	SpriteLoad(&sprClearText, "clearText", (L"./Resources/Sprite/clear_text.png"),
+		{ SCREEN_WIDTH*0.5f,255.0f });//pos
+	//基準点を画像の真ん中に設定
+	sprClearText->GetComponent<SpriteRenderer>()->pivot = sprClearText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
+	sprClearText->GetComponent<SpriteRenderer>()->SetEnable(false);
 }
 
 void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
@@ -236,6 +262,8 @@ void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* file
 	(*spr)->GetComponent<SpriteRenderer>()->pos = pos;
 	(*spr)->GetComponent<SpriteRenderer>()->scale = scale;
 	(*spr)->GetComponent<SpriteRenderer>()->color = color;
+
+	spriteManager->AddChild(*spr);
 }
 
 // UIの制御

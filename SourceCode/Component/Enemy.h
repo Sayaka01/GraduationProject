@@ -83,8 +83,8 @@ public:
 		return vector.Length();
 	}
 
-	// p¨‰ñ“]
-	void RotateTransform(float elapsedTime);
+	// p¨‰ñ“] v:is•ûŒü
+	void RotateTransform(DirectX::SimpleMath::Vector3 v, float elapsedTime);
 
 	// ”»’è‚ª“–‚½‚Á‚½‚ç
 	void OnCollisionEnter(Collider* collider);

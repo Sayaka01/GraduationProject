@@ -35,6 +35,9 @@ public:
 
 	float GetAttackPower() { return currentState->GetAttackPower(); }
 
+	void SetIsDead(bool b) { isDead = b; }
+	bool GetIsDead() { return isDead; }
+
 private:
 
 	//-----< 関数 >-----//
@@ -51,5 +54,7 @@ private:
 	float jumpSpeed = 50.0f;//ジャンプの高さ
 	float knockBackSpeed = 10.0f;//ノックバックの強さ
 	float wireSpeed = 100.0f;//ワイヤー移動のスピード
+
+	bool isDead = false;//完全に死んでいるかどうか
 
 };

@@ -696,10 +696,15 @@ Death::Death(GameObject* parent)
 void Death::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Death, false);
+
 }
 void Death::Update()
 {
-
+	// アニメーションが終わったら死亡フラグを立てる
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		parent->GetComponent<Player>()->SetIsDead(true);
+	}
 }
 void Death::Exit()
 {

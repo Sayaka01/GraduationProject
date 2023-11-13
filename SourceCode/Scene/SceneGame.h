@@ -27,7 +27,7 @@ private:
 	void SpriteInitialze();
 
 	void SpriteLoad(GameObject** spr, std::string name, const wchar_t* filepath, 
-		DirectX::SimpleMath::Vector2 pos, DirectX::SimpleMath::Vector2 scale, DirectX::SimpleMath::Vector4 color);
+		DirectX::SimpleMath::Vector2 pos, DirectX::SimpleMath::Vector2 scale = { 1.0f,1.0f }, DirectX::SimpleMath::Vector4 color= { 1.0f,1.0f,1.0f,1.0f });
 
 	// UIの制御
 	void PlayerUIUpdate();
@@ -51,6 +51,10 @@ private:
 	GameObject* sprOverBack{ nullptr };
 	GameObject* sprOverText{ nullptr };
 
+	// GameClear時のUI
+	GameObject* sprClearBack{ nullptr };
+	GameObject* sprClearText{ nullptr };
+
 	enum class GameState
 	{
 		Ready = -1,//プレイ準備中
@@ -60,4 +64,6 @@ private:
 	};
 
 	char gameResult{ (char)GameState::Ready };
+
+	bool isQuestClear{ false };//クエストの条件をクリアしたかどうか
 };

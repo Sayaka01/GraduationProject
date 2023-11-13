@@ -6,6 +6,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/ModelRenderer.h"
 #include "Component/SphereCollider.h"
+#include "Component/RigidBody.h"
 #include <SimpleMath.h>
 #include <Component/Health.h>
 #include <Component/Player.h>
@@ -13,6 +14,22 @@
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        vec.Normalize();
+        //姿勢の回転
+        owner->RotateTransform(vec, elapsedTime);
+    }
+
+
+    // 骨の位置の取得
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
+    // sphereColliderの位置を設定
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
+
     // アニメーションが再生し終わったら打撃行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
@@ -53,11 +70,25 @@ void PunchAction::Enter()
 
     // アニメーションの設定
     owner->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
+
+    // 攻撃する手の骨の位置を計算し当たり判定をONにする
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+
+    // Colliderのタイプを"攻め判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
+
 }
 
 // 打撃行動の終了処理
 void PunchAction::Exit()
 {
+    // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = false;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+
+    // Colliderのタイプを"守り判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 重撃行動のアクション
@@ -66,8 +97,17 @@ ActionBase::State SkillAction::Run(float elapsedTime)
     // 骨の位置の取得
     DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
     // sphereColliderの位置を設定
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        vec.Normalize();
+        //姿勢の回転
+        owner->RotateTransform(vec, elapsedTime);
+    }
 
     // アニメーションが再生し終わったら重撃行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
@@ -118,14 +158,20 @@ void SkillAction::Enter()
     
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
     owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(true);
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    // Colliderのタイプを"攻め判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
+
 }
 
 // 重撃行動の終了処理
 void SkillAction::Exit()
 {
+    // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
     owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = false;
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+    // Colliderのタイプを"守り判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 休憩行動のアクション
@@ -152,7 +198,7 @@ void BreakAction::Enter()
     owner->ChangeAnimation(Enemy::AnimationName::Idle1, true);
     
     // 実行時間をランダム(1~2秒)で決める
-    owner->SetRunTimer(Random::Range(1.0f,2.0f));
+    owner->SetRunTimer(Random::Range(0.5f,1.0f));
 
 }
 
@@ -167,7 +213,7 @@ ActionBase::State WanderAction::Run(float elapsedTime)
     // 目的位置へ移動
     owner->MoveToTargetPosition(elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(),elapsedTime);
 
     // 目的位置にある程度近づいたらアクション終了
     if(owner->GetLengthToTargetPosition()<1.0f)
@@ -236,7 +282,7 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
     owner->MoveToTargetPosition(elapsedTime);
 
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
     float length = owner->GetLengthToTargetPosition();
     // プレイヤーとの距離が攻撃範囲より小さくなったら終了
@@ -265,8 +311,7 @@ ActionBase::State EscapeAction::Run(float elapsedTime)
     // 目的位置とは逆方向へ進む
     owner->MoveToTargetPosition(-elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
-
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
     float runTimer = owner->GetRunTimer();
     runTimer -= elapsedTime;

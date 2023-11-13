@@ -43,13 +43,11 @@ void Enemy::Initialize()
 
 	//攻撃用に腕の関節位置を取得
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "RigRArm2");
+	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("leftHand", "RigLArm2");
 	//腰の位置を取得
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("waist", "RigMain");
 	//取得したい骨の位置の計算をオンにする
 	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("waist")->isCalc = true;
-	parent->GetComponent<SphereCollider>("waist")->radius = 3.0f;
-
-	parent->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
 
 	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 
@@ -57,7 +55,6 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-
 	//ビヘイビアツリー
 	if (activeNode == nullptr)
 		activeNode = aiTree->ActiveNodeInference(behaviorData);
@@ -190,9 +187,10 @@ void Enemy::MoveToTargetPosition(float elapsedTime)
 
 
 // 姿勢回転
-void Enemy::RotateTransform(float elapsedTime)
+void Enemy::RotateTransform(DirectX::SimpleMath::Vector3 v,float elapsedTime)
 {
-	DirectX::SimpleMath::Vector3 velo = parent->GetComponent<RigidBody>()->GetVelocity();
+	DirectX::SimpleMath::Vector3 velo = v;
+	//DirectX::SimpleMath::Vector3 velo = parent->GetComponent<RigidBody>()->GetVelocity();
 	velo.y = 0;//ｙ軸の移動は考慮しない
 
 	////速度の距離を取得
