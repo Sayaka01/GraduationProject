@@ -63,6 +63,11 @@ void RigidBody::DebugGui()
 		ImGui::DragFloat("mass", &mass, 0.1f);
 		ImGui::DragFloat("coefficient", &coefficient, 0.1f);
 		ImGui::Checkbox("useGravity", &useGravity);
+		if (ImGui::Button("ResetVelocity"))
+		{
+			velocity = { 0.0f,0.0f,0.0f };
+		}
+
 		ImGui::TreePop();
 	}
 }

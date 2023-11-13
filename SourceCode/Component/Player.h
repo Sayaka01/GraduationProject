@@ -50,6 +50,6 @@ private:
 	float runSpeed = 40.0f;//走る速さ
 	float jumpSpeed = 50.0f;//ジャンプの高さ
 	float knockBackSpeed = 10.0f;//ノックバックの強さ
-	float wireSpeed = 75.0f;//ワイヤー移動のスピード
+	float wireSpeed = 100.0f;//ワイヤー移動のスピード
 
 };

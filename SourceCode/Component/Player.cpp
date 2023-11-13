@@ -32,6 +32,7 @@ void Player::Initialize()
 	states.emplace_back(new Death(parent));//死亡
 	states.emplace_back(new AimWire(parent));//ワイヤーでの直線移動
 	states.emplace_back(new SwingWire(parent));//ワイヤーでの弧を書いた移動
+	states.emplace_back(new WireJump(parent));//ワイヤーでの弧を書いた移動後のジャンプ
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -166,9 +167,9 @@ void Player::ChangeState(std::string nextStateName)
 				currentState->Exit();//変更前ステートの終了処理
 
 			currentState = state;//ステートの変更
+			OutputDebugLog(nextStateName + "ステートに遷移しました。\n");
 			currentState->Enter();//ステート遷移時の処理
 			changeState = true;
-			OutputDebugLog(nextStateName + "ステートに遷移しました。\n");
 			break;
 		}
 	}

@@ -34,6 +34,10 @@ void Transform::DebugGui()
 		ImGui::DragFloat3("pos", &pos.x);
 		ImGui::DragFloat3("scale", &scale.x);
 		ImGui::DragFloat4("orientation", &orientation.x);
+		if (ImGui::Button("ResetPosition"))
+		{
+			pos = { 0.0f,0.0f,0.0f };
+		}
 		ImGui::TreePop();
 	}
 }

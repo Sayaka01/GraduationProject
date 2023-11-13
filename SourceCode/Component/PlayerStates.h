@@ -98,7 +98,7 @@ namespace PlayerState
 
 		float attackPower = 0.0f;
 
-		DirectX::XMFLOAT3 parameter = { 0.0f,0.0f,0.0f };//凡庸パラメータ
+		static DirectX::XMFLOAT3 parameter;//凡庸パラメータ
 	};
 
 	//待機
@@ -306,10 +306,34 @@ namespace PlayerState
 		std::string GetNext()override;
 
 	private:
-		float maxWireLength = 30.0f;
+		float maxWireLength = 40.0f;
 		DirectX::XMFLOAT3 oldPosition[2]{};
 		float swingTimer = 0.0f;
 		float maxSwingTime = 1.0f;
+	};
+
+	//ワイヤーでの弧を書いた移動後のジャンプ
+	class WireJump : public Default
+	{
+	public:
+		WireJump();
+		WireJump(GameObject* parent);
+		~WireJump() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		DirectX::XMFLOAT3 moveDirection = {};
+		DirectX::XMFLOAT3 oldPosition[2]{};
+		float falling = false;
+		float jumpSpeed = 0.0f;
 	};
 
 }
