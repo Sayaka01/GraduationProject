@@ -187,9 +187,10 @@ void Enemy::MoveToTargetPosition(float elapsedTime)
 
 
 // p¨‰ñ“]
-void Enemy::RotateTransform(float elapsedTime)
+void Enemy::RotateTransform(DirectX::SimpleMath::Vector3 v,float elapsedTime)
 {
-	DirectX::SimpleMath::Vector3 velo = parent->GetComponent<RigidBody>()->GetVelocity();
+	DirectX::SimpleMath::Vector3 velo = v;
+	//DirectX::SimpleMath::Vector3 velo = parent->GetComponent<RigidBody>()->GetVelocity();
 	velo.y = 0;//‚™²‚ÌˆÚ“®‚Íl—¶‚µ‚È‚¢
 
 	////‘¬“x‚Ì‹——£‚ğæ“¾

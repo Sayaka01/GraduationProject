@@ -6,6 +6,7 @@
 #include "GameObject/GameObject.h"
 #include "Component/ModelRenderer.h"
 #include "Component/SphereCollider.h"
+#include "Component/RigidBody.h"
 #include <SimpleMath.h>
 #include <Component/Health.h>
 #include <Component/Player.h>
@@ -13,6 +14,17 @@
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        vec.Normalize();
+        //姿勢の回転
+        owner->RotateTransform(vec, elapsedTime);
+    }
+
+
     // 骨の位置の取得
     DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
     // sphereColliderの位置を設定
@@ -87,6 +99,15 @@ ActionBase::State SkillAction::Run(float elapsedTime)
     // sphereColliderの位置を設定
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
+    //プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        vec.Normalize();
+        //姿勢の回転
+        owner->RotateTransform(vec, elapsedTime);
+    }
 
     // アニメーションが再生し終わったら重撃行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
@@ -177,7 +198,7 @@ void BreakAction::Enter()
     owner->ChangeAnimation(Enemy::AnimationName::Idle1, true);
     
     // 実行時間をランダム(1~2秒)で決める
-    owner->SetRunTimer(Random::Range(1.0f,2.0f));
+    owner->SetRunTimer(Random::Range(0.5f,1.0f));
 
 }
 
@@ -192,7 +213,7 @@ ActionBase::State WanderAction::Run(float elapsedTime)
     // 目的位置へ移動
     owner->MoveToTargetPosition(elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(),elapsedTime);
 
     // 目的位置にある程度近づいたらアクション終了
     if(owner->GetLengthToTargetPosition()<1.0f)
@@ -261,7 +282,7 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
     owner->MoveToTargetPosition(elapsedTime);
 
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
     float length = owner->GetLengthToTargetPosition();
     // プレイヤーとの距離が攻撃範囲より小さくなったら終了
@@ -290,8 +311,7 @@ ActionBase::State EscapeAction::Run(float elapsedTime)
     // 目的位置とは逆方向へ進む
     owner->MoveToTargetPosition(-elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(elapsedTime);
-
+    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
     float runTimer = owner->GetRunTimer();
     runTimer -= elapsedTime;
