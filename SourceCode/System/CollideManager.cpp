@@ -128,8 +128,15 @@ void CollideManager::Collide()
 					sphere->center += result.normal * result.penetration * 0.5f;
 				}
 				
-				capsule->OnCollisionEnter(sphere);
-				sphere->OnCollisionEnter(capsule);
+				if (capsule->type == Collider::Type::Deffense && sphere->type == Collider::Type::Offense)
+					capsule->OnCollisionEnter(sphere);
+				else if (capsule->type == Collider::Type::Offense && sphere->type == Collider::Type::Deffense)
+					sphere->OnCollisionEnter(capsule);
+				else
+				{
+					capsule->OnCollisionEnter(sphere);
+					sphere->OnCollisionEnter(capsule);
+				}
 
 			}
 		}
