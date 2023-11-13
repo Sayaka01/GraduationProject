@@ -82,7 +82,7 @@ NodeBase* BehaviorTree::Run(NodeBase* actionNode, BehaviorData* data, float elap
     }
     
     NodeBase* node = root->InferenceAbsolute(owner, data);
-    if (node != nullptr)
+    if (node != nullptr && actionNode != node)//node‚ğæ“¾‚·‚é‚©Œ»İ‚Ìnode‚Æˆá‚¤ê‡
     {
         actionNode->Exit();
         node->Enter();

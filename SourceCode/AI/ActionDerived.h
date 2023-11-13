@@ -101,5 +101,8 @@ public:
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
+
+private:
+
 };
 

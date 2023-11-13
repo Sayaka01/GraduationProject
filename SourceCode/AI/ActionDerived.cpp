@@ -8,6 +8,7 @@
 #include "Component/SphereCollider.h"
 #include <SimpleMath.h>
 #include <Component/Health.h>
+#include <Component/Player.h>
 
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
@@ -307,7 +308,7 @@ ActionBase::State DieAction::Run(float elapsedTime)
 // 死亡行動の初期処理
 void DieAction::Enter()
 {
-    owner->SetRunTimer(0.6f);
+    owner->SetRunTimer(2.0f);
     owner->ChangeAnimation(Enemy::AnimationName::Die, false);
 }
 
@@ -321,19 +322,49 @@ void DieAction::Exit()
 // 被弾行動のアクション
 ActionBase::State DamageAction::Run(float elapsedTime)
 {
+    float runTimer = owner->GetRunTimer();
+    runTimer -= elapsedTime;
+    owner->SetRunTimer(runTimer);
+
     // アニメーションが再生し終わったら被弾行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
+
+    //行動時間が無効の場合ノックバックを行わない
+    if (runTimer <= 0) return ActionBase::State::Running;
+       
+    // プレイヤーオブジェクトを取得
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+
+    //プレイヤーが見つからない場合ノックバックを行わない
+    if (playerObj == nullptr) return ActionBase::State::Running;
+
+    // ノックバックの強さ
+    float knockPower = 15.0f;
+    // プレイヤーの位置から自分の位置のベクトルを計算
+    DirectX::SimpleMath::Vector3 knockBackVec = owner->GetParent()->GetComponent<Transform>()->pos - playerObj->GetComponent<Transform>()->pos;
+    knockBackVec.Normalize();//正規化
+    // ノックバックで後ろへ跳ぶ
+    owner->GetParent()->GetComponent<RigidBody>()->AddVelocity(knockBackVec * knockPower);
+
     return ActionBase::State::Running;
 }
 
 // 被弾行動の初期処理
 void DamageAction::Enter()
 {
-    // HP処理
-    owner->GetParent()->GetComponent<Health>()->SubtructHp(2.0f);
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    if (playerObj != nullptr)
+    {
+        // プレイヤーの現在の攻撃力を取得
+        float ap = playerObj->GetComponent<Player>()->GetAttackPower();
+        // HP処理
+        owner->GetParent()->GetComponent<Health>()->SubtructHp(ap);
+    }
+
+    owner->SetRunTimer(0.3f);
 
     owner->ChangeAnimation(Enemy::AnimationName::TakeDamege, false);
 }
