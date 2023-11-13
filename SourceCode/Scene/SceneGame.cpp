@@ -183,10 +183,12 @@ void SceneGame::EnemyInitialize()
 
 	// ˜‚Ì“–‚½‚è”»’è—p‹…‚ÌÝ’è
 	enemy->AddComponent(new SphereCollider("waist"));
-	// ‰EŽè‚ÌUŒ‚—p“–‚½‚è”»’è‹…‚ÌÝ’è
-	enemy->AddComponent(new SphereCollider("attackRightHand"));
-	enemy->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
-	enemy->GetComponent<SphereCollider>("attackRightHand")->type = Collider::Type::Offense;
+	enemy->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+
+	// UŒ‚—p“–‚½‚è”»’è‹…‚ÌÝ’è
+	enemy->AddComponent(new SphereCollider("HandCollider"));
+	enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+	enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
 	// ˆÚ“®Ý’è
 	enemy->AddComponent(new RigidBody());
 

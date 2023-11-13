@@ -13,6 +13,11 @@
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
+    // 骨の位置の取得
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
+    // sphereColliderの位置を設定
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
+
     // アニメーションが再生し終わったら打撃行動を終了
     if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
@@ -53,11 +58,25 @@ void PunchAction::Enter()
 
     // アニメーションの設定
     owner->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
+
+    // 攻撃する手の骨の位置を計算し当たり判定をONにする
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+
+    // Colliderのタイプを"攻め判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
+
 }
 
 // 打撃行動の終了処理
 void PunchAction::Exit()
 {
+    // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = false;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+
+    // Colliderのタイプを"守り判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 重撃行動のアクション
@@ -66,7 +85,7 @@ ActionBase::State SkillAction::Run(float elapsedTime)
     // 骨の位置の取得
     DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
     // sphereColliderの位置を設定
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->center = bonePos;
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
 
     // アニメーションが再生し終わったら重撃行動を終了
@@ -118,14 +137,20 @@ void SkillAction::Enter()
     
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
     owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(true);
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    // Colliderのタイプを"攻め判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
+
 }
 
 // 重撃行動の終了処理
 void SkillAction::Exit()
 {
+    // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
     owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = false;
-    owner->GetParent()->GetComponent<SphereCollider>("attackRightHand")->SetEnable(false);
+    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+    // Colliderのタイプを"守り判定"に設定
+    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 休憩行動のアクション
