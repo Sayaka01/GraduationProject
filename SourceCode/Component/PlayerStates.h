@@ -309,7 +309,7 @@ namespace PlayerState
 		float maxWireLength = 40.0f;
 		DirectX::XMFLOAT3 oldPosition[2]{};
 		float swingTimer = 0.0f;
-		float maxSwingTime = 1.0f;
+		float maxSwingTime = 0.5f;
 	};
 
 	//ワイヤーでの弧を書いた移動後のジャンプ
@@ -334,6 +334,7 @@ namespace PlayerState
 		DirectX::XMFLOAT3 oldPosition[2]{};
 		float falling = false;
 		float jumpSpeed = 0.0f;
+		float inputRatio = 0.5f;
 	};
 
 }

@@ -107,10 +107,6 @@ void SceneGame::Draw()
 	CollideManager::Instance().Draw();
 
 	spriteManager->Draw();
-
-	ImGui::Begin("Game");
-	ImGui::Checkbox("clear button", &isQuestClear);
-	ImGui::End();
 }
 
 void SceneGame::PlayerInitialize()
