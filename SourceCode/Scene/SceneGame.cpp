@@ -73,22 +73,15 @@ void SceneGame::Finalize()
 
 void SceneGame::Update()
 {
-	//プレイヤーのHPが0になったらGameOverへ画面を遷移
-	if (player->GetComponent<Player>()->GetIsDead())
+	//ゲームが終わっている場合(GameClear || GameOver)
+	if (isFinishGame)
 	{
-		sprOverText->GetComponent<SpriteRenderer>()->SetEnable(true);
-		sprOverBack->GetComponent<SpriteRenderer>()->SetEnable(true);
+		ResultUpdate();
 		spriteManager->Update();
 		return;
 	}
-	//クエストをクリアしたらGameClearへ画面を変更
-	else if (isQuestClear)
-	{
-		sprClearText->GetComponent<SpriteRenderer>()->SetEnable(true);
-		sprClearBack->GetComponent<SpriteRenderer>()->SetEnable(true);
-		spriteManager->Update();
-		return;
-	}
+
+	JudgeResult();
 
 
 	objectManager->Update();
@@ -246,6 +239,19 @@ void SceneGame::SpriteInitialze()
 	//基準点を画像の真ん中に設定
 	sprClearText->GetComponent<SpriteRenderer>()->pivot = sprClearText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
 	sprClearText->GetComponent<SpriteRenderer>()->SetEnable(false);
+
+	// "Title"の画像読み込み
+	SpriteLoad(&sprTitleText, "ToTitleText", (L"./Resources/Sprite/title_text.png"),
+		{ SCREEN_WIDTH * 0.5f,570 }, { 0.6f,0.6f });//pos,scale
+	sprTitleText->GetComponent<SpriteRenderer>()->pivot = sprTitleText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
+	sprTitleText->GetComponent<SpriteRenderer>()->SetEnable(false);
+
+	// "Retry"の画像読み込み
+	SpriteLoad(&sprRetryText, "RetryText", (L"./Resources/Sprite/retry_text.png"),
+		{ SCREEN_WIDTH * 0.5f,650 }, { 0.6f,0.6f });//pos,scale
+	sprRetryText->GetComponent<SpriteRenderer>()->pivot = sprRetryText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
+	sprRetryText->GetComponent<SpriteRenderer>()->SetEnable(false);
+
 }
 
 void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
@@ -271,5 +277,40 @@ void SceneGame::PlayerUIUpdate()
 	// HPの割合から描画位置をずらす
 	float rate = player->GetComponent<Health>()->GetHpRate();
 	sprBoxBar->GetComponent<SpriteRenderer>()->texPos.x = spriteSizeX * (1 - rate);
+
+}
+
+// ゲーム終了時の更新処理
+void SceneGame::ResultUpdate()
+{
+	float elapsedTime = SystemManager::Instance().GetElapsedTime();
+
+
+}
+
+// ゲームが終了した場合の処理
+void SceneGame::JudgeResult()
+{
+	bool isDeadP = player->GetComponent<Player>()->GetIsDead();
+	if (isDeadP /* || クエストがクリアされたら*/)
+	{
+		if (isDeadP)
+		{
+			//プレイヤーのHPが0になったらGameOverへ画面を遷移
+			sprOverText->GetComponent<SpriteRenderer>()->SetEnable(true);
+			sprOverBack->GetComponent<SpriteRenderer>()->SetEnable(true);
+		}
+		else
+		{
+			//クエストをクリアしたらGameClearへ画面を変更
+			sprClearText->GetComponent<SpriteRenderer>()->SetEnable(true);
+			sprClearBack->GetComponent<SpriteRenderer>()->SetEnable(true);
+		}
+
+		// "Title","Retry"画像を描画ON
+		sprTitleText->GetComponent<SpriteRenderer>()->SetEnable(true);
+		sprRetryText->GetComponent<SpriteRenderer>()->SetEnable(true);
+		isFinishGame = true;
+	}
 
 }

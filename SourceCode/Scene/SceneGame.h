@@ -32,6 +32,12 @@ private:
 	// UIの制御
 	void PlayerUIUpdate();
 
+	// ゲーム終了時の更新処理
+	void ResultUpdate();
+	
+	// ゲームが終了した場合の処理
+	void JudgeResult();
+
 	GameObject* objectManager = nullptr;
 	GameObject* player = nullptr;
 	GameObject* enemy = nullptr;
@@ -55,6 +61,10 @@ private:
 	GameObject* sprClearBack{ nullptr };
 	GameObject* sprClearText{ nullptr };
 
+	// GameClear/Over時の操作用
+	GameObject* sprTitleText{ nullptr };
+	GameObject* sprRetryText{ nullptr };
+
 	enum class GameState
 	{
 		Ready = -1,//プレイ準備中
@@ -65,5 +75,6 @@ private:
 
 	char gameResult{ (char)GameState::Ready };
 
-	bool isQuestClear{ false };//クエストの条件をクリアしたかどうか
+	//bool isQuestClear{ false };//クエストの条件をクリアしたかどうか
+	bool isFinishGame{ false };//ゲームが終わったかどうか
 };
