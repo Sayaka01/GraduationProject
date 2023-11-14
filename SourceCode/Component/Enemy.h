@@ -39,6 +39,7 @@ public:
 	};
 
 	Enemy() = default;
+	Enemy(char num) :ownIndex(num) {}
 	~Enemy() override = default;
 
 	//-----< ä÷êî >-----//
@@ -108,6 +109,8 @@ public:
 
 	float GetPunchAttackPower() { return punchPower; }
 	float GetSlashAttackPower() { return slashPower; }
+
+	char GetOwnIndex() { return ownIndex; }
 private:
 
 	//-----< ä÷êî >-----//
@@ -138,6 +141,7 @@ private:
 
 	bool hitFlag{ false };
 
+	char ownIndex = -1;
 
 	//-----< íËêî >-----//
 
@@ -156,6 +160,5 @@ private:
 	//ÇªÇÍÇºÇÍÇÃçUåÇóÕ
 	float punchPower{ 3 };
 	float slashPower{ 6 };
-
 
 };

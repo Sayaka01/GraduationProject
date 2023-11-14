@@ -239,6 +239,7 @@ private:
 		}
 	};
 
+
 	struct Mesh
 	{
 		uint64_t uniqueId{ 0 };
@@ -342,6 +343,9 @@ public:
 	DirectX::XMFLOAT4X4 GetMeshGlobalTransform(int meshIndex) const { return meshes.at(meshIndex).defaultGlobalTransform; }
 	//BoundingBox* GetMeshBoundingBox(int meshIndex) { return meshes.at(meshIndex).boundingBox.get(); }
 
+	ModelData::Skeleton::Bone& GetBone(int meshIndex, int boneIndex) { return GetMesh(meshIndex).bindPose.bones.at(boneIndex); }
+
+
 	//シェーダーの差し替え
 	void SetPixelShader(ID3D11PixelShader* newPixelShader) { replacedPixelShader = newPixelShader; }
 	void SetVertexShader(ID3D11VertexShader* newVertexShader) { replacedVertexShader = newVertexShader; }
@@ -377,56 +381,5 @@ public:
 
 private:
 	Animation::Keyframe* currentKeyframe;
-
-public:
-	//特定の骨の位置を取得するための構造体
-	struct BonePositionData
-	{
-	public:
-		// ---< 関数 >---
-		// name:呼び出す際の名前　boneName:骨の本来の名前
-		BonePositionData(std::string name,std::string boneName) :name(name),boneName(boneName) {}
-		void SetIsCalc(bool b) { isCalc = b; }
-
-		// ---< 変数 >---
-
-		bool isCalc{ false };//計算するかどうか
-		std::string name;//呼び出す際の名前
-		std::string boneName;//骨の名前
-		DirectX::XMFLOAT3 position{};//骨のワールド座標
-	};
-
-	// 骨の位置データを格納
-	std::vector<BonePositionData> boneData;
-
-	// 名前から位置を取得(name:呼び出す際の名前)
-	DirectX::XMFLOAT3 GetBonePositionFromName(std::string name)
-	{
-		for (auto& bone : boneData)
-		{
-			if (bone.name == name)
-				return bone.position;
-		}
-
-		//取得したい骨の位置の名前が登録されていません
-		return  { 0.0f,0.0f,0.0f };
-	}
-
-	//取得したい骨の情報を登録
-	//name:呼び出し用の名前、boneName:モデルの骨の名前
-	void AddBonePositionData(std::string name, std::string boneName)
-	{
-		boneData.emplace_back(name, boneName);
-	}
-
-	BonePositionData* GetBoneData(std::string name)
-	{
-		for (auto& bone : boneData)
-		{
-			if (bone.name == name)
-				return &bone;
-		}
-		return nullptr;
-	}
 
 };

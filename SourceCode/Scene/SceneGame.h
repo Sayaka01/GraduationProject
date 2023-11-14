@@ -34,7 +34,10 @@ private:
 
 	GameObject* objectManager = nullptr;
 	GameObject* player = nullptr;
-	GameObject* enemy = nullptr;
+
+	GameObject* enemyManager = nullptr;
+	std::vector<GameObject*> enemies;
+
 	GameObject* lightObject = nullptr;
 	GameObject* stage = nullptr;
 	CameraController* cameraController = nullptr;

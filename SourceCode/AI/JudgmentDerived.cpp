@@ -8,6 +8,9 @@ bool BattleJudgment::Judgment()
     GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
+        //プレイヤーのHPがなければ攻撃しない
+        if (!playerObj->GetComponent<Health>()->GetIsAlive())
+            return false;
         //プレイヤーとの距離
         DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
         float length = vector.Length();
@@ -38,6 +41,10 @@ bool AttackJudgment::Judgment()
     GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
+        //プレイヤーのHPがなければ攻撃しない
+        if (!playerObj->GetComponent<Health>()->GetIsAlive())
+            return false;
+
         //プレイヤーとの距離
         DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
         float length = vector.Length();

@@ -153,8 +153,35 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 void PlayerState::Default::CalcEnemyDistance()
 {
 	//¡‚Í“G‚ª1‘Ì‚È‚Ì‚Å‚±‚Ì‚â‚è•ûBŒã‚ÅŠæ’£‚é
-	GameObject* enemy = parent->GetParent()->GetChild("enemy");
-	parameter = enemy->GetComponent<Transform>()->pos;
+	GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
+	DirectX::SimpleMath::Vector3 playerPos = parent->GetComponent<Transform>()->pos;
+	if (enemyManager != nullptr)
+	{
+		int enemyCounut = int(enemyManager->GetChildrenCount());
+		float minLength = FLT_MAX;
+		if (enemyCounut > 0)
+		{
+			for (int i = 0; i < enemyCounut; i++)
+			{
+				DirectX::SimpleMath::Vector3 enemyPos= enemyManager->GetChild("enemy_" + std::to_string(i))->GetComponent<Transform>()->pos;
+				DirectX::SimpleMath::Vector3 vec = playerPos - enemyPos;
+				float length = vec.Length();
+
+				if (minLength > length)
+				{
+					minLength = length;
+					parameter = enemyPos;
+				}
+			}
+			return;
+		}
+	}
+
+	//“G‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍŽ©•ªŽ©g‚ÌˆÊ’u‚ð•Ô‚·
+	parameter = playerPos;
+
+	//GameObject* enemy = parent->GetParent()->GetChild("enemy");
+	//parameter = enemy->GetComponent<Transform>()->pos;
 }
 
 bool PlayerState::Default::JudgeIdleState()

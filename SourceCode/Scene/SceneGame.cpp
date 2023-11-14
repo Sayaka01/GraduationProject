@@ -50,7 +50,7 @@ void SceneGame::Initialize()
 	objectManager->AddChild(lightObject);
 	objectManager->AddChild(stage);
 	objectManager->AddChild(player);
-	objectManager->AddChild(enemy);
+	objectManager->AddChild(enemyManager);
 
 	spriteManager = new GameObject("spriteManager");
 
@@ -170,11 +170,80 @@ void SceneGame::PlayerInitialize()
 
 void SceneGame::EnemyInitialize()
 {
-	enemy = new GameObject("enemy");
+	enemyManager = new GameObject("enemyManager");
 
-	enemy->SetTag(Tag::Enemy);
+	//“G‚ÌÅ‘å”
+	const float MaxCountEnemy = 5;
 
-	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Enemy/miniRobotOrange.fbx");
+	// “G‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
+
+	// 
+#if 0
+	for (int i = 0; i < MaxCountEnemy; i++)
+	{
+		ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Enemy/miniRobotOrange.fbx");
+
+		enemies.emplace_back(new GameObject("enemy_"+std::to_string(i)));
+		enemies[i]->SetTag(Tag::Enemy);
+		enemies[i]->AddComponent(modelRenderer);
+
+		// ˜‚Ì“–‚½‚è”»’è—p‹…‚Ìİ’è
+		enemies[i]->AddComponent(new SphereCollider("waist"));
+		enemies[i]->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+
+		// UŒ‚—p“–‚½‚è”»’è‹…‚Ìİ’è
+		enemies[i]->AddComponent(new SphereCollider("HandCollider"));
+		enemies[i]->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+		enemies[i]->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
+		// ˆÚ“®İ’è
+		enemies[i]->AddComponent(new RigidBody());
+
+		enemies[i]->AddComponent(new Enemy());
+
+		// p¨“™‚Ìİ’è
+		enemies[i]->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
+		enemies[i]->GetComponent<Transform>()->pos = { 20+(i*20.0f), 0, 30 };
+
+		// HPİ’è
+		enemies[i]->AddComponent(new Health(10));
+
+		enemyManager->AddChild(enemies[i]);
+
+	}
+#else
+	for (int i = 0; i < MaxCountEnemy; i++)
+	{
+		GameObject* enemy = new GameObject("enemy_" + std::to_string(i));
+
+		ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Enemy/miniRobotOrange.fbx");
+
+		enemy->SetTag(Tag::Enemy);
+		enemy->AddComponent(modelRenderer);
+
+		// ˜‚Ì“–‚½‚è”»’è—p‹…‚Ìİ’è
+		enemy->AddComponent(new SphereCollider("waist"));
+		enemy->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+
+		// UŒ‚—p“–‚½‚è”»’è‹…‚Ìİ’è
+		enemy->AddComponent(new SphereCollider("HandCollider"));
+		enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+		enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
+		// ˆÚ“®İ’è
+		enemy->AddComponent(new RigidBody());
+
+		enemy->AddComponent(new Enemy(i));
+
+		// p¨“™‚Ìİ’è
+		enemy->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
+		enemy->GetComponent<Transform>()->pos = { 20 + (i * 20.0f), 0, 30 };
+
+		// HPİ’è
+		enemy->AddComponent(new Health(10));
+
+		enemyManager->AddChild(enemy);
+
+	}
+#endif
 
 	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
 	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Death.fbx");
@@ -190,38 +259,18 @@ void SceneGame::EnemyInitialize()
 	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Walking.fbx");
 	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");
 
-	enemy->AddComponent(modelRenderer);
 
-	// ˜‚Ì“–‚½‚è”»’è—p‹…‚Ìİ’è
-	enemy->AddComponent(new SphereCollider("waist"));
-	enemy->GetComponent<SphereCollider>("waist")->radius = 3.0f;
-
-	// UŒ‚—p“–‚½‚è”»’è‹…‚Ìİ’è
-	enemy->AddComponent(new SphereCollider("HandCollider"));
-	enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
-	enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
-	// ˆÚ“®İ’è
-	enemy->AddComponent(new RigidBody());
-
-	enemy->AddComponent(new Enemy());
-
-	// p¨“™‚Ìİ’è
-	enemy->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
-	enemy->GetComponent<Transform>()->pos = { 20, 0, 30 };
-
-	// HPİ’è
-	enemy->AddComponent(new Health(10));
 }
 
 // 2D‰æ‘œ‚Ì‰Šúİ’è
 void SceneGame::SpriteInitialze()
 {
 	// ƒvƒŒƒCƒ„[UI‰æ‘œ‚Ì“Ç‚İ‚İ
-	SpriteLoad(&sprBoxBar,	  "boxBar",	    (L"./Resources/Sprite/box_bar.png"),
-		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
-
 	SpriteLoad(&sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),			
 		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+	
+	SpriteLoad(&sprBoxBar, "boxBar", (L"./Resources/Sprite/box_bar.png"),
+		{ 147.4f,48.7f }, { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
 
 	SpriteLoad(&sprCircleBar,  "circleBar",  (L"./Resources/Sprite/circle_bar_satisfy.png"), 
 		{ -7.12f,-17.56f },	{ 0.5f,0.5f }, { 1.0f,1.0f,0.0f,1.0f });//pos,scale,color

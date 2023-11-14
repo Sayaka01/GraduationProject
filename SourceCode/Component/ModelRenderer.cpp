@@ -1,12 +1,15 @@
 
 #include <Stdafx.h>
 #include "ModelRenderer.h"
+#include "ModelData.h"
 
 #include "Component/Transform.h"
 #include "GameObject/GameObject.h"
 
 #include "System/ResourceManager.h"
 #include "System/SystemManager.h"
+
+using namespace DirectX;
 
 //コンストラクタ
 ModelRenderer::ModelRenderer(const char* filePath)
@@ -40,6 +43,47 @@ void ModelRenderer::Draw()
 		//	keyframe = interpolationKeyframe;
 		/*else*/ keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
 	}
+
+	//for (const ModelData::Mesh& mesh : meshes)
+	for(int i=0;i<modelData->GetMeshesSize();i++)
+	{
+		if (!keyframe.nodes.empty())
+		{
+			//currentKeyframe = keyframe;
+			DirectX::XMFLOAT4X4 w;
+			DirectX::XMFLOAT4X4 bt;
+			const Animation::Keyframe::Node& meshNode{ keyframe.nodes.at(modelData->GetMesh(i).nodeIndex) };
+			XMStoreFloat4x4(&w, XMLoadFloat4x4(&meshNode.globalTransform) * XMLoadFloat4x4(&parent->GetComponent<Transform>()->world));
+
+			const size_t boneCount{ modelData->GetMesh(i).bindPose.bones.size() };
+			//_ASSERT_EXPR(boneCount < MAX_BONES, L"The value of the 'bone_count' has exceeded MAX_BONES.");
+
+			for (size_t boneIndex = 0; boneIndex < boneCount; ++boneIndex)
+			{
+				const Animation::Keyframe::Node& bone_node{ keyframe.nodes.at(modelData->GetBone(i,boneIndex).nodeIndex) };
+
+				//攻撃するときのHitSphereようにぶつけたい場所の位置を算出
+				for (auto& b : boneData)
+				{
+					if (b.isCalc && modelData->GetBone(i, boneIndex).name == b.boneName)
+					{
+						DirectX::XMFLOAT4X4 gt;
+						XMStoreFloat4x4(&gt,
+							XMLoadFloat4x4(&keyframe.nodes.at(modelData->GetBone(i, boneIndex).nodeIndex + 1).globalTransform) *
+							XMMatrixInverse(nullptr, XMLoadFloat4x4(&modelData->GetMesh(i).defaultGlobalTransform))
+						);
+						DirectX::XMFLOAT3 g = { gt._41,gt._42,gt._43 };
+						DirectX::XMVECTOR Translation = DirectX::XMLoadFloat3(&g);
+						DirectX::XMMATRIX World = DirectX::XMLoadFloat4x4(&w);
+						DirectX::XMStoreFloat3(&b.position, DirectX::XMVector3TransformCoord(Translation, World));
+					}
+				}
+
+
+			}
+		}
+	}
+
 	modelData->Draw(parent->GetComponent<Transform>()->world, &keyframe, materialColor);
 
 }

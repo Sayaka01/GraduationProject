@@ -179,21 +179,21 @@ void ModelData::Draw(const DirectX::XMFLOAT4X4& world, Animation::Keyframe* keyf
                 );
 
                 //UŒ‚‚·‚é‚Æ‚«‚ÌHitSphere‚æ‚¤‚É‚Ô‚Â‚¯‚½‚¢êŠ‚ÌˆÊ’u‚ðŽZo
-                for (auto& b : boneData)
-                {
-                    if (b.isCalc && bone.name == b.boneName)
-                    {
-                        DirectX::XMFLOAT4X4 gt;
-                        XMStoreFloat4x4(&gt,
-                            XMLoadFloat4x4(&keyframe->nodes.at(bone.nodeIndex + 1).globalTransform) *
-                            XMMatrixInverse(nullptr, XMLoadFloat4x4(&mesh.defaultGlobalTransform))
-                        );
-                        DirectX::XMFLOAT3 g = { gt._41,gt._42,gt._43 };
-                        DirectX::XMVECTOR Translation = DirectX::XMLoadFloat3(&g);
-                        DirectX::XMMATRIX World = DirectX::XMLoadFloat4x4(&constantDefault.world);
-                        DirectX::XMStoreFloat3(&b.position, DirectX::XMVector3TransformCoord(Translation, World));
-                    }
-                }
+                //for (auto& b : boneData)
+                //{
+                //    if (b.isCalc && bone.name == b.boneName)
+                //    {
+                //        DirectX::XMFLOAT4X4 gt;
+                //        XMStoreFloat4x4(&gt,
+                //            XMLoadFloat4x4(&keyframe->nodes.at(bone.nodeIndex + 1).globalTransform) *
+                //            XMMatrixInverse(nullptr, XMLoadFloat4x4(&mesh.defaultGlobalTransform))
+                //        );
+                //        DirectX::XMFLOAT3 g = { gt._41,gt._42,gt._43 };
+                //        DirectX::XMVECTOR Translation = DirectX::XMLoadFloat3(&g);
+                //        DirectX::XMMATRIX World = DirectX::XMLoadFloat4x4(&constantDefault.world);
+                //        DirectX::XMStoreFloat3(&b.position, DirectX::XMVector3TransformCoord(Translation, World));
+                //    }
+                //}
 
 
             }

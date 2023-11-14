@@ -26,7 +26,8 @@ ActionBase::State PunchAction::Run(float elapsedTime)
 
 
     // 骨の位置の取得
-    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()));
     // sphereColliderの位置を設定
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
@@ -72,7 +73,8 @@ void PunchAction::Enter()
     owner->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
 
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
+    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = true;
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
 
     // Colliderのタイプを"攻め判定"に設定
@@ -84,7 +86,8 @@ void PunchAction::Enter()
 void PunchAction::Exit()
 {
     // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = false;
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
+    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
 
     // Colliderのタイプを"守り判定"に設定
@@ -95,7 +98,8 @@ void PunchAction::Exit()
 ActionBase::State SkillAction::Run(float elapsedTime)
 {
     // 骨の位置の取得
-    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()));
     // sphereColliderの位置を設定
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
@@ -157,7 +161,8 @@ void SkillAction::Enter()
     owner->ChangeAnimation(Enemy::AnimationName::RightClawAttack, false);
     
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
+    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = true;
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
     // Colliderのタイプを"攻め判定"に設定
     owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
@@ -168,7 +173,8 @@ void SkillAction::Enter()
 void SkillAction::Exit()
 {
     // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = false;
+    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
+    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
     // Colliderのタイプを"守り判定"に設定
     owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;

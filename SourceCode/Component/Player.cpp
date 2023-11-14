@@ -3,6 +3,7 @@
 #include "Player.h"
 
 #include "GameObject/GameObject.h"
+#include "Component/Enemy.h"
 
 #include "Component/Transform.h"
 #include "Component/CapsuleCollider.h"
@@ -45,11 +46,11 @@ void Player::Initialize()
 
 	//骨の位置と名前を登録
 	//右手
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "mixamorig:RightHandIndex4");
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("rightHand")->isCalc = true;
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("rightHand", "mixamorig:RightHandIndex4");
+	parent->GetComponent<ModelRenderer>()->GetBoneData("rightHand")->isCalc = true;
 	//左手
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("leftHand")->isCalc = true;
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
+	parent->GetComponent<ModelRenderer>()->GetBoneData("leftHand")->isCalc = true;
 
 
 }
@@ -68,11 +69,11 @@ void Player::Update()
 	if (parent->GetComponent<Transform>()->pos.y < 0.0f)parent->GetComponent<Transform>()->pos.y = 0.0f;
 
 	//右手の球
-	DirectX::SimpleMath::Vector3 rightHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("rightHand");
+	DirectX::SimpleMath::Vector3 rightHandPos = parent->GetComponent<ModelRenderer>()->GetBonePositionFromName("rightHand");
 	parent->GetComponent<SphereCollider>("RightHandSphere")->center = rightHandPos;
 
 	//左手の球
-	DirectX::SimpleMath::Vector3 leftHandPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("leftHand");
+	DirectX::SimpleMath::Vector3 leftHandPos = parent->GetComponent<ModelRenderer>()->GetBonePositionFromName("leftHand");
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->center = leftHandPos;
 
 	//カプセルの位置補正
@@ -137,7 +138,7 @@ void Player::OnCollisionEnter(Collider* collider)
 	if (currentState->GetName() != "Damage" && currentState->GetName() != "Death")
 	{
 		//HPを減らす
-		parent->GetComponent<Health>()->SubtructHp(1);
+		parent->GetComponent<Health>()->SubtructHp(collider->GetParent()->GetComponent<Enemy>()->GetAttackPower());
 
 		if (parent->GetComponent<Health>()->GetIsAlive())
 		{

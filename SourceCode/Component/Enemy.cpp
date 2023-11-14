@@ -42,12 +42,12 @@ void Enemy::Initialize()
 	parent->GetComponent<RigidBody>()->SetUseGravity(false);
 
 	//攻撃用に腕の関節位置を取得
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("rightHand", "RigRArm2");
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("leftHand", "RigLArm2");
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("rightHand"+std::to_string(ownIndex), "RigRArm2");
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("leftHand" + std::to_string(ownIndex), "RigLArm2");
 	//腰の位置を取得
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->AddBonePositionData("waist", "RigMain");
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("waist" + std::to_string(ownIndex), "RigMain");
 	//取得したい骨の位置の計算をオンにする
-	parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBoneData("waist")->isCalc = true;
+	parent->GetComponent<ModelRenderer>()->GetBoneData("waist" + std::to_string(ownIndex))->isCalc = true;
 
 	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 
@@ -63,7 +63,7 @@ void Enemy::Update()
 		//activeNode = aiTree->Run(activeNode, behaviorData,elapsedTime);
 
 	// 腰の位置の取得
-	DirectX::SimpleMath::Vector3 waistPos = parent->GetComponent<ModelRenderer>()->GetModelResource()->GetBonePositionFromName("waist");
+	DirectX::SimpleMath::Vector3 waistPos = parent->GetComponent<ModelRenderer>()->GetBonePositionFromName("waist" + std::to_string(ownIndex));
 	DirectX::SimpleMath::Vector3 forward = parent->GetComponent<Transform>()->GetForward();
 	waistPos -= forward * 1.5f;
 
