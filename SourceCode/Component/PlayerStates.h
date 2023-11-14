@@ -21,6 +21,8 @@ namespace PlayerState
 		Running,
 		Walking,
 		Punching,//右
+		StylishFlip,//ワイヤーぶら下がり
+		HookPunch,//空中攻撃
 	};
 	
 	//基底クラス
@@ -335,6 +337,28 @@ namespace PlayerState
 		float falling = false;
 		float jumpSpeed = 0.0f;
 		float inputRatio = 0.5f;
+	};
+
+	//空中攻撃
+	class JumpAttack : public Default
+	{
+	public:
+		JumpAttack();
+		JumpAttack(GameObject* parent);
+		~JumpAttack() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		float attackRangeMin = 8.0f;
+		float attackRangeMax = 20.0f;
 	};
 
 }

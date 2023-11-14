@@ -793,7 +793,8 @@ void SwingWire::Enter()
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
 	//parent->GetComponent<RigidBody>()->SetUseGravity(false);
-
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::StylishFlip, true);
+	
 
 	swingTimer = 0.0f;
 }
@@ -931,8 +932,6 @@ void WireJump::Update()
 }
 void WireJump::Exit()
 {
-	OutputDebugLog("\n");
-
 }
 std::string WireJump::GetNext()
 {
@@ -962,6 +961,37 @@ std::string WireJump::GetNext()
 	{
 		return "Landing";
 	}
+
+	//ïœçXÇ»Çµ
+	return "";
+}
+
+//-----< ãÛíÜçUåÇ >-----//
+JumpAttack::JumpAttack()
+{
+	name = "JumpAttack";
+}
+JumpAttack::JumpAttack(GameObject* parent)
+{
+	name = "JumpAttack";
+	this->parent = parent;
+}
+void JumpAttack::Enter()
+{
+
+}
+void JumpAttack::Update()
+{	
+
+	
+	Default::Update();
+}
+void JumpAttack::Exit()
+{
+
+}
+std::string JumpAttack::GetNext()
+{
 
 	//ïœçXÇ»Çµ
 	return "";
