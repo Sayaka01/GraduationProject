@@ -820,7 +820,8 @@ void SwingWire::Enter()
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
 	//parent->GetComponent<RigidBody>()->SetUseGravity(false);
-
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::StylishFlip, true);
+	
 
 	swingTimer = 0.0f;
 }
@@ -835,8 +836,6 @@ void SwingWire::Update()
 	YAxisRotate(velocity);
 
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
-	OutputDebugLog("velocity", velocity);
-	OutputDebugLog("BeforePos", pos);
 
 	//ワイヤーの長さに基づいて補正
 	DirectX::XMFLOAT3 vec = pos - parameter;
@@ -844,7 +843,6 @@ void SwingWire::Update()
 	pos = parameter + vec;
 	parent->GetComponent<Transform>()->pos = pos;
 
-	OutputDebugLog("AfterPos", pos);
 	//位置の保存
 	oldPosition[0] = oldPosition[1];
 	oldPosition[1] = pos;
@@ -864,14 +862,6 @@ void SwingWire::Exit()
 	parent->GetComponent<RigidBody>()->SetUseGravity(true);
 
 	parameter = oldPosition[0];
-
-	OutputDebugLog("\n");
-
-	OutputDebugLog("SwingWire::Exit()\n");
-	OutputDebugLog("oldPosition[0]", oldPosition[0]);
-	OutputDebugLog("oldPosition[1]", oldPosition[1]);
-
-	OutputDebugLog("\n");
 }
 std::string SwingWire::GetNext()
 {
@@ -883,9 +873,9 @@ std::string SwingWire::GetNext()
 
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	float length = LengthFloat3(oldPosition[1] - oldPosition[0]);
-	if (length < 0.15f || swingTimer > maxSwingTime)
+	float l = parent->GetComponent<Player>()->GetWireSpeed() * SystemManager::Instance().GetElapsedTime();
+	if (length < l * 0.05f || swingTimer > maxSwingTime)
 	{
-		//OutputDebugLog("swingTimer", swingTimer);
 		return "WireJump";
 	}
 
@@ -917,14 +907,7 @@ void WireJump::Enter()
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	DirectX::XMFLOAT3 vec = pos - parameter;
 	moveDirection = vec / SystemManager::Instance().GetElapsedTime();
-	jumpSpeed = moveDirection.y + parent->GetComponent<Player>()->GetJumpSpeed();
-	DirectX::XMFLOAT3 v = parent->GetComponent<RigidBody>()->GetVelocity();
-	OutputDebugLog("v", v);
-	OutputDebugLog("pos", pos);
-	OutputDebugLog("parameter", parameter);
-	OutputDebugLog("vec", vec);
-	OutputDebugLog("moveDirection", moveDirection);
-	OutputDebugLog("\n");
+	jumpSpeed = (moveDirection.y < 0.0f ? 0.0f : moveDirection.y) + parent->GetComponent<Player>()->GetJumpSpeed();
 	moveDirection.y = 0.0f;
 
 	//初期化
@@ -951,11 +934,16 @@ void WireJump::Update()
 	oldPosition[0] = oldPosition[1];
 	oldPosition[1] = pos;
 
-
+	DirectX::XMFLOAT3 inputVec = CalcMoveVec();
+	DirectX::XMFLOAT3 moveVec{};
+	if (LengthFloat3(inputVec) > FLT_EPSILON)
+		moveVec = (inputVec * parent->GetComponent<Player>()->GetRunSpeed() * inputRatio) + (moveDirection * (1.0f - inputRatio));
+	else
+		moveVec = moveDirection;
 
 	//カメラの前方向に進む(XZ平面）
-	SetMoveVelocity(moveDirection);
-	YAxisRotate(CalcMoveVec());
+	SetMoveVelocity(moveVec);
+	YAxisRotate(inputVec);
 
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
@@ -971,8 +959,6 @@ void WireJump::Update()
 }
 void WireJump::Exit()
 {
-	OutputDebugLog("\n");
-
 }
 std::string WireJump::GetNext()
 {
@@ -1002,6 +988,37 @@ std::string WireJump::GetNext()
 	{
 		return "Landing";
 	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 空中攻撃 >-----//
+JumpAttack::JumpAttack()
+{
+	name = "JumpAttack";
+}
+JumpAttack::JumpAttack(GameObject* parent)
+{
+	name = "JumpAttack";
+	this->parent = parent;
+}
+void JumpAttack::Enter()
+{
+
+}
+void JumpAttack::Update()
+{	
+
+	
+	Default::Update();
+}
+void JumpAttack::Exit()
+{
+
+}
+std::string JumpAttack::GetNext()
+{
 
 	//変更なし
 	return "";
