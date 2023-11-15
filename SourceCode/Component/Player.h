@@ -57,4 +57,5 @@ private:
 
 	bool isDead = false;//Š®‘S‚ÉŽ€‚ñ‚Å‚¢‚é‚©‚Ç‚¤‚©
 
+	float stepDegree = 30.0f;
 };

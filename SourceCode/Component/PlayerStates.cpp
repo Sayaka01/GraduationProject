@@ -49,7 +49,12 @@ void PlayerState::Default::Update()
 
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
-	//プレイヤーコンポーネントにMoveVelocityを設定
+	//RigidBodyコンポーネントにMoveVelocityを設定
+	parent->GetComponent<RigidBody>()->SetVelocity(velocity);
+}
+void PlayerState::Default::AddMoveVelocity(DirectX::XMFLOAT3 velocity)
+{
+	//RigidBodyコンポーネントにMoveVelocityを追加
 	parent->GetComponent<RigidBody>()->AddVelocity(velocity);
 }
 DirectX::XMFLOAT3 Default::GetCameraFront()
@@ -223,6 +228,8 @@ bool PlayerState::Default::JudgePunchLeftState()
 }
 bool PlayerState::Default::JudgeAimWireState()
 {
+	return false;
+
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
@@ -316,7 +323,7 @@ void Run::Update()
 	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
 	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
 
-	SetMoveVelocity(moveVelocity);
+	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
 
 	Default::Update();
@@ -387,7 +394,7 @@ void Jump::Update()
 	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
 	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
 
-	SetMoveVelocity(moveVelocity);
+	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
 
 	Default::Update();
@@ -398,6 +405,12 @@ void Jump::Exit()
 }
 std::string Jump::GetNext()
 {
+	//空中攻撃ステートに遷移できるか
+	if (JudgePunchRightState())
+	{
+		return "JumpAttack";
+	}
+
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
 	if (JudgeSwingWireState())
 	{
@@ -452,7 +465,7 @@ void Falling::Update()
 	DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
 	moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
 
-	SetMoveVelocity(moveVelocity);
+	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
 
 	Default::Update();
@@ -463,6 +476,12 @@ void Falling::Exit()
 }
 std::string Falling::GetNext()
 {
+	//空中攻撃ステートに遷移できるか
+	if (JudgePunchRightState())
+	{
+		return "JumpAttack";
+	}
+
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
 	if (JudgeSwingWireState())
 	{
@@ -555,7 +574,7 @@ void PunchRight::Enter()
 	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Punching, false);
 	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.5f);
 	
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
@@ -577,11 +596,13 @@ void PunchRight::Update()
 	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
 	vec.y = 0.0f;
 	float length = LengthFloat3(vec);
-	if (length < attackRangeMax && length > attackRangeMin)
+	if (length < attackRangeMax)
 	{
-		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
 		YAxisRotate(vec);
+		if (length > attackRangeMin)
+			AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
 	}
+		
 
 	Default::Update();
 }
@@ -624,6 +645,8 @@ void PunchLeft::Enter()
 {
 	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Attack, false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
 
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
@@ -646,10 +669,11 @@ void PunchLeft::Update()
 	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
 	vec.y = 0.0f;
 	float length = LengthFloat3(vec);
-	if (length < attackRangeMax && length > attackRangeMin)
+	if (length < attackRangeMax)
 	{
-		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
 		YAxisRotate(vec);
+		if (length > attackRangeMin)
+			AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
 	}
 
 	Default::Update();
@@ -657,6 +681,8 @@ void PunchLeft::Update()
 void PunchLeft::Exit()
 {
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 }
 std::string PunchLeft::GetNext()
 {
@@ -687,7 +713,7 @@ void Damage::Enter()
 void Damage::Update()
 {
 	//ノックバックのvelocity
-	SetMoveVelocity(parameter);
+	AddMoveVelocity(parameter);
 
 	Default::Update();
 }
@@ -894,7 +920,7 @@ std::string SwingWire::GetNext()
 	return "";
 }
 
-//-----< ワイヤーでの弧を書いた移動 >-----//
+//-----< ワイヤーでの弧を書いた移動後のジャンプ >-----//
 WireJump::WireJump()
 {
 	name = "WireJump";
@@ -996,7 +1022,7 @@ std::string WireJump::GetNext()
 	return "";
 }
 
-//-----< 空中攻撃 >-----//
+//-----< 空中攻撃（右パンチ） >-----//
 JumpAttack::JumpAttack()
 {
 	name = "JumpAttack";
@@ -1008,20 +1034,91 @@ JumpAttack::JumpAttack(GameObject* parent)
 }
 void JumpAttack::Enter()
 {
+	//アニメーションの再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::HookPunch, false);
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(3.0f);
+
+	//攻撃用当たり判定のコンポーネントを有効化
+	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(true);
+
+	//攻撃力を設定
+	attackPower = 1.0f;
+
+	//一番近い敵の位置をparameterに格納
+	CalcEnemyDistance();
+
+	//移動ベクトルを計算
+	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
+	float length = LengthFloat3(vec);
+
+	parameter = { 0.0f,0.0f,0.0f };
+
+	if (length < attackRangeMax)
+	{
+		if (length > attackRangeMin)
+		{
+			float animSpeed = parent->GetComponent<ModelRenderer>()->GetAnimationSpeed();
+			parameter = NormalizeFloat3(vec) * (length / maxMoveTime * animSpeed);
+			
+			//重力を無視する
+			parent->GetComponent<RigidBody>()->SetUseGravity(false);
+		}
+	}
+
+	//2段以降の攻撃の入力の取得を開始
+	acceptAttackButton = true;
+
+	//攻撃中増え続ける
+	attackTimer = 0.0f;
+
+	//今から攻撃するので初期化
+	attackInterval = 0.0f;
 
 }
 void JumpAttack::Update()
 {	
+	float animSpeed = parent->GetComponent<ModelRenderer>()->GetAnimationSpeed();
+	attackTimer += SystemManager::Instance().GetElapsedTime() * animSpeed;
 
-	
+	if (attackTimer < maxMoveTime && LengthFloat3(parameter) > FLT_EPSILON)
+	{
+		SetMoveVelocity(parameter);
+		YAxisRotate(parameter);
+	}
+	else
+	{
+		parent->GetComponent<RigidBody>()->SetUseGravity(true);
+	}
+
+	//DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
+	//vec.y = 0.0f;
+	//float length = LengthFloat3(vec);
+	//if (length < attackRangeMax)
+	//{
+	//	YAxisRotate(vec);
+	//	if (length > attackRangeMin)
+	//		AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetWireSpeed());
+	//}
+
 	Default::Update();
+
 }
 void JumpAttack::Exit()
 {
+	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+
 
 }
 std::string JumpAttack::GetNext()
 {
+	//アニメーション再生が終わったら落下ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
+	}
 
 	//変更なし
 	return "";

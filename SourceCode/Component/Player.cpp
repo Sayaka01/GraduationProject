@@ -34,6 +34,7 @@ void Player::Initialize()
 	states.emplace_back(new AimWire(parent));//ワイヤーでの直線移動
 	states.emplace_back(new SwingWire(parent));//ワイヤーでの弧を書いた移動
 	states.emplace_back(new WireJump(parent));//ワイヤーでの弧を書いた移動後のジャンプ
+	states.emplace_back(new JumpAttack(parent));//空中攻撃（右）
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -133,26 +134,47 @@ void Player::OnCollisionEnter(Collider* collider)
 	if (!parent->GetComponent<Health>()->GetIsAlive())return;
 	if (collider->GetParent()->GetTag() != Tag::Enemy)return;
 
+	//位置の補正
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>("BodyCapsule");
 	parent->GetComponent<Transform>()->pos = capsuleCollider->end;
 	parent->GetComponent<Transform>()->pos.y -= capsuleCollider->radius;
-
-	if (currentState->GetName() != "Damage" && currentState->GetName() != "Death")
+	
+	if (collider->type == Collider::Type::Offense)
 	{
-		//HPを減らす
-		parent->GetComponent<Health>()->SubtructHp(collider->GetParent()->GetComponent<Enemy>()->GetAttackPower());
+		//ダメージを受ける
+		if (currentState->GetName() != "Damage" && currentState->GetName() != "Death")
+		{
+			//HPを減らす
+			parent->GetComponent<Health>()->SubtructHp(collider->GetParent()->GetComponent<Enemy>()->GetAttackPower());
 
-		if (parent->GetComponent<Health>()->GetIsAlive())
-		{
-			ChangeState("Damage");//ダメージステートに遷移
-			DirectX::XMFLOAT3 knockBackVec = (capsuleCollider->end + (capsuleCollider->cylinderSize * 0.5f)) - collider->center;
-			parent->GetComponent<RigidBody>()->AddVelocity({ 0.0f,NormalizeFloat3(knockBackVec).y * knockBackSpeed,0.0f });
-			knockBackVec.y = 0.0f;
-			currentState->SetParameter(NormalizeFloat3(knockBackVec) * knockBackSpeed);
+			if (parent->GetComponent<Health>()->GetIsAlive())
+			{
+				ChangeState("Damage");//ダメージステートに遷移
+				DirectX::XMFLOAT3 knockBackVec = (capsuleCollider->end + (capsuleCollider->cylinderSize * 0.5f)) - collider->center;
+				parent->GetComponent<RigidBody>()->SetVelocity({ 0.0f,NormalizeFloat3(knockBackVec).y * jumpSpeed,0.0f });
+				knockBackVec.y = 0.0f;
+				currentState->SetParameter(NormalizeFloat3(knockBackVec) * knockBackSpeed);
+			}
+			else
+			{
+				ChangeState("Death");//死亡ステートに遷移
+			}
 		}
-		else
+	}
+	else
+	{
+		if (currentState->GetName() != "JumpAttack")
 		{
-			ChangeState("Death");//死亡ステートに遷移
+			//プレイヤーが上にいるなら踏む
+			DirectX::XMFLOAT3 vec = capsuleCollider->end - collider->center;
+			DirectX::XMFLOAT3 up = { 0.0f,1.0f,0.0f };
+			float dot = DotFloat3(vec, up);
+			if (cosf(dot) < DirectX::XMConvertToDegrees(stepDegree) && vec.y > 0.0f)
+			{
+				//踏んだ
+				currentState->InitJumpCount();
+				ChangeState("Jump");//ジャンプステートに遷移
+			}
 		}
 	}
 }
