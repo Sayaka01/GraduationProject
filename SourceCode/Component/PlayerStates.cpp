@@ -33,7 +33,7 @@ void PlayerState::Default::Update()
 	{
 		//ゲームパッドの取得
 		GamePad gamePad = SystemManager::Instance().GetGamePad();
-		if (gamePad.GetButtonDown() & GamePad::BTN_B)
+		if (gamePad.GetButtonDown() & GamePad::BTN_X)
 		{
 			pushAttackButton = true;
 		}
@@ -217,12 +217,10 @@ bool PlayerState::Default::JudgePunchRightState()
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 	//Aボタンが押されていたらtrue
-	return (gamePad.GetButtonDown() & GamePad::BTN_B);
+	return (gamePad.GetButtonDown() & GamePad::BTN_X);
 }
 bool PlayerState::Default::JudgePunchLeftState()
 {
-	//ゲームパッドの取得
-	GamePad gamePad = SystemManager::Instance().GetGamePad();
 	//Aボタンが押されていたらtrue
 	return (pushAttackButton && (attackInterval < acceptAttackTime));
 }
