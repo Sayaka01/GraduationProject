@@ -50,9 +50,14 @@ namespace PlayerState
 		//パラメーターの設定
 		void SetParameter(DirectX::XMFLOAT3 param) { parameter = param; }
 
+		//ジャンプ回数の初期化
+		void InitJumpCount() { jumpCount = 0; }
+
 	protected:
-		//移動ベクトルをプレイヤーコンポーネントに保存
+		//移動ベクトルをRigidBodyコンポーネントに保存
 		void SetMoveVelocity(DirectX::XMFLOAT3 velocity);
+		//移動ベクトルをRigidBodyコンポーネントに追加
+		void AddMoveVelocity(DirectX::XMFLOAT3 velocity);
 		//カメラの前方向を取得
 		DirectX::XMFLOAT3 GetCameraFront();
 		//カメラの右方向を取得
@@ -358,7 +363,7 @@ namespace PlayerState
 
 	private:
 		float attackRangeMin = 8.0f;
-		float attackRangeMax = 20.0f;
+		float attackRangeMax = 40.0f;
 	};
 
 }
