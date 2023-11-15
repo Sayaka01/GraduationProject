@@ -1094,15 +1094,15 @@ void JumpAttack::Update()
 		parent->GetComponent<RigidBody>()->SetUseGravity(true);
 	}
 
-	//DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
-	//vec.y = 0.0f;
-	//float length = LengthFloat3(vec);
-	//if (length < attackRangeMax)
-	//{
-	//	YAxisRotate(vec);
-	//	if (length > attackRangeMin)
-	//		AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetWireSpeed());
-	//}
+	if (LengthFloat3(parameter) < FLT_EPSILON)
+	{
+		DirectX::XMFLOAT3 moveVelocity = CalcMoveVec();
+		moveVelocity *= parent->GetComponent<Player>()->GetRunSpeed();
+
+		AddMoveVelocity(moveVelocity);
+		YAxisRotate(moveVelocity);
+	}
+
 
 	Default::Update();
 
@@ -1120,7 +1120,10 @@ std::string JumpAttack::GetNext()
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
-		return "Idle";
+		if (parent->GetComponent<Transform>()->pos.y > 0.0f)
+			return "Falling";
+		else
+			return "Idle";
 	}
 
 	//変更なし
