@@ -121,12 +121,13 @@ struct Animation
 			DirectX::XMFLOAT3 scaling{ 1, 1, 1 };
 			DirectX::XMFLOAT4 rotation{ 0, 0, 0, 1 }; // Rotation quaternion
 			DirectX::XMFLOAT3 translation{ 0, 0, 0 };
+			std::string name{};
 
 			//シリアライズ
 			template<class T>
 			void serialize(T& archive)
 			{
-				archive(globalTransform, scaling, rotation, translation);
+				archive(globalTransform, scaling, rotation, translation,name);
 			}
 		};
 		std::vector<Node> nodes;

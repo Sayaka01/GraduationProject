@@ -853,6 +853,9 @@ void SwingWire::Update()
 
 	parent->GetComponent<SphereCollider>("DebugSphere")->center = pos;
 
+	//˜‚ÌˆÊ’u‚Ìƒ‚[ƒVƒ‡ƒ“‚É‚æ‚éˆÚ“®‚ð’âŽ~
+	parent->GetComponent<ModelRenderer>()->StopMotionVelocity("Hip");
+
 	Default::Update();
 }
 void SwingWire::Exit()

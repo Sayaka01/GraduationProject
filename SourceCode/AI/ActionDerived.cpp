@@ -85,6 +85,9 @@ void PunchAction::Enter()
 // ‘ÅŒ‚s“®‚ÌI—¹ˆ—
 void PunchAction::Exit()
 {
+    // UŒ‚—Í‚ÌÝ’è
+    owner->SetAttackPower(0);
+
     // UŒ‚‚·‚éŽè‚Ìœ‚ÌˆÊ’u‚ðŒvŽZ‚Æ“–‚½‚è”»’è‚ðOFF‚É‚·‚é
     owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
     ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
@@ -172,6 +175,9 @@ void SkillAction::Enter()
 // dŒ‚s“®‚ÌI—¹ˆ—
 void SkillAction::Exit()
 {
+    // UŒ‚—Í‚ÌÝ’è
+    owner->SetAttackPower(0);
+
     // UŒ‚‚·‚éŽè‚Ìœ‚ÌˆÊ’u‚ðŒvŽZ‚Æ“–‚½‚è”»’è‚ðOFF‚É‚·‚é
     owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
     ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;

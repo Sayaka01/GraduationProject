@@ -375,6 +375,7 @@ void ModelData::UpdateGlobalTransform(Animation::Keyframe& keyframe) const
         XMMATRIX P{ parent_index < 0 ? XMMatrixIdentity() : XMLoadFloat4x4(&keyframe.nodes.at(parent_index).globalTransform) };
 
         XMStoreFloat4x4(&node.globalTransform, S * R * T * P);
+        int a = 0;
     }
 }
 
@@ -1086,6 +1087,7 @@ void ModelData::FetchAnimations(FbxScene* fbxScene, std::vector<Animation>& anim
                     node.scaling = ConvertToXMFloat3(local_transform.GetS());
                     node.rotation = ConvertToXMFloat4(local_transform.GetQ());
                     node.translation = ConvertToXMFloat3(local_transform.GetT());
+                    node.name = fbxNode->GetName();
                 }
             }
         }
