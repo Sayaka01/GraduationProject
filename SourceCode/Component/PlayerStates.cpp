@@ -580,8 +580,8 @@ void PunchRight::Update()
 	if (length < attackRangeMax && length > attackRangeMin)
 	{
 		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
-		YAxisRotate(vec);
 	}
+		YAxisRotate(vec);
 
 	Default::Update();
 }
@@ -649,8 +649,8 @@ void PunchLeft::Update()
 	if (length < attackRangeMax && length > attackRangeMin)
 	{
 		SetMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
-		YAxisRotate(vec);
 	}
+		YAxisRotate(vec);
 
 	Default::Update();
 }
