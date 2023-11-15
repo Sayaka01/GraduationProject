@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 
 #include "Component.h"
 #include "ModelData.h"
@@ -62,7 +63,11 @@ public:
 	//テクスチャの張替え
 	void SetTexture(Texture newTexture) const { modelData->SetTexture(newTexture); }
 
+	// モーションの移動値を停止
+	void StopMotionVelocity(const std::string nodeName, std::string currentAnim = "");
 
+	//名前と一致するnodeの番号を保存
+	void StoreNodeIndex(std::string callName, std::string BaseAnimName, std::string rigName);
 
 private:
 	//-----< 変数 >-----//
@@ -93,6 +98,15 @@ private:
 
 	DirectX::XMFLOAT4X4* worlds = nullptr;
 
+	struct Motion
+	{
+		int index = -1;
+		std::string name;
+		std::string rigName;
+		DirectX::SimpleMath::Vector3 defaultPostion{ 0,0,0 };//基準の腰の位置
+	};
+
+	std::map<std::string, Motion> nodeIndex;//string(ノードの名前),int(indexの保存)
 public:
 	//特定の骨の位置を取得するための構造体
 	struct BonePositionData

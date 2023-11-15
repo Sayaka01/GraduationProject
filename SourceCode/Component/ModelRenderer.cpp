@@ -51,7 +51,7 @@ void ModelRenderer::Draw()
 		{
 			//currentKeyframe = keyframe;
 			DirectX::XMFLOAT4X4 w;
-			DirectX::XMFLOAT4X4 bt;
+			//DirectX::XMFLOAT4X4 bt;
 			const Animation::Keyframe::Node& meshNode{ keyframe.nodes.at(modelData->GetMesh(i).nodeIndex) };
 			XMStoreFloat4x4(&w, XMLoadFloat4x4(&meshNode.globalTransform) * XMLoadFloat4x4(&parent->GetComponent<Transform>()->world));
 
@@ -60,16 +60,16 @@ void ModelRenderer::Draw()
 
 			for (size_t boneIndex = 0; boneIndex < boneCount; ++boneIndex)
 			{
-				const Animation::Keyframe::Node& bone_node{ keyframe.nodes.at(modelData->GetBone(i,boneIndex).nodeIndex) };
+				const Animation::Keyframe::Node& bone_node{ keyframe.nodes.at(modelData->GetBone(i,(int)boneIndex).nodeIndex) };
 
 				//攻撃するときのHitSphereようにぶつけたい場所の位置を算出
 				for (auto& b : boneData)
 				{
-					if (b.isCalc && modelData->GetBone(i, boneIndex).name == b.boneName)
+					if (b.isCalc && modelData->GetBone(i, (int)boneIndex).name == b.boneName)
 					{
 						DirectX::XMFLOAT4X4 gt;
 						XMStoreFloat4x4(&gt,
-							XMLoadFloat4x4(&keyframe.nodes.at(modelData->GetBone(i, boneIndex).nodeIndex + 1).globalTransform) *
+							XMLoadFloat4x4(&keyframe.nodes.at(modelData->GetBone(i, (int)boneIndex).nodeIndex + 1).globalTransform) *
 							XMMatrixInverse(nullptr, XMLoadFloat4x4(&modelData->GetMesh(i).defaultGlobalTransform))
 						);
 						DirectX::XMFLOAT3 g = { gt._41,gt._42,gt._43 };
@@ -198,5 +198,87 @@ void ModelRenderer::StopAnimation()
 void ModelRenderer::AppendAnimation(const char* animationFilename, float samplingRate)
 {
 	modelData->AppendAnimation(animationFilename, samplingRate);
+}
+
+// モーションの移動値を停止
+void ModelRenderer::StopMotionVelocity(const std::string callName, std::string currentAnim)
+{
+	if (nodeIndex.size() <= 0)
+		return;
+
+	Motion motion = nodeIndex.at(callName);
+
+	//現在のキーフレームを取得
+	Animation::Keyframe::Node* node = nullptr;
+	if(currentAnim == "")
+	node=&(modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex).nodes.at(motion.index/*要素がなければ例外スロー*/));
+
+	//DirectX::XMMATRIX GT = DirectX::XMLoadFloat4x4(&node->globalTransform);
+	//DirectX::XMMATRIX T = DirectX::XMLoadFloat4x4(&transform);
+	//DirectX::XMMATRIX W = GT * T;
+	//DirectX::XMFLOAT4X4 w;
+	//DirectX::XMStoreFloat4x4(&w, W);
+
+	//前回から今回のフレームまでの移動値の差分を計算
+	//diffRootMotionTranslation.x = node->translation.x - cacheRootMotionTranslation.x;
+	//diffRootMotionTranslation.y = node->translation.y - cacheRootMotionTranslation.y;
+	//diffRootMotionTranslation.z = node->translation.z - cacheRootMotionTranslation.z;
+	//diffRootMotionTranslation.x = w._41 - cacheRootMotionTranslation.x;
+	//diffRootMotionTranslation.y = w._42 - cacheRootMotionTranslation.y;
+	//diffRootMotionTranslation.z = w._43 - cacheRootMotionTranslation.z;
+
+	//今回の移動値を保存
+	//cacheRootMotionTranslation = node->translation;
+	//cacheRootMotionTranslation = DirectX::XMFLOAT3(w._41, w._42, w._43);
+
+	
+	//位置を基準の位置へ設定
+	node->translation = motion.defaultPostion;
+	//node->translation.x = 0;
+	//node->translation.y = 0;
+	//node->translation.y = firstPoseTransform.y;
+	//node->translation.z = 0;
+	modelData->UpdateGlobalTransform(modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex));
+
+#ifdef _DEBUG
+	ImGui::Begin("node");
+	ImGui::SliderFloat3("translate", &node->translation.x, -20, 20);
+	ImGui::End();
+#endif
+
+
+	//isRootMotionCalc = false;
+	return;
+
+}
+
+//名前と一致するnodeの番号を保存
+void ModelRenderer::StoreNodeIndex(std::string callName,std::string BaseAnimName,std::string rigName)
+{
+	Animation* defaultAnimation{nullptr};
+	
+	//基準位置を取得するアニメーションを探す
+	for (Animation& anim : modelData->animationClips)
+	{
+		if (anim.name == BaseAnimName)
+		{
+			defaultAnimation = &anim;
+		}
+	}
+	//初めのキーフレームを取得
+	Animation::Keyframe keyframe = defaultAnimation->sequence.at(0);
+	int count = 0;
+	for (Animation::Keyframe::Node& node : keyframe.nodes)
+	{
+		if (node.name != rigName)
+		{
+			count++;
+			continue;
+		}
+		nodeIndex[callName].index = count;
+		nodeIndex[callName].defaultPostion = node.translation;
+		return;
+	}
+
 }
 

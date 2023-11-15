@@ -126,7 +126,7 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StylishFlip.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/HookPunch.fbx");
 
-	player->AddComponent(modelRenderer);
+	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 1;

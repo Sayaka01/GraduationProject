@@ -53,11 +53,13 @@ void Player::Initialize()
 	parent->GetComponent<ModelRenderer>()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
 	parent->GetComponent<ModelRenderer>()->GetBoneData("leftHand")->isCalc = true;
 
+	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("Hip","Falling","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 
 }
 
 void Player::Update()
 {
+
 	//ステートの更新
 	currentState->Update();
 	
