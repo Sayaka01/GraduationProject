@@ -161,15 +161,18 @@ void Player::OnCollisionEnter(Collider* collider)
 	}
 	else
 	{
-		//プレイヤーが上にいるなら踏む
-		DirectX::XMFLOAT3 vec = capsuleCollider->end - collider->center;
-		DirectX::XMFLOAT3 up = { 0.0f,1.0f,0.0f };
-		float dot = DotFloat3(vec, up);
-		if (cosf(dot) < DirectX::XMConvertToDegrees(stepDegree) && vec.y > 0.0f)
+		if (currentState->GetName() != "JumpAttack")
 		{
-			//踏んだ
-			currentState->InitJumpCount();
-			ChangeState("Jump");//ジャンプステートに遷移
+			//プレイヤーが上にいるなら踏む
+			DirectX::XMFLOAT3 vec = capsuleCollider->end - collider->center;
+			DirectX::XMFLOAT3 up = { 0.0f,1.0f,0.0f };
+			float dot = DotFloat3(vec, up);
+			if (cosf(dot) < DirectX::XMConvertToDegrees(stepDegree) && vec.y > 0.0f)
+			{
+				//踏んだ
+				currentState->InitJumpCount();
+				ChangeState("Jump");//ジャンプステートに遷移
+			}
 		}
 	}
 }

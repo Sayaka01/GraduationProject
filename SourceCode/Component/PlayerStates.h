@@ -363,7 +363,9 @@ namespace PlayerState
 
 	private:
 		float attackRangeMin = 8.0f;
-		float attackRangeMax = 40.0f;
+		float attackRangeMax = 30.0f;
+		float maxMoveTime = 25.0f;//‚±‚±‚Ü‚Å‚ÉˆÚ“®‚ğI‚¦‚é
+		float attackTimer = 0.0f;
 	};
 
 }
