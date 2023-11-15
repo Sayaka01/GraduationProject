@@ -911,6 +911,11 @@ std::string SwingWire::GetNext()
 		return "WireJump";
 	}
 
+	//pos.y < 0.0f なら着地ステートへ
+	if (parent->GetComponent<Transform>()->pos.y < 0.0f)
+	{
+		return "Landing";
+	}
 
 
 	//変更なし
@@ -968,7 +973,7 @@ void WireJump::Update()
 		moveVec = moveDirection;
 
 	//カメラの前方向に進む(XZ平面）
-	SetMoveVelocity(moveVec);
+	AddMoveVelocity(moveVec);
 	YAxisRotate(inputVec);
 
 	//アニメーション再生が終わったら落下ステートへ遷移
