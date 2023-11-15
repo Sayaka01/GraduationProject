@@ -5,7 +5,7 @@
 bool BattleJudgment::Judgment()
 {    
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーのHPがなければ攻撃しない
@@ -38,7 +38,7 @@ bool EscapeJudgment::Judgment()
 bool AttackJudgment::Judgment()
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーのHPがなければ攻撃しない
@@ -61,7 +61,7 @@ bool AttackJudgment::Judgment()
 bool WanderJudgment::Judgment()
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーとの距離

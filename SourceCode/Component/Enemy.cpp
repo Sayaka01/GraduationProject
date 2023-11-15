@@ -284,9 +284,13 @@ void Enemy::RotateTransform(DirectX::SimpleMath::Vector3 v,float elapsedTime)
 
 void Enemy::OnCollisionEnter(Collider* collider)
 {
+	SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
+	parent->GetComponent<Transform>()->pos = spCollider->center;
+
 	if (collider->GetParent()->GetTag() != Tag::Player)return;
 
-	hitFlag = true;
+	if (collider->type == Collider::Type::Offense)
+		hitFlag = true;
 
 	//SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
 	//parent->GetComponent<Transform>()->pos = spCollider->center;

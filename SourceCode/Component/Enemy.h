@@ -38,6 +38,19 @@ public:
 		BrastAttack,
 	};
 
+	enum class StateName
+	{
+		Idle,
+		Punch,
+		Slash,
+		Break,
+		Wander,
+		Pursuit,
+		Escape,
+		Die,
+		Damage,
+	};
+
 	Enemy() = default;
 	Enemy(char num) :ownIndex(num) {}
 	~Enemy() override = default;
@@ -111,6 +124,9 @@ public:
 	float GetSlashAttackPower() { return slashPower; }
 
 	char GetOwnIndex() { return ownIndex; }
+
+	void SetStateName(StateName sName) { stateName = sName; }
+	StateName GetStateName() { return stateName; }
 private:
 
 	//-----< ä÷êî >-----//
@@ -160,5 +176,7 @@ private:
 	//ÇªÇÍÇºÇÍÇÃçUåÇóÕ
 	float punchPower{ 3 };
 	float slashPower{ 6 };
+
+	StateName stateName = StateName::Idle;
 
 };

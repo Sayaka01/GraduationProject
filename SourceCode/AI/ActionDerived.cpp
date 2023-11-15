@@ -15,7 +15,7 @@
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
@@ -80,6 +80,9 @@ void PunchAction::Enter()
     // Colliderのタイプを"攻め判定"に設定
     owner->GetParent()->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
 
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Punch);
+
 }
 
 // 打撃行動の終了処理
@@ -107,7 +110,7 @@ ActionBase::State SkillAction::Run(float elapsedTime)
     owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
@@ -170,6 +173,9 @@ void SkillAction::Enter()
     // Colliderのタイプを"攻め判定"に設定
     owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
 
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Slash);
+
 }
 
 // 重撃行動の終了処理
@@ -211,6 +217,8 @@ void BreakAction::Enter()
     
     // 実行時間をランダム(1~2秒)で決める
     owner->SetRunTimer(Random::Range(0.5f,1.0f));
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Break);
 
 }
 
@@ -242,6 +250,10 @@ void WanderAction::Enter()
     owner->SetTargetPositionRandom(owner->GetWanderRange());
     // 前進アニメーションを再生
     owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Wander);
+
 }
 
 // 徘徊行動の終了処理
@@ -271,6 +283,9 @@ void IdleAction::Enter()
     owner->ChangeAnimation(Enemy::AnimationName::Idle2, true);
     // 実行時間をランダム(3~5秒)で決める
     owner->SetRunTimer(Random::Range(3.0f, 5.0f));
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Idle);
+
 }
 
 // 待機行動の終了処理
@@ -283,7 +298,7 @@ void IdleAction::Exit()
 ActionBase::State PursuitAction::Run(float elapsedTime)
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーの位置をターゲット位置に設定
@@ -310,6 +325,9 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
 void PursuitAction::Enter()
 {
     owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Pursuit);
+
 }
 
 // 追跡行動の終了処理
@@ -341,6 +359,9 @@ ActionBase::State EscapeAction::Run(float elapsedTime)
 void EscapeAction::Enter()
 {
     owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Escape);
+
 }
 
 // 逃走行動の終了処理
@@ -367,6 +388,9 @@ void DieAction::Enter()
 {
     owner->SetRunTimer(2.0f);
     owner->ChangeAnimation(Enemy::AnimationName::Die, false);
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Die);
+
 }
 
 // 死亡行動の終了処理
@@ -393,7 +417,7 @@ ActionBase::State DamageAction::Run(float elapsedTime)
     if (runTimer <= 0) return ActionBase::State::Running;
        
     // プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
 
     //プレイヤーが見つからない場合ノックバックを行わない
     if (playerObj == nullptr) return ActionBase::State::Running;
@@ -412,7 +436,7 @@ ActionBase::State DamageAction::Run(float elapsedTime)
 // 被弾行動の初期処理
 void DamageAction::Enter()
 {
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         // プレイヤーの現在の攻撃力を取得
@@ -420,6 +444,9 @@ void DamageAction::Enter()
         // HP処理
         owner->GetParent()->GetComponent<Health>()->SubtructHp(ap);
     }
+
+    //ステートの名前を設定
+    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Damage);
 
     owner->SetRunTimer(0.3f);
 
