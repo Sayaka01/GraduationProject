@@ -14,14 +14,29 @@
 // 打撃行動のアクション
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
+    Enemy* enemy = owner->GetComponent<Enemy>();
+
+    float runTimer = enemy->GetRunTimer();
+
+    // タイマー更新
+    runTimer -= elapsedTime;
+    enemy->SetRunTimer(runTimer);
+
     //プレイヤーオブジェクトを取得
     GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         vec.Normalize();
+        
+        if (runTimer >= 0)
+        {
+            enemy->SetTargetPosition(playerObj->GetComponent<Transform>()->pos);
+            enemy->MoveToTargetPosition(elapsedTime);
+        }
+
         //姿勢の回転
-        owner->GetComponent<Enemy>()->RotateTransform(vec, elapsedTime);
+        enemy->RotateTransform(vec, elapsedTime);
     }
 
 
@@ -77,12 +92,21 @@ void PunchAction::Enter()
     owner->GetComponent<ModelRenderer>()->GetBoneData
     ("leftHand" + std::to_string(enemy->GetOwnIndex()))->isCalc = true;
     owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    owner->GetComponent<SphereCollider>("HandCollider")->radius = 2.0f;
+    // 骨の位置の取得
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("leftHand" + std::to_string(enemy->GetOwnIndex()));
+    // sphereColliderの位置を設定
+    owner->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
     // Colliderのタイプを"攻め判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
 
     //ステートの名前を設定
     enemy->SetStateName(Enemy::StateName::Punch);
+
+    // 実行時間をランダム(1~2秒)で決める
+    enemy->SetRunTimer(Random::Range(0.1f, 0.3f));
 
 }
 
@@ -96,6 +120,7 @@ void PunchAction::Exit()
     owner->GetComponent<ModelRenderer>()->GetBoneData
     ("leftHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
     owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+    owner->GetComponent<SphereCollider>("HandCollider")->radius = 1.0f;
 
     // Colliderのタイプを"守り判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
@@ -172,6 +197,12 @@ void SkillAction::Enter()
     owner->GetComponent<ModelRenderer>()->GetBoneData
     ("rightHand" + std::to_string(enemy->GetOwnIndex()))->isCalc = true;
     owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    // 骨の位置の取得
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("rightHand" + std::to_string(enemy->GetOwnIndex()));
+    // sphereColliderの位置を設定
+    owner->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
+
     // Colliderのタイプを"攻め判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
 
@@ -190,6 +221,7 @@ void SkillAction::Exit()
     owner->GetComponent<ModelRenderer>()->GetBoneData
     ("rightHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
     owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+
     // Colliderのタイプを"守り判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
@@ -391,7 +423,7 @@ ActionBase::State DieAction::Run(float elapsedTime)
     runTimer -= elapsedTime;
     enemy->SetRunTimer(runTimer);
     //行動時間とアニメーションが終了している場合行動終了
-    if (runTimer <= 0.0f /*&& owner->GetParent()->GetComponent<Animation>().IsPlayAnimation()*/)
+    if (runTimer <= 0.0f && owner->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }

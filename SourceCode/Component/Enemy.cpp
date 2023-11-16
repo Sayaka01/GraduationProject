@@ -23,6 +23,8 @@
 
 #include <SimpleMath.h>
 
+#include "Component/Player.h"
+
 
 void Enemy::Initialize()
 {
@@ -48,6 +50,8 @@ void Enemy::Initialize()
 	parent->GetComponent<ModelRenderer>()->AddBonePositionData("waist" + std::to_string(ownIndex), "RigMain");
 	//Žæ“¾‚µ‚½‚¢œ‚ÌˆÊ’u‚ÌŒvŽZ‚ðƒIƒ“‚É‚·‚é
 	parent->GetComponent<ModelRenderer>()->GetBoneData("waist" + std::to_string(ownIndex))->isCalc = true;
+	parent->GetComponent<ModelRenderer>()->GetBoneData("rightHand" + std::to_string(ownIndex))->isCalc = true;
+	parent->GetComponent<ModelRenderer>()->GetBoneData("leftHand" + std::to_string(ownIndex))->isCalc = true;
 
 	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
 
@@ -299,9 +303,11 @@ void Enemy::OnCollisionEnter(Collider* collider)
 
 	if (collider->GetParent()->GetTag() != Tag::Player)return;
 
-	if (collider->type == Collider::Type::Offense)
+	if (collider->type == Collider::Type::Offense && !collider->GetParent()->GetComponent<Player>()->GetIsHitAttackToEnemy())
+	{
 		hitFlag = true;
-
+		collider->GetParent()->GetComponent<Player>()->SetIsHitAttackToEnemy(true);
+	}
 	//SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
 	//parent->GetComponent<Transform>()->pos = spCollider->center;
 }

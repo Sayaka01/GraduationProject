@@ -592,6 +592,9 @@ void PunchRight::Enter()
 
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	CalcEnemyDistance();
+
+	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
+	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 }
 void PunchRight::Update()
 {
@@ -665,6 +668,9 @@ void PunchLeft::Enter()
 
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	CalcEnemyDistance();
+
+	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
+	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 }
 void PunchLeft::Update()
 {
@@ -1083,7 +1089,8 @@ void JumpAttack::Enter()
 	//UŒ‚’†‘‚¦‘±‚¯‚é
 	attackTimer = 0.0f;
 
-
+	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
+	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 }
 void JumpAttack::Update()
 {	

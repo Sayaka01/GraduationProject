@@ -371,7 +371,7 @@ void SceneGame::ResultUpdate()
 	}
 
 	//Aƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚çtrue
-	if (gamePad.GetButtonUp() & GamePad::BTN_X)
+	if (gamePad.GetButtonUp() & GamePad::BTN_A)
 	{
 		//retry‚ð‘I‘ð
 		if (selectNextScene ==NextSelectName::Game)

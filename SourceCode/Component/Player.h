@@ -39,6 +39,9 @@ public:
 	void SetIsDead(bool b) { isDead = b; }
 	bool GetIsDead() { return isDead; }
 
+	bool GetIsHitAttackToEnemy() { return isHitAttackToEnemy; }
+	void SetIsHitAttackToEnemy(bool b) { isHitAttackToEnemy = b; }
+
 private:
 
 	//-----< 関数 >-----//
@@ -59,4 +62,6 @@ private:
 	bool isDead = false;//完全に死んでいるかどうか
 
 	float stepDegree = 30.0f;
+
+	bool isHitAttackToEnemy = false;//敵用の攻撃が当たっているかのフラグ
 };
