@@ -47,6 +47,9 @@ namespace PlayerState
 		//UŒ‚—Í‚Ìæ“¾
 		float GetAttackPower() { return attackPower; }
 
+		//UŒ‚ŠÔŠu‚Ìæ“¾
+		float GetAttackInterval() { return attackInterval; }
+
 		//ƒpƒ‰ƒ[ƒ^[‚Ìİ’è
 		void SetParameter(DirectX::XMFLOAT3 param) { parameter = param; }
 
