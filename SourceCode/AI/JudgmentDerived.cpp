@@ -16,7 +16,7 @@ bool BattleJudgment::Judgment()
         GameObject* enemyManager = owner->GetParent();
         for (int i=0;i< enemyManager->GetChildrenCount();i++)
         {
-            Enemy* otherEnemy = enemyManager->GetChild("enemy_" + std::to_string(i))->GetComponent<Enemy>();
+            Enemy* otherEnemy = enemyManager->GetGameObj(i)->GetComponent<Enemy>();
             if (otherEnemy->GetStateName() == Enemy::StateName::Punch)
                 return false;
             else if (otherEnemy->GetStateName() == Enemy::StateName::Slash)

@@ -168,7 +168,7 @@ void PlayerState::Default::CalcEnemyDistance()
 		{
 			for (int i = 0; i < enemyCounut; i++)
 			{
-				DirectX::SimpleMath::Vector3 enemyPos= enemyManager->GetChild("enemy_" + std::to_string(i))->GetComponent<Transform>()->pos;
+				DirectX::SimpleMath::Vector3 enemyPos= enemyManager->GetGameObj(i)->GetComponent<Transform>()->pos;
 				DirectX::SimpleMath::Vector3 vec = playerPos - enemyPos;
 				float length = vec.Length();
 
