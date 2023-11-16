@@ -34,7 +34,6 @@ void SceneGame::Initialize()
 	objectManager = new GameObject("objectManager");
 
 	PlayerInitialize();
-	EnemyInitialize();
 
 	cameraController = new CameraController();
 	cameraController->GetComponent<Camera>()->SetTargetObj(player);
@@ -51,10 +50,11 @@ void SceneGame::Initialize()
 	objectManager->AddChild(lightObject);
 	objectManager->AddChild(stage);
 	objectManager->AddChild(player);
+
+	EnemyInitialize();
 	objectManager->AddChild(enemyManager);
 
 	spriteManager = new GameObject("spriteManager");
-
 	SpriteInitialze();
 
 
@@ -215,6 +215,7 @@ void SceneGame::EnemyInitialize()
 		// 腰の当たり判定用球の設定
 		enemy->AddComponent(new SphereCollider("waist"));
 		enemy->GetComponent<SphereCollider>("waist")->radius = 3.0f;
+		enemy->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 
 		// 攻撃用当たり判定球の設定
 		enemy->AddComponent(new SphereCollider("HandCollider"));
@@ -230,7 +231,7 @@ void SceneGame::EnemyInitialize()
 		enemy->GetComponent<Transform>()->pos = { 20 + (i * 20.0f), 0, 30 };
 
 		// HP設定
-		enemy->AddComponent(new Health(10));
+		enemy->AddComponent(new Health(5));
 
 		enemyManager->AddChild(enemy);
 
@@ -409,7 +410,7 @@ void SceneGame::FlashUiColor(SpriteRenderer* spr)
 void SceneGame::JudgeResult()
 {
 	bool isDeadP = player->GetComponent<Player>()->GetIsDead();
-	if (isDeadP /* || クエストがクリアされたら*/)
+	if (isDeadP || enemyManager->GetChildrenCount()<=0/*クエストがクリアされたら*/)
 	{
 		if (isDeadP)
 		{
