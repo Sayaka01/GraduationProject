@@ -42,6 +42,9 @@ public:
 	bool GetIsHitAttackToEnemy() { return isHitAttackToEnemy; }
 	void SetIsHitAttackToEnemy(bool b) { isHitAttackToEnemy = b; }
 
+	bool GetIsAttack() { return isAttack; }
+	void SetIsAttack(bool flag) { isAttack = flag; }
+
 private:
 
 	//-----< 関数 >-----//
@@ -64,4 +67,6 @@ private:
 	float stepDegree = 30.0f;
 
 	bool isHitAttackToEnemy = false;//敵用の攻撃が当たっているかのフラグ
+
+	bool isAttack = false;//プレイヤーが攻撃ステートかどうか
 };

@@ -595,6 +595,9 @@ void PunchRight::Enter()
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
+	//攻撃中フラグをtrueに
+	parent->GetComponent<Player>()->SetIsAttack(true);
 }
 void PunchRight::Update()
 {
@@ -615,6 +618,9 @@ void PunchRight::Exit()
 {
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
+
+	//攻撃中フラグをfalseに
+	parent->GetComponent<Player>()->SetIsAttack(false);
 }
 std::string PunchRight::GetNext()
 {
@@ -671,6 +677,10 @@ void PunchLeft::Enter()
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
+	//攻撃中フラグをtrueに
+	parent->GetComponent<Player>()->SetIsAttack(true);
+
 }
 void PunchLeft::Update()
 {
@@ -691,6 +701,9 @@ void PunchLeft::Exit()
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	//アニメーションスピードの調整
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+	
+	//攻撃中フラグをfalseに
+	parent->GetComponent<Player>()->SetIsAttack(false);
 }
 std::string PunchLeft::GetNext()
 {
@@ -1091,6 +1104,10 @@ void JumpAttack::Enter()
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
+	//攻撃中フラグをtrueに
+	parent->GetComponent<Player>()->SetIsAttack(true);
+
 }
 void JumpAttack::Update()
 {	
@@ -1126,6 +1143,8 @@ void JumpAttack::Exit()
 	//アニメーションの再生速度の変更
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 
+	//攻撃中フラグをfalseに
+	parent->GetComponent<Player>()->SetIsAttack(false);
 
 }
 std::string JumpAttack::GetNext()

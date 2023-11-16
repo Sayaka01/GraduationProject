@@ -142,7 +142,7 @@ void Player::OnCollisionEnter(Collider* collider)
 	if (collider->type == Collider::Type::Offense)
 	{
 		//ƒ_ƒ[ƒW‚ðŽó‚¯‚é
-		if (currentState->GetName() != "Damage" && currentState->GetName() != "Death")
+		if (currentState->GetName() != "Damage" && currentState->GetName() != "Death" && !isAttack)
 		{
 			//HP‚ðŒ¸‚ç‚·
 			parent->GetComponent<Health>()->SubtructHp(collider->GetParent()->GetComponent<Enemy>()->GetAttackPower());

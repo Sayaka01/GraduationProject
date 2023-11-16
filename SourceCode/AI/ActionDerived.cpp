@@ -475,6 +475,7 @@ ActionBase::State DamageAction::Run(float elapsedTime)
     float knockPower = 15.0f;
     // プレイヤーの位置から自分の位置のベクトルを計算
     DirectX::SimpleMath::Vector3 knockBackVec = owner->GetComponent<Transform>()->pos - playerObj->GetComponent<Transform>()->pos;
+    knockBackVec.y = 0.0f;//y軸の移動量を考慮しない
     knockBackVec.Normalize();//正規化
     // ノックバックで後ろへ跳ぶ
     owner->GetComponent<RigidBody>()->AddVelocity(knockBackVec * knockPower);
