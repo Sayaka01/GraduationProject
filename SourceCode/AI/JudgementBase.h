@@ -5,8 +5,8 @@
 class JudgmentBase
 {
 public:
-    JudgmentBase(Enemy* enemy) :owner(enemy) {}
+    JudgmentBase(GameObject* enemy) :owner(enemy) {}
     virtual bool Judgment() = 0;
 protected:
-    Enemy* owner;
+    GameObject* owner;
 };

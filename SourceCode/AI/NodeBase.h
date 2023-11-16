@@ -38,11 +38,11 @@ public:
     bool Judgment();
     NodeBase* SelectPriority(std::vector<NodeBase*>* list);
     NodeBase* SelectAbsolute(std::vector<NodeBase*>* list);
-    NodeBase* SelectRandom(Enemy* enemy, std::vector<NodeBase*>* list);
+    NodeBase* SelectRandom(GameObject* enemy, std::vector<NodeBase*>* list);
     NodeBase* SelectSequence(std::vector<NodeBase*>* list, BehaviorData* data);
     NodeBase* SearchNode(std::string serchName);
-    NodeBase* Inference(Enemy* enemy, BehaviorData* data);
-    NodeBase* InferenceAbsolute(Enemy* enemy, BehaviorData* data);
+    NodeBase* Inference(GameObject* enemy, BehaviorData* data);
+    NodeBase* InferenceAbsolute(GameObject* enemy, BehaviorData* data);
     ActionBase::State Run(float elapsedTime);
     void Enter();// s“®‚Ì‰Šúˆ—
     void Exit();// s“®‚ÌI—¹ˆ—

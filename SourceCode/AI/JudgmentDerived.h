@@ -7,7 +7,7 @@
 class BattleJudgment :public JudgmentBase
 {
 public:
-    BattleJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    BattleJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };
 
@@ -15,7 +15,7 @@ public:
 class EscapeJudgment :public JudgmentBase
 {
 public:
-    EscapeJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    EscapeJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };
 
@@ -23,7 +23,7 @@ public:
 class AttackJudgment :public JudgmentBase
 {
 public:
-    AttackJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    AttackJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };
 
@@ -31,7 +31,7 @@ public:
 class DamageJudgment :public JudgmentBase
 {
 public:
-    DamageJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    DamageJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };
 
@@ -39,7 +39,7 @@ public:
 class DeathJudgment :public JudgmentBase
 {
 public:
-    DeathJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    DeathJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };
 
@@ -47,6 +47,6 @@ public:
 class WanderJudgment :public JudgmentBase
 {
 public:
-    WanderJudgment(Enemy* enemy) :JudgmentBase(enemy) {}
+    WanderJudgment(GameObject* enemy) :JudgmentBase(enemy) {}
     bool Judgment()override;
 };

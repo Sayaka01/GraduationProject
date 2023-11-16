@@ -7,8 +7,7 @@ class NodeBase;
 class BehaviorData;
 class ActionBase;
 class JudgmentBase;
-class Enemy;
-
+#include "GameObject/GameObject.h"
 class BehaviorTree
 {
 public:
@@ -23,7 +22,7 @@ public:
     };
 
     BehaviorTree() :root(nullptr), owner(nullptr) {}
-    BehaviorTree(Enemy* enemy) :root(nullptr), owner(enemy) {}
+    BehaviorTree(GameObject* enemy) :root(nullptr), owner(enemy) {}
     ~BehaviorTree();
 
     //実行ノードを推論
@@ -43,5 +42,5 @@ private:
     void NodeAllClear(NodeBase* delNode);
 private:
     NodeBase* root{ nullptr };
-    Enemy* owner{nullptr};
+    GameObject* owner{nullptr};
 };

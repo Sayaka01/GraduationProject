@@ -4,7 +4,9 @@
 
 #include "SceneManager.h"
 
-#include "../GameObject/GameObject.h"
+#include "SceneLoading.h"
+#include "SceneTitle.h"
+
 #include "../GameObject/CameraController.h"
 
 #include "Component/Transform.h"
@@ -17,7 +19,6 @@
 #include "Component/SphereCollider.h"
 #include "Component/BoxCollider.h"
 #include "Component/CapsuleCollider.h"
-#include "Component/SpriteRenderer.h"
 #include "../Component/Health.h"
 
 #include "System/SystemManager.h"
@@ -76,8 +77,8 @@ void SceneGame::Update()
 	//ゲームが終わっている場合(GameClear || GameOver)
 	if (isFinishGame)
 	{
-		ResultUpdate();
 		spriteManager->Update();
+		ResultUpdate();
 		return;
 	}
 
@@ -293,14 +294,15 @@ void SceneGame::SpriteInitialze()
 
 	// "Title"の画像読み込み
 	SpriteLoad(&sprTitleText, "ToTitleText", (L"./Resources/Sprite/title_text.png"),
-		{ SCREEN_WIDTH * 0.5f,570 }, { 0.6f,0.6f });//pos,scale
+		{ SCREEN_WIDTH * 0.5f,650 }, { 0.6f,0.6f });//pos,scale
 	sprTitleText->GetComponent<SpriteRenderer>()->pivot = sprTitleText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
 	sprTitleText->GetComponent<SpriteRenderer>()->SetEnable(false);
 
 	// "Retry"の画像読み込み
 	SpriteLoad(&sprRetryText, "RetryText", (L"./Resources/Sprite/retry_text.png"),
-		{ SCREEN_WIDTH * 0.5f,650 }, { 0.6f,0.6f });//pos,scale
+		{ SCREEN_WIDTH * 0.5f,570 }, { 0.6f,0.6f });//pos,scale
 	sprRetryText->GetComponent<SpriteRenderer>()->pivot = sprRetryText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
+	sprRetryText->GetComponent<SpriteRenderer>()->color = { 0.9f,0.9f,0,1 };
 	sprRetryText->GetComponent<SpriteRenderer>()->SetEnable(false);
 
 }
@@ -335,8 +337,72 @@ void SceneGame::PlayerUIUpdate()
 void SceneGame::ResultUpdate()
 {
 	float elapsedTime = SystemManager::Instance().GetElapsedTime();
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
+	
+	if (gamePad.GetAxisLY() >= 0.3f)//↑
+	{
+		if (selectNextScene == NextSelectName::Title)
+		{
+			selectNextScene = NextSelectName::Game;
+			sprRetryText->GetComponent<SpriteRenderer>()->color = { 0.9f,0.9f,0,1 };
+			sprTitleText->GetComponent<SpriteRenderer>()->color = { 1,1,1,1 };
+		}
+	}
+	else if (gamePad.GetAxisLY() <= -0.3f)//↓
+	{
+		if (selectNextScene == NextSelectName::Game)
+		{
+			selectNextScene = NextSelectName::Title;
+			sprRetryText->GetComponent<SpriteRenderer>()->color = { 1,1,1,1 };
+			sprTitleText->GetComponent<SpriteRenderer>()->color = { 0.9f, 0.9f, 0, 1 };
+		}
+	}
 
+	if (selectNextScene == NextSelectName::Game)
+	{
+		FlashUiColor(sprRetryText->GetComponent<SpriteRenderer>());
+	}
+	else if (selectNextScene == NextSelectName::Title)
+	{
+		FlashUiColor(sprTitleText->GetComponent<SpriteRenderer>());
+	}
+
+	//Aボタンが押されていたらtrue
+	if (gamePad.GetButtonUp() & GamePad::BTN_X)
+	{
+		//retryを選択
+		if (selectNextScene ==NextSelectName::Game)
+		{
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+		}
+		//titleを選択
+		else if (selectNextScene == NextSelectName::Title)
+		{
+			SceneManager::Instance().ChangeScene(new SceneTitle);
+		}
+	}
+}
+
+//UIのカラーを点滅させる(暗→明)
+void SceneGame::FlashUiColor(SpriteRenderer* spr)
+{
+	switch (flashUIState)
+	{
+	case 0:
+		spr->color.x -= SystemManager::Instance().GetElapsedTime() * 0.7f;
+		spr->color.y -= SystemManager::Instance().GetElapsedTime() * 0.7f;
+		if (spr->color.x <= 0.55f)
+			flashUIState = 1;
+		break;
+	case 1:
+		spr->color.x += SystemManager::Instance().GetElapsedTime() * 0.7f;
+		spr->color.y += SystemManager::Instance().GetElapsedTime() * 0.7f;
+		if (spr->color.x >= 1.0)
+			flashUIState = 0;
+		break;
+	}
 }
 
 // ゲームが終了した場合の処理

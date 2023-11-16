@@ -15,24 +15,24 @@
 ActionBase::State PunchAction::Run(float elapsedTime)
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
-        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         vec.Normalize();
         //姿勢の回転
-        owner->RotateTransform(vec, elapsedTime);
+        owner->GetComponent<Enemy>()->RotateTransform(vec, elapsedTime);
     }
 
 
     // 骨の位置の取得
-    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetBonePositionFromName
-    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()));
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("leftHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()));
     // sphereColliderの位置を設定
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
+    owner->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
     // アニメーションが再生し終わったら打撃行動を終了
-    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
+    if (owner->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -66,22 +66,23 @@ ActionBase::State PunchAction::Run(float elapsedTime)
 // 打撃行動の初期処理
 void PunchAction::Enter()
 {
+    Enemy* enemy = owner->GetComponent<Enemy>();
     // 攻撃力の設定
-    owner->SetAttackPower(owner->GetPunchAttackPower());
+    enemy->SetAttackPower(enemy->GetPunchAttackPower());
 
     // アニメーションの設定
-    owner->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
+    enemy->ChangeAnimation(Enemy::AnimationName::LeftSlashAttack,false);
 
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
-    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = true;
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    owner->GetComponent<ModelRenderer>()->GetBoneData
+    ("leftHand" + std::to_string(enemy->GetOwnIndex()))->isCalc = true;
+    owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
 
     // Colliderのタイプを"攻め判定"に設定
-    owner->GetParent()->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
+    owner->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
 
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Punch);
+    enemy->SetStateName(Enemy::StateName::Punch);
 
 }
 
@@ -89,38 +90,38 @@ void PunchAction::Enter()
 void PunchAction::Exit()
 {
     // 攻撃力の設定
-    owner->SetAttackPower(0);
+    owner->GetComponent<Enemy>()->SetAttackPower(0);
 
     // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
-    ("leftHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+    owner->GetComponent<ModelRenderer>()->GetBoneData
+    ("leftHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
+    owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
 
     // Colliderのタイプを"守り判定"に設定
-    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
+    owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 重撃行動のアクション
 ActionBase::State SkillAction::Run(float elapsedTime)
 {
     // 骨の位置の取得
-    DirectX::SimpleMath::Vector3 bonePos = owner->GetParent()->GetComponent<ModelRenderer>()->GetBonePositionFromName
-    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()));
+    DirectX::SimpleMath::Vector3 bonePos = owner->GetComponent<ModelRenderer>()->GetBonePositionFromName
+    ("rightHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()));
     // sphereColliderの位置を設定
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
+    owner->GetComponent<SphereCollider>("HandCollider")->center = bonePos;
 
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
-        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        DirectX::SimpleMath::Vector3 vec = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         vec.Normalize();
         //姿勢の回転
-        owner->RotateTransform(vec, elapsedTime);
+        owner->GetComponent<Enemy>()->RotateTransform(vec, elapsedTime);
     }
 
     // アニメーションが再生し終わったら重撃行動を終了
-    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
+    if (owner->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -161,20 +162,21 @@ ActionBase::State SkillAction::Run(float elapsedTime)
 // 重撃行動の初期処理
 void SkillAction::Enter()
 {
+    Enemy* enemy=owner->GetComponent<Enemy>();
     // 攻撃力の設定
-    owner->SetAttackPower(owner->GetSlashAttackPower());
+    enemy->SetAttackPower(enemy->GetSlashAttackPower());
 
-    owner->ChangeAnimation(Enemy::AnimationName::RightClawAttack, false);
+    enemy->ChangeAnimation(Enemy::AnimationName::RightClawAttack, false);
     
     // 攻撃する手の骨の位置を計算し当たり判定をONにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
-    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = true;
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
+    owner->GetComponent<ModelRenderer>()->GetBoneData
+    ("rightHand" + std::to_string(enemy->GetOwnIndex()))->isCalc = true;
+    owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(true);
     // Colliderのタイプを"攻め判定"に設定
-    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
+    owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
 
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Slash);
+    enemy->SetStateName(Enemy::StateName::Slash);
 
 }
 
@@ -182,27 +184,28 @@ void SkillAction::Enter()
 void SkillAction::Exit()
 {
     // 攻撃力の設定
-    owner->SetAttackPower(0);
+    owner->GetComponent<Enemy>()->SetAttackPower(0);
 
     // 攻撃する手の骨の位置を計算と当たり判定をOFFにする
-    owner->GetParent()->GetComponent<ModelRenderer>()->GetBoneData
-    ("rightHand" + std::to_string(owner->GetParent()->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
-    owner->GetParent()->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
+    owner->GetComponent<ModelRenderer>()->GetBoneData
+    ("rightHand" + std::to_string(owner->GetComponent<Enemy>()->GetOwnIndex()))->isCalc = false;
+    owner->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
     // Colliderのタイプを"守り判定"に設定
-    owner->GetParent()->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
+    owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
 }
 
 // 休憩行動のアクション
 ActionBase::State BreakAction::Run(float elapsedTime)
 {
-    float runTimer = owner->GetRunTimer();
+    Enemy* enemy = owner->GetComponent<Enemy>();
+    float runTimer = enemy->GetRunTimer();
 
     // タイマー更新
     runTimer -= elapsedTime;
-    owner->SetRunTimer(runTimer);
+    enemy->SetRunTimer(runTimer);
 
     // 実行時間が経過したらアクション終了
-    if (runTimer <= 0.0f && owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
+    if (runTimer <= 0.0f && owner->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -212,13 +215,14 @@ ActionBase::State BreakAction::Run(float elapsedTime)
 // 休憩行動の初期処理
 void BreakAction::Enter()
 {
+    Enemy* enemy= owner->GetComponent<Enemy>();
     // 待機アニメーションを再生
-    owner->ChangeAnimation(Enemy::AnimationName::Idle1, true);
+    enemy->ChangeAnimation(Enemy::AnimationName::Idle1, true);
     
     // 実行時間をランダム(1~2秒)で決める
-    owner->SetRunTimer(Random::Range(0.5f,1.0f));
+    enemy->SetRunTimer(Random::Range(0.1f,0.3f));
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Break);
+    enemy->SetStateName(Enemy::StateName::Break);
 
 }
 
@@ -230,13 +234,14 @@ void BreakAction::Exit()
 // 徘徊行動のアクション
 ActionBase::State WanderAction::Run(float elapsedTime)
 {
+    Enemy* enemy= owner->GetComponent<Enemy>();
     // 目的位置へ移動
-    owner->MoveToTargetPosition(elapsedTime);
+    enemy->MoveToTargetPosition(elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(),elapsedTime);
+    enemy->RotateTransform(owner->GetComponent<RigidBody>()->GetVelocity(),elapsedTime);
 
     // 目的位置にある程度近づいたらアクション終了
-    if(owner->GetLengthToTargetPosition()<1.0f)
+    if(enemy->GetLengthToTargetPosition()<1.0f)
     {
         return ActionBase::State::Complete;
     }
@@ -246,13 +251,14 @@ ActionBase::State WanderAction::Run(float elapsedTime)
 // 徘徊行動の初期処理
 void WanderAction::Enter()
 {
+    Enemy* enemy= owner->GetComponent<Enemy>();
     // 目的位置をランダムに設定
-    owner->SetTargetPositionRandom(owner->GetWanderRange());
+    enemy->SetTargetPositionRandom(enemy->GetWanderRange());
     // 前進アニメーションを再生
-    owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+    enemy->ChangeAnimation(Enemy::AnimationName::DashForward, true);
 
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Wander);
+    enemy->SetStateName(Enemy::StateName::Wander);
 
 }
 
@@ -264,10 +270,11 @@ void WanderAction::Exit()
 // 待機行動のアクション
 ActionBase::State IdleAction::Run(float elapsedTime)
 {
+    Enemy* enemy = owner->GetComponent<Enemy>();
     //タイマー更新
-    float runTimer = owner->GetRunTimer();
+    float runTimer = enemy->GetRunTimer();
     runTimer -= elapsedTime;
-    owner->SetRunTimer(runTimer);
+    enemy->SetRunTimer(runTimer);
 
     // 実行時間が過ぎたら終了
     if (runTimer <= 0.0f)
@@ -280,41 +287,44 @@ ActionBase::State IdleAction::Run(float elapsedTime)
 // 待機行動の初期処理
 void IdleAction::Enter()
 {
-    owner->ChangeAnimation(Enemy::AnimationName::Idle2, true);
+    Enemy* enemy = owner->GetComponent<Enemy>();
+    enemy->ChangeAnimation(Enemy::AnimationName::Idle2, true);
     // 実行時間をランダム(3~5秒)で決める
-    owner->SetRunTimer(Random::Range(3.0f, 5.0f));
+    enemy->SetRunTimer(Random::Range(1.0f, 2.0f));
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Idle);
+    enemy->SetStateName(Enemy::StateName::Idle);
 
 }
 
 // 待機行動の終了処理
 void IdleAction::Exit()
 {
-    owner->SetTargetPositionRandom(owner->GetWanderRange());
+    Enemy* enemy = owner->GetComponent<Enemy>();
+    enemy->SetTargetPositionRandom(enemy->GetWanderRange());
 }
 
 // 追跡攻撃のアクション
 ActionBase::State PursuitAction::Run(float elapsedTime)
 {
+    Enemy* enemy = owner->GetComponent<Enemy>();
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーの位置をターゲット位置に設定
-        owner->SetTargetPosition(playerObj->GetComponent<Transform>()->pos);
+        enemy->SetTargetPosition(playerObj->GetComponent<Transform>()->pos);
     }
 
     //目的位置まで移動
-    owner->MoveToTargetPosition(elapsedTime);
+    enemy->MoveToTargetPosition(elapsedTime);
 
     //姿勢の回転
-    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
+    enemy->RotateTransform(owner->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
-    float length = owner->GetLengthToTargetPosition();
+    float length = enemy->GetLengthToTargetPosition();
     // プレイヤーとの距離が攻撃範囲より小さくなったら終了
-    if (length < owner->GetAttackRange()//距離が攻撃範囲より近づくとき
-        || length > owner->GetPursuitRange())//距離が追跡範囲をでたとき
+    if (length < enemy->GetAttackRange()//距離が攻撃範囲より近づくとき
+        || length > enemy->GetPursuitRange())//距離が追跡範囲をでたとき
     {
         return ActionBase::State::Complete;
     }
@@ -324,9 +334,11 @@ ActionBase::State PursuitAction::Run(float elapsedTime)
 // 追跡行動の初期処理
 void PursuitAction::Enter()
 {
-    owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+    Enemy* enemy = owner->GetComponent<Enemy>();
+
+    enemy->ChangeAnimation(Enemy::AnimationName::DashForward, true);
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Pursuit);
+    enemy->SetStateName(Enemy::StateName::Pursuit);
 
 }
 
@@ -338,16 +350,17 @@ void PursuitAction::Exit()
 // 逃走行動のアクション
 ActionBase::State EscapeAction::Run(float elapsedTime)
 {    
+    Enemy* enemy = owner->GetComponent<Enemy>();
     // 目的位置とは逆方向へ進む
-    owner->MoveToTargetPosition(-elapsedTime);
+    enemy->MoveToTargetPosition(-elapsedTime);
     //姿勢の回転
-    owner->RotateTransform(owner->GetParent()->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
+    enemy->RotateTransform(owner->GetComponent<RigidBody>()->GetVelocity(), elapsedTime);
 
-    float runTimer = owner->GetRunTimer();
+    float runTimer = enemy->GetRunTimer();
     runTimer -= elapsedTime;
-    owner->SetRunTimer(runTimer);
+    enemy->SetRunTimer(runTimer);
 
-    if (runTimer < 0 || owner->GetLengthToTargetPosition()>5.0f)
+    if (runTimer < 0 || enemy->GetLengthToTargetPosition()>5.0f)
     {
         return ActionBase::State::Complete;
     }
@@ -358,10 +371,11 @@ ActionBase::State EscapeAction::Run(float elapsedTime)
 // 逃走行動の初期処理
 void EscapeAction::Enter()
 {
-    owner->ChangeAnimation(Enemy::AnimationName::DashForward, true);
-    //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Escape);
+    Enemy* enemy = owner->GetComponent<Enemy>();
 
+    enemy->ChangeAnimation(Enemy::AnimationName::DashForward, true);
+    //ステートの名前を設定
+    enemy->SetStateName(Enemy::StateName::Escape);
 }
 
 // 逃走行動の終了処理
@@ -372,9 +386,10 @@ void EscapeAction::Exit()
 // 死亡行動のアクション
 ActionBase::State DieAction::Run(float elapsedTime)
 {
-    float runTimer = owner->GetRunTimer();
+    Enemy* enemy = owner->GetComponent<Enemy>();
+    float runTimer = enemy->GetRunTimer();
     runTimer -= elapsedTime;
-    owner->SetRunTimer(runTimer);
+    enemy->SetRunTimer(runTimer);
     //行動時間とアニメーションが終了している場合行動終了
     if (runTimer <= 0.0f /*&& owner->GetParent()->GetComponent<Animation>().IsPlayAnimation()*/)
     {
@@ -386,10 +401,11 @@ ActionBase::State DieAction::Run(float elapsedTime)
 // 死亡行動の初期処理
 void DieAction::Enter()
 {
-    owner->SetRunTimer(2.0f);
-    owner->ChangeAnimation(Enemy::AnimationName::Die, false);
+    Enemy* enemy= owner->GetComponent<Enemy>();
+    enemy->SetRunTimer(2.0f);
+    enemy->ChangeAnimation(Enemy::AnimationName::Die, false);
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Die);
+    enemy->SetStateName(Enemy::StateName::Die);
 
 }
 
@@ -397,18 +413,19 @@ void DieAction::Enter()
 void DieAction::Exit()
 {
     // activeフラグを消す
-    owner->GetParent()->SetActive(false);
+    owner->SetActive(false);
 }
 
 // 被弾行動のアクション
 ActionBase::State DamageAction::Run(float elapsedTime)
 {
-    float runTimer = owner->GetRunTimer();
+    Enemy* enemy = owner->GetComponent<Enemy>();
+    float runTimer = enemy->GetRunTimer();
     runTimer -= elapsedTime;
-    owner->SetRunTimer(runTimer);
+    enemy->SetRunTimer(runTimer);
 
     // アニメーションが再生し終わったら被弾行動を終了
-    if (owner->GetParent()->GetComponent<ModelRenderer>()->IsFinishAnimation())
+    if (owner->GetComponent<ModelRenderer>()->IsFinishAnimation())
     {
         return ActionBase::State::Complete;
     }
@@ -417,7 +434,7 @@ ActionBase::State DamageAction::Run(float elapsedTime)
     if (runTimer <= 0) return ActionBase::State::Running;
        
     // プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
 
     //プレイヤーが見つからない場合ノックバックを行わない
     if (playerObj == nullptr) return ActionBase::State::Running;
@@ -425,10 +442,10 @@ ActionBase::State DamageAction::Run(float elapsedTime)
     // ノックバックの強さ
     float knockPower = 15.0f;
     // プレイヤーの位置から自分の位置のベクトルを計算
-    DirectX::SimpleMath::Vector3 knockBackVec = owner->GetParent()->GetComponent<Transform>()->pos - playerObj->GetComponent<Transform>()->pos;
+    DirectX::SimpleMath::Vector3 knockBackVec = owner->GetComponent<Transform>()->pos - playerObj->GetComponent<Transform>()->pos;
     knockBackVec.Normalize();//正規化
     // ノックバックで後ろへ跳ぶ
-    owner->GetParent()->GetComponent<RigidBody>()->AddVelocity(knockBackVec * knockPower);
+    owner->GetComponent<RigidBody>()->AddVelocity(knockBackVec * knockPower);
 
     return ActionBase::State::Running;
 }
@@ -436,21 +453,22 @@ ActionBase::State DamageAction::Run(float elapsedTime)
 // 被弾行動の初期処理
 void DamageAction::Enter()
 {
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         // プレイヤーの現在の攻撃力を取得
         float ap = playerObj->GetComponent<Player>()->GetAttackPower();
         // HP処理
-        owner->GetParent()->GetComponent<Health>()->SubtructHp(ap);
+        owner->GetComponent<Health>()->SubtructHp(ap);
     }
 
+    Enemy* enemy = owner->GetComponent<Enemy>();
     //ステートの名前を設定
-    owner->GetParent()->GetComponent<Enemy>()->SetStateName(Enemy::StateName::Damage);
+    enemy->SetStateName(Enemy::StateName::Damage);
 
-    owner->SetRunTimer(0.3f);
+    enemy->SetRunTimer(0.3f);
 
-    owner->ChangeAnimation(Enemy::AnimationName::TakeDamege, false);
+    enemy->ChangeAnimation(Enemy::AnimationName::TakeDamege, false);
 }
 
 // 被弾行動の終了処理

@@ -132,29 +132,29 @@ void Enemy::SetBehaviorTree()
 {
 	//ƒrƒwƒCƒrƒAƒcƒŠ[Ý’è
 	behaviorData = new BehaviorData();
-	aiTree = new BehaviorTree(this);
+	aiTree = new BehaviorTree(this->parent);
 
 	aiTree->AddNode("", "Root", 0, BehaviorTree::Rule::Priority, nullptr, nullptr);
 
 	//aiTree->AddNode("Root", "Escape", 1, BehaviorTree::Rule::Sequence, new EscapeJudgment(this), nullptr);
-	aiTree->AddNode("Root", "Death", 1, BehaviorTree::Rule::Absolute, new DamageJudgment(this), nullptr);
-	aiTree->AddNode("Root", "Battle", 2, BehaviorTree::Rule::Priority, new BattleJudgment(this), nullptr);
+	aiTree->AddNode("Root", "Death", 1, BehaviorTree::Rule::Absolute, new DamageJudgment(this->parent), nullptr);
+	aiTree->AddNode("Root", "Battle", 2, BehaviorTree::Rule::Priority, new BattleJudgment(this->parent), nullptr);
 	aiTree->AddNode("Root", "Scout", 3, BehaviorTree::Rule::Priority, nullptr, nullptr);
 
-	aiTree->AddNode("Death", "Die", 1, BehaviorTree::Rule::Non, new DeathJudgment(this), new DieAction(this));
-	aiTree->AddNode("Death", "Damage", 2, BehaviorTree::Rule::Non, nullptr, new DamageAction(this));
+	aiTree->AddNode("Death", "Die", 1, BehaviorTree::Rule::Non, new DeathJudgment(this->parent), new DieAction(this->parent));
+	aiTree->AddNode("Death", "Damage", 2, BehaviorTree::Rule::Non, nullptr, new DamageAction(this->parent));
 
-	aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::Rule::Random, new AttackJudgment(this), nullptr);
+	aiTree->AddNode("Battle", "Attack", 1, BehaviorTree::Rule::Random, new AttackJudgment(this->parent), nullptr);
 	aiTree->AddNode("Battle", "Discovery", 2, BehaviorTree::Rule::Random, nullptr, nullptr);
 
-	aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::Rule::Non, new WanderJudgment(this), new WanderAction(this));
-	aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::Rule::Non, nullptr, new IdleAction(this));
+	aiTree->AddNode("Scout", "Wander", 1, BehaviorTree::Rule::Non, new WanderJudgment(this->parent), new WanderAction(this->parent));
+	aiTree->AddNode("Scout", "Idle", 2, BehaviorTree::Rule::Non, nullptr, new IdleAction(this->parent));
 
-	aiTree->AddNode("Attack", "Punch", 1, BehaviorTree::Rule::Non, nullptr, new PunchAction(this));
-	aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::Rule::Non, nullptr, new SkillAction(this));
-	aiTree->AddNode("Attack", "Break", 3, BehaviorTree::Rule::Non, nullptr, new BreakAction(this));
+	aiTree->AddNode("Attack", "Punch", 1, BehaviorTree::Rule::Non, nullptr, new PunchAction(this->parent));
+	aiTree->AddNode("Attack", "Skill", 2, BehaviorTree::Rule::Non, nullptr, new SkillAction(this->parent));
+	aiTree->AddNode("Attack", "Break", 3, BehaviorTree::Rule::Non, nullptr, new BreakAction(this->parent));
 
-	aiTree->AddNode("Discovery", "Pursuit", 1, BehaviorTree::Rule::Non, nullptr, new PursuitAction(this));
+	aiTree->AddNode("Discovery", "Pursuit", 1, BehaviorTree::Rule::Non, nullptr, new PursuitAction(this->parent));
 }
 
 
@@ -284,8 +284,13 @@ void Enemy::RotateTransform(DirectX::SimpleMath::Vector3 v,float elapsedTime)
 
 void Enemy::OnCollisionEnter(Collider* collider)
 {
-	SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
-	parent->GetComponent<Transform>()->pos = spCollider->center;
+	// “G“¯Žm‚Å“–‚½‚Á‚½ê‡
+	if (collider->GetParent()->GetTag() == Tag::Enemy)
+	{
+		SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
+		parent->GetComponent<Transform>()->pos.x = spCollider->center.x;
+		parent->GetComponent<Transform>()->pos.z = spCollider->center.z;
+	}
 
 	if (collider->GetParent()->GetTag() != Tag::Player)return;
 

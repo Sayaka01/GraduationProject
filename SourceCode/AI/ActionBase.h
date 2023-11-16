@@ -5,7 +5,7 @@
 class ActionBase
 {
 public:
-    ActionBase(Enemy* enemy) :owner(enemy) {}
+    ActionBase(GameObject* enemy) :owner(enemy) {}
     ~ActionBase() { }
     //é¿çsèÓïÒ
     enum class State
@@ -25,7 +25,7 @@ public:
     //void SetStep(int s) { step = s; }
 
 protected:
-    Enemy* owner{ nullptr };
+    GameObject* owner{ nullptr };
     //int step = 0;
     //Enemy::BehaviorState state = Enemy::BehaviorState::NONE;
 };

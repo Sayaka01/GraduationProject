@@ -5,18 +5,30 @@
 bool BattleJudgment::Judgment()
 {    
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーのHPがなければ攻撃しない
         if (!playerObj->GetComponent<Health>()->GetIsAlive())
             return false;
+
+        // 他の敵が攻撃中なら攻撃しない
+        GameObject* enemyManager = owner->GetParent();
+        for (int i=0;i< enemyManager->GetChildrenCount();i++)
+        {
+            Enemy* otherEnemy = enemyManager->GetChild("enemy_" + std::to_string(i))->GetComponent<Enemy>();
+            if (otherEnemy->GetStateName() == Enemy::StateName::Punch)
+                return false;
+            else if (otherEnemy->GetStateName() == Enemy::StateName::Slash)
+                return false;
+        }
+
         //プレイヤーとの距離
-        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         float length = vector.Length();
 
         //プレイヤーと敵の距離が一定以下になったら攻撃可能
-        if (length < owner->GetPursuitRange())//攻撃範囲に入っている場合
+        if (length < owner->GetComponent<Enemy>()->GetPursuitRange())//攻撃範囲に入っている場合
         {
             return true;
         }
@@ -38,7 +50,7 @@ bool EscapeJudgment::Judgment()
 bool AttackJudgment::Judgment()
 {
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーのHPがなければ攻撃しない
@@ -46,11 +58,11 @@ bool AttackJudgment::Judgment()
             return false;
 
         //プレイヤーとの距離
-        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         float length = vector.Length();
 
         //プレイヤーと敵の距離が一定以下になったら攻撃可能
-        if (length < owner->GetAttackRange())
+        if (length < owner->GetComponent<Enemy>()->GetAttackRange())
         {
             return true;
         }
@@ -60,16 +72,17 @@ bool AttackJudgment::Judgment()
 
 bool WanderJudgment::Judgment()
 {
+
     //プレイヤーオブジェクトを取得
-    GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
         //プレイヤーとの距離
-        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetParent()->GetComponent<Transform>()->pos;
+        DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;
         float length = vector.Length();
 
         //プレイヤーと敵の距離が一定以上になったら徘徊
-        if (length > owner->GetPursuitRange() && owner->GetLengthToTargetPosition() >= 1.5f)
+        if (length > owner->GetComponent<Enemy>()->GetPursuitRange() && owner->GetComponent<Enemy>()->GetLengthToTargetPosition() >= 1.5f)
         {
             return true;
         }
@@ -86,7 +99,13 @@ bool DamageJudgment::Judgment()
     //}
     //ダメージ通知を受けていた場合はDamageノードへ
     //if (owner->GetIsDamaged())
-    if(owner->GetParent()->GetComponent<Enemy>()->GetHitFlag())
+     //プレイヤーオブジェクトを取得
+    //GameObject* playerObj = owner->GetParent()->GetParent()->GetParent()->GetChild("player");
+    //if (playerObj != nullptr)
+    //{
+    //    playerObj->
+    //}
+    if (owner->GetComponent<Enemy>()->GetHitFlag())
     {
         //owner->SetIsDamaged(false);
         return true;
@@ -98,7 +117,7 @@ bool DeathJudgment::Judgment()
 {
     //HPが０以下になったらDeathノードへ
     //if (owner->GetHp() <= 0)
-    if(owner->GetParent()->GetComponent<Health>()->GetHpRate()<=0.0f)
+    if(owner->GetComponent<Health>()->GetHpRate()<=0.0f)
     {
         return true;
     }

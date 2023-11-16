@@ -7,7 +7,7 @@
 class PunchAction :public ActionBase
 {
 public:
-    PunchAction(Enemy* enemy) :ActionBase(enemy) {}
+    PunchAction(GameObject* enemy) :ActionBase(enemy) {}
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -17,7 +17,7 @@ public:
 class SkillAction :public ActionBase
 {
 public:
-    SkillAction(Enemy* enemy) :ActionBase(enemy) {}
+    SkillAction(GameObject* enemy) :ActionBase(enemy) {}
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -27,7 +27,7 @@ public:
 class BreakAction :public ActionBase
 {
 public:
-    BreakAction(Enemy* enemy) :ActionBase(enemy) { }
+    BreakAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -37,7 +37,7 @@ public:
 class WanderAction :public ActionBase
 {
 public:
-    WanderAction(Enemy* enemy) :ActionBase(enemy) { }
+    WanderAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -47,7 +47,7 @@ public:
 class IdleAction :public ActionBase
 {
 public:
-    IdleAction(Enemy* enemy) :ActionBase(enemy) { }
+    IdleAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -57,7 +57,7 @@ public:
 class PursuitAction :public ActionBase
 {
 public:
-    PursuitAction(Enemy* enemy) :ActionBase(enemy) { }
+    PursuitAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -77,7 +77,7 @@ public:
 class EscapeAction :public ActionBase
 {
 public:
-    EscapeAction(Enemy* enemy) :ActionBase(enemy) { }
+    EscapeAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -87,7 +87,7 @@ public:
 class DieAction :public ActionBase
 {
 public:
-    DieAction(Enemy* enemy) :ActionBase(enemy) { }
+    DieAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理
@@ -97,7 +97,7 @@ public:
 class DamageAction :public ActionBase
 {
 public:
-    DamageAction(Enemy* enemy) :ActionBase(enemy) { }
+    DamageAction(GameObject* enemy) :ActionBase(enemy) { }
     ActionBase::State Run(float elapsedTime)override;    // 行動中
     void Enter()override;   // 行動の初期処理
     void Exit()override;    // 行動の終了処理

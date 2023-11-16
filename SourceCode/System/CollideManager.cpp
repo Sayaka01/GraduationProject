@@ -62,7 +62,7 @@ void CollideManager::Collide()
 		{
 			if (!colliderA->GetEnable() || !colliderB->GetEnable())continue;
 			if (!colliderA->useHitEvent || !colliderB->useHitEvent)continue;
-			if (colliderA->GetParent()->GetTag() == colliderB->GetParent()->GetTag())continue;
+			if (colliderA->GetParent()->GetName() == colliderB->GetParent()->GetName())continue;
 
 			if (Physics::IntersectSphereVsSphere(colliderA, colliderB, &result))
 			{

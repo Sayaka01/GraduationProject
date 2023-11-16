@@ -3,6 +3,7 @@
 #include "Scene.h"
 
 #include "GameObject/GameObject.h"
+#include "Component/SpriteRenderer.h"
 #include <SimpleMath.h>
 
 class CameraController;
@@ -34,6 +35,9 @@ private:
 
 	// ゲーム終了時の更新処理
 	void ResultUpdate();
+
+	//UIのカラーを点滅させる(暗→明)
+	void FlashUiColor(SpriteRenderer* spr);
 	
 	// ゲームが終了した場合の処理
 	void JudgeResult();
@@ -80,4 +84,13 @@ private:
 
 	//bool isQuestClear{ false };//クエストの条件をクリアしたかどうか
 	bool isFinishGame{ false };//ゲームが終わったかどうか
+
+	enum class NextSelectName
+	{
+		Game,
+		Title
+	};
+
+	NextSelectName selectNextScene = NextSelectName::Game;
+	int flashUIState = 0;
 };

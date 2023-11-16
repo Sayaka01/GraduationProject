@@ -106,7 +106,7 @@ NodeBase* NodeBase::SelectAbsolute(std::vector<NodeBase*>* list)
     return selectNode;
 }
 
-NodeBase* NodeBase::SelectRandom(Enemy* enemy, std::vector<NodeBase*>* list)
+NodeBase* NodeBase::SelectRandom(GameObject* enemy, std::vector<NodeBase*>* list)
 {
     //«s“®‚É‹K‘¥‚ğ‚½‚¹‚Ä‚İ‚½
 #if 0
@@ -210,7 +210,7 @@ NodeBase* NodeBase::SearchNode(std::string serchName)
     return nullptr;
 }
 
-NodeBase* NodeBase::Inference(Enemy* enemy, BehaviorData* data)
+NodeBase* NodeBase::Inference(GameObject* enemy, BehaviorData* data)
 {
     std::vector<NodeBase*> list;
     NodeBase* result = nullptr;
@@ -263,7 +263,7 @@ NodeBase* NodeBase::Inference(Enemy* enemy, BehaviorData* data)
     return result;
 }
 
-NodeBase* NodeBase::InferenceAbsolute(Enemy* enemy, BehaviorData* data)
+NodeBase* NodeBase::InferenceAbsolute(GameObject* enemy, BehaviorData* data)
 {
     std::vector<NodeBase*> list;
     NodeBase* result = nullptr;
