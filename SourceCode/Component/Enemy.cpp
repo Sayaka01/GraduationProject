@@ -307,6 +307,10 @@ void Enemy::OnCollisionEnter(Collider* collider)
 	{
 		hitFlag = true;
 		collider->GetParent()->GetComponent<Player>()->SetIsHitAttackToEnemy(true);
+	
+		SphereCollider* spCollider = parent->GetComponent<SphereCollider>("waist");
+		parent->GetComponent<Transform>()->pos.x = spCollider->center.x;
+		parent->GetComponent<Transform>()->pos.z = spCollider->center.z;
 	}
 	//SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
 	//parent->GetComponent<Transform>()->pos = spCollider->center;

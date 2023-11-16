@@ -132,16 +132,18 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 1;
+	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 2;
 
 	player->AddComponent(new SphereCollider("RightHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightHandSphere")->type = Collider::Type::Offense;
+	player->GetComponent<SphereCollider>("RightHandSphere")->priority = 0;
 	player->AddComponent(new SphereCollider("LeftHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("LeftHandSphere")->type = Collider::Type::Offense;
+	player->GetComponent<SphereCollider>("LeftHandSphere")->priority = 0;
 
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;
@@ -223,6 +225,7 @@ void SceneGame::EnemyInitialize()
 		enemy->AddComponent(new SphereCollider("HandCollider"));
 		enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
 		enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
+		enemy->GetComponent<SphereCollider>("HandCollider")->priority = 1;
 		// ˆÚ“®Ý’è
 		enemy->AddComponent(new RigidBody());
 
