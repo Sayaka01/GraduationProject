@@ -34,6 +34,7 @@ public:
 	float GetWireSpeed() { return wireSpeed; }
 
 	float GetAttackPower() { return currentState->GetAttackPower(); }
+	float GetAttackInterval() { return currentState->GetAttackInterval(); }
 
 	void SetIsDead(bool b) { isDead = b; }
 	bool GetIsDead() { return isDead; }

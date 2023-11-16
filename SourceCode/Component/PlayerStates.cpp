@@ -1066,17 +1066,19 @@ void JumpAttack::Enter()
 			
 			//d—Í‚ğ–³‹‚·‚é
 			parent->GetComponent<RigidBody>()->SetUseGravity(false);
+			
+			//2’iˆÈ~‚ÌUŒ‚‚Ì“ü—Í‚Ìæ“¾‚ğŠJn
+			acceptAttackButton = true;
+		
+			//¡‚©‚çUŒ‚‚·‚é‚Ì‚Å‰Šú‰»
+			attackInterval = 0.0f;
 		}
 	}
 
-	//2’iˆÈ~‚ÌUŒ‚‚Ì“ü—Í‚Ìæ“¾‚ğŠJn
-	acceptAttackButton = true;
 
 	//UŒ‚’†‘‚¦‘±‚¯‚é
 	attackTimer = 0.0f;
 
-	//¡‚©‚çUŒ‚‚·‚é‚Ì‚Å‰Šú‰»
-	attackInterval = 0.0f;
 
 }
 void JumpAttack::Update()
