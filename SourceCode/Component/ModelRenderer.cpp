@@ -252,6 +252,27 @@ void ModelRenderer::StopMotionVelocity(const std::string callName, std::string c
 
 }
 
+void ModelRenderer::StopMotionXZVelocity(const std::string callName, std::string currentAnim)
+{
+	if (nodeIndex.size() <= 0)
+		return;
+
+	Motion motion = nodeIndex.at(callName);
+
+	//現在のキーフレームを取得
+	Animation::Keyframe::Node* node = nullptr;
+	if (currentAnim == "")
+		node = &(modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex).nodes.at(motion.index/*要素がなければ例外スロー*/));
+
+	//位置を基準の位置へ設定
+	node->translation.x = motion.defaultPostion.x;
+	node->translation.z = motion.defaultPostion.z;
+
+	modelData->UpdateGlobalTransform(modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex));
+
+	return;
+}
+
 //名前と一致するnodeの番号を保存
 void ModelRenderer::StoreNodeIndex(std::string callName,std::string BaseAnimName,std::string rigName)
 {

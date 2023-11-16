@@ -126,6 +126,8 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StylishFlip.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/HookPunch.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");
 
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 

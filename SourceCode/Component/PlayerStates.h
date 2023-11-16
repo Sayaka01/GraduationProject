@@ -23,6 +23,8 @@ namespace PlayerState
 		Punching,//右
 		StylishFlip,//ワイヤーぶら下がり
 		HookPunch,//空中攻撃
+		Avoid,//回避
+		AvoidJump,//空中回避
 	};
 	
 	//基底クラス
@@ -88,6 +90,8 @@ namespace PlayerState
 		bool JudgeAimWireState();
 		//ワイヤーでの弧を書いた移動ステートの遷移条件
 		bool JudgeSwingWireState();
+		//回避ステートの遷移条件
+		bool JudgeAvoidState();
 
 
 		std::string name = "";//ステートの名前
@@ -109,6 +113,8 @@ namespace PlayerState
 		float attackPower = 0.0f;
 
 		static DirectX::XMFLOAT3 parameter;//凡庸パラメータ
+
+		static bool isAvoid;//回避したかどうか
 	};
 
 	//待機
@@ -220,7 +226,7 @@ namespace PlayerState
 
 	private:
 		float attackRangeMin = 8.0f;
-		float attackRangeMax = 20.0f;
+		float attackRangeMax = 25.0f;
 	};
 
 	//パンチ（左）
@@ -241,7 +247,7 @@ namespace PlayerState
 		std::string GetNext()override;
 	private:
 		float attackRangeMin = 8.0f;
-		float attackRangeMax = 15.0f;
+		float attackRangeMax = 25.0f;
 	};
 
 	//ダメージ
@@ -369,6 +375,52 @@ namespace PlayerState
 		float attackRangeMax = 30.0f;
 		float maxMoveTime = 25.0f;//ここまでに移動を終える
 		float attackTimer = 0.0f;
+	};
+
+	//回避
+	class Avoid : public Default
+	{
+	public:
+		Avoid();
+		Avoid(GameObject* parent);
+		~Avoid() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		float avoidSpeed = 50.0f;
+		DirectX::XMFLOAT3 avoidVec = {};
+	};
+
+	//空中回避
+	class AvoidJump : public Default
+	{
+	public:
+		AvoidJump();
+		AvoidJump(GameObject* parent);
+		~AvoidJump() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		float avoidSpeed = 50.0f;
+		float avoidJumpPower = 20.0f;
+		DirectX::XMFLOAT3 avoidVec = {};
+
 	};
 
 }

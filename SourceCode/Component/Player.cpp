@@ -35,6 +35,8 @@ void Player::Initialize()
 	states.emplace_back(new SwingWire(parent));//ワイヤーでの弧を書いた移動
 	states.emplace_back(new WireJump(parent));//ワイヤーでの弧を書いた移動後のジャンプ
 	states.emplace_back(new JumpAttack(parent));//空中攻撃（右）
+	states.emplace_back(new Avoid(parent));//回避
+	states.emplace_back(new AvoidJump(parent));//空中回避
 
 	//待機ステートに
 	ChangeState("Idle");
@@ -53,7 +55,8 @@ void Player::Initialize()
 	parent->GetComponent<ModelRenderer>()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
 	parent->GetComponent<ModelRenderer>()->GetBoneData("leftHand")->isCalc = true;
 
-	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("Hip","Falling","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
+	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("IdleHip","Idle","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
+	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("FallingHip","Falling","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 
 }
 
@@ -142,7 +145,7 @@ void Player::OnCollisionEnter(Collider* collider)
 	if (collider->type == Collider::Type::Offense)
 	{
 		//ダメージを受ける
-		if (currentState->GetName() != "Damage" && currentState->GetName() != "Death" && !isAttack)
+		if (currentState->GetName() != "Damage" && currentState->GetName() != "Death" && currentState->GetName() != "Avoid" && currentState->GetName() != "AvoidJump" && !isAttack)
 		{
 			//HPを減らす
 			parent->GetComponent<Health>()->SubtructHp(collider->GetParent()->GetComponent<Enemy>()->GetAttackPower());

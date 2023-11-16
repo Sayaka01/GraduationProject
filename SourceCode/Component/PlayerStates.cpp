@@ -24,6 +24,7 @@ bool Default::acceptAttackButton = false;
 bool Default::pushAttackButton = false;
 int Default::jumpCount = 0;
 DirectX::XMFLOAT3 Default::parameter = { 0.0f,0.0f,0.0f };
+bool Default::isAvoid = false;
 
 //-----< 基底クラス >-----//
 void PlayerState::Default::Update()
@@ -242,6 +243,13 @@ bool PlayerState::Default::JudgeSwingWireState()
 	//ZRボタンが押されていたらtrue
 	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_SHOULDER);
 }
+bool PlayerState::Default::JudgeAvoidState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+	//Bボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_B);
+}
 
 //-----< 待機 >-----//
 Idle::Idle()
@@ -297,6 +305,12 @@ std::string Idle::GetNext()
 	{
 		return "Run";
 	}
+
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState())
+	{
+		return "Avoid";
+	}
 	
 	//変更なし
 	return "";
@@ -346,6 +360,12 @@ std::string Run::GetNext()
 	if (JudgePunchRightState())
 	{
 		return "PunchRight";
+	}
+
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState())
+	{
+		return "Avoid";
 	}
 
 	//ワイヤーでの直線移動ステートに遷移できるか
@@ -411,6 +431,12 @@ std::string Jump::GetNext()
 	if (JudgePunchRightState())
 	{
 		return "JumpAttack";
+	}
+
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState() && !isAvoid)
+	{
+		return "AvoidJump";
 	}
 
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
@@ -484,6 +510,12 @@ std::string Falling::GetNext()
 		return "JumpAttack";
 	}
 
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState() && !isAvoid)
+	{
+		return "AvoidJump";
+	}
+
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
 	if (JudgeSwingWireState())
 	{
@@ -528,6 +560,8 @@ void Landing::Enter()
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Landing, false);
 
 	jumpCount = 0;
+
+	isAvoid = false;
 }
 void Landing::Update()
 {
@@ -551,7 +585,13 @@ std::string Landing::GetNext()
 		return "Run";
 	}
 
-	//アニメーション再生が終わったら落下ステートへ遷移
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState())
+	{
+		return "Avoid";
+	}
+
+	//アニメーション再生が終わったら待機ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
 		return "Idle";
@@ -823,6 +863,12 @@ std::string AimWire::GetNext()
 		return "Jump";
 	}
 
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState() && isAvoid)
+	{
+		return "AvoidJump";
+	}
+
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
@@ -851,7 +897,7 @@ void SwingWire::Enter()
 	DirectX::XMFLOAT3 cameraFront = GetCameraFront();
 
 	//ワイヤーの刺す位置（仮）
-	//ワイヤーを斜辺とした90°,30°,60°の直角三角形とみて計算する
+	//ワイヤーを斜辺とした90°,45°,45°の直角三角形とみて計算する
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	parameter = pos + (cameraFront * (maxWireLength / sqrtf(2.0f)));//自分の位置からワイヤーを刺すXZ平面上の点
 	parameter.y += maxWireLength / sqrtf(2.0f);//ワイヤーを刺す位置
@@ -901,7 +947,7 @@ void SwingWire::Update()
 	parent->GetComponent<SphereCollider>("DebugSphere")->center = pos;
 
 	//腰の位置のモーションによる移動を停止
-	parent->GetComponent<ModelRenderer>()->StopMotionVelocity("Hip");
+	parent->GetComponent<ModelRenderer>()->StopMotionVelocity("FallingHip");
 
 	Default::Update();
 }
@@ -939,6 +985,12 @@ std::string SwingWire::GetNext()
 	if (parent->GetComponent<Transform>()->pos.y < 0.0f)
 	{
 		return "Landing";
+	}
+
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState() && !isAvoid)
+	{
+		return "AvoidJump";
 	}
 
 
@@ -1033,6 +1085,12 @@ std::string WireJump::GetNext()
 	if (JudgeAimWireState() && falling)
 	{
 		return "AimWire";
+	}
+
+	//回避ステートに遷移できるか
+	if (JudgeAvoidState() && !isAvoid)
+	{
+		return "AvoidJump";
 	}
 
 	//ジャンプステートへ遷移できるか
@@ -1167,3 +1225,112 @@ std::string JumpAttack::GetNext()
 	return "";
 }
 
+//-----< 回避 >-----//
+Avoid::Avoid()
+{
+	name = "Avoid";
+}
+Avoid::Avoid(GameObject* parent)
+{
+	name = "Avoid";
+	this->parent = parent;
+}
+void Avoid::Enter()
+{
+	//アニメーションの再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Avoid, false);
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+
+	//回避ベクトルを作成
+	avoidVec = CalcMoveVec() * avoidSpeed;
+
+	//Lスティック入力がないならカメラの前方向に回避
+	if (LengthFloat3(avoidVec) < FLT_EPSILON)
+	{
+		avoidVec = GetCameraFront() * avoidSpeed;
+	}
+}
+void Avoid::Update()
+{
+	AddMoveVelocity(avoidVec);
+	YAxisRotate(avoidVec);
+
+	//腰の位置のモーションによる移動を停止
+	parent->GetComponent<ModelRenderer>()->StopMotionXZVelocity("IdleHip");
+
+	Default::Update();
+}
+void Avoid::Exit()
+{
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+}
+std::string Avoid::GetNext()
+{
+	//アニメーション再生が終わったら待機ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< 回避 >-----//
+AvoidJump::AvoidJump()
+{
+	name = "AvoidJump";
+}
+AvoidJump::AvoidJump(GameObject* parent)
+{
+	name = "AvoidJump";
+	this->parent = parent;
+}
+void AvoidJump::Enter()
+{
+	//アニメーションの再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::AvoidJump, false);
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+
+	//回避ベクトルを作成
+	avoidVec = CalcMoveVec() * avoidSpeed;
+
+	//Lスティック入力がないならカメラの前方向に回避
+	if (LengthFloat3(avoidVec) < FLT_EPSILON)
+	{
+		avoidVec = GetCameraFront() * avoidSpeed;
+	}
+
+	parent->GetComponent<RigidBody>()->Jump(avoidJumpPower);
+
+	isAvoid = true;
+}
+void AvoidJump::Update()
+{
+	AddMoveVelocity(avoidVec);
+	YAxisRotate(avoidVec);
+
+	//腰の位置のモーションによる移動を停止
+	parent->GetComponent<ModelRenderer>()->StopMotionVelocity("FallingHip");
+
+	Default::Update();
+}
+void AvoidJump::Exit()
+{
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+}
+std::string AvoidJump::GetNext()
+{
+	//アニメーション再生が終わったら待機ステートへ遷移
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Falling";
+	}
+
+	//変更なし
+	return "";
+}

@@ -65,6 +65,8 @@ public:
 
 	// モーションの移動値を停止
 	void StopMotionVelocity(const std::string nodeName, std::string currentAnim = "");
+	// モーションの移動値を停止(XZ)
+	void StopMotionXZVelocity(const std::string nodeName, std::string currentAnim = "");
 
 	//名前と一致するnodeの番号を保存
 	void StoreNodeIndex(std::string callName, std::string BaseAnimName, std::string rigName);
