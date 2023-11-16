@@ -1017,6 +1017,11 @@ void WireJump::Exit()
 }
 std::string WireJump::GetNext()
 {
+	//空中攻撃ステートに遷移できるか
+	if (JudgePunchRightState())
+	{
+		return "JumpAttack";
+	}
 
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
 	if (JudgeSwingWireState() && falling)
