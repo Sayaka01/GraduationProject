@@ -71,6 +71,11 @@ void Enemy::Update()
 	// sphereCollider‚ÌˆÊ’u‚ðÝ’è
 	parent->GetComponent<SphereCollider>("waist")->center = waistPos;
 
+	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
+	pos -= forward * 1.5f;
+	parent->GetComponent<SphereCollider>("waist")->center = parent->GetComponent<Transform>()->pos;
+	parent->GetComponent<SphereCollider>("waist")->center.y += 7.0f;
+
 	// “–‚½‚èƒtƒ‰ƒO‚ð‰Šú‰»‚³‚¹‚ÄEnter‚Ìˆ—
 	hitFlag = false;
 
@@ -287,7 +292,7 @@ void Enemy::OnCollisionEnter(Collider* collider)
 	// “G“¯Žm‚Å“–‚½‚Á‚½ê‡
 	if (collider->GetParent()->GetTag() == Tag::Enemy)
 	{
-		SphereCollider* spCollider = parent->GetComponent<SphereCollider>();
+		SphereCollider* spCollider = parent->GetComponent<SphereCollider>("waist");
 		parent->GetComponent<Transform>()->pos.x = spCollider->center.x;
 		parent->GetComponent<Transform>()->pos.z = spCollider->center.z;
 	}

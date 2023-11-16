@@ -324,6 +324,10 @@ void Run::Update()
 	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
 
+	DirectX::XMFLOAT3 p = parent->GetComponent<Transform>()->pos;
+	p.y += 5.0f;
+	parent->GetComponent<SphereCollider>("DebugSphere")->center = p;
+
 	Default::Update();
 }
 void Run::Exit()

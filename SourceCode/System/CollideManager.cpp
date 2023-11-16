@@ -104,7 +104,7 @@ void CollideManager::Collide()
 			if (!capsule->GetEnable() || !sphere->GetEnable())continue;
 			if (!capsule->useHitEvent || !sphere->useHitEvent)continue;
 
-			if (capsule->GetParent()->GetTag() == sphere->GetParent()->GetTag())continue;
+			if (capsule->GetParent()->GetName() == sphere->GetParent()->GetName())continue;
 
 
 			if (Physics::IntersectSphereVsCapsule(sphere, capsule, &result))
