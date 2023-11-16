@@ -418,7 +418,7 @@ namespace PlayerState
 
 	private:
 		float avoidSpeed = 50.0f;
-		float avoidJumpPower = 20.0f;
+		float avoidJumpPower = 30.0f;
 		DirectX::XMFLOAT3 avoidVec = {};
 
 	};

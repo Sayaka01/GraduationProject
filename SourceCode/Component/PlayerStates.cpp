@@ -241,7 +241,7 @@ bool PlayerState::Default::JudgeSwingWireState()
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
 	//ZRƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚½‚çtrue
-	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_SHOULDER);
+	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_SHOULDER) && (parent->GetComponent<Transform>()->pos.y > 11.5f);
 }
 bool PlayerState::Default::JudgeAvoidState()
 {
