@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene.h"
+#include "GameObject/GameObject.h"
 
 class SceneLoading : public Scene
 {
@@ -16,4 +17,5 @@ private:
 	static void LoadingThread(SceneLoading* scene);
 private:
 	Scene* nextScene = nullptr;
+	GameObject* sprLoading{ nullptr };
 };

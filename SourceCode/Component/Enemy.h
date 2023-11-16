@@ -174,8 +174,8 @@ private:
 	float rotateRatio{ 0.75f };
 
 	//‚»‚ê‚¼‚ê‚ÌUŒ‚—Í
-	float punchPower{ 3 };
-	float slashPower{ 6 };
+	float punchPower{ 2 };
+	float slashPower{ 4 };
 
 	StateName stateName = StateName::Idle;
 

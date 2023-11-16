@@ -4,6 +4,9 @@
 #include "sceneLoading.h"
 #include "sceneManager.h"
 #include <thread>
+#include "Component/SpriteRenderer.h"
+#include <SimpleMath.h>
+#include "System/SystemManager.h"
 
 SceneLoading::SceneLoading(Scene* nextScene)
 {
@@ -13,6 +16,13 @@ SceneLoading::SceneLoading(Scene* nextScene)
 
 void SceneLoading::Initialize()
 {
+	sprLoading = new GameObject("loading");
+	sprLoading->AddComponent(new SpriteRenderer(L"./Resources/Sprite/LoadingIcon.png"));
+	sprLoading->GetComponent<SpriteRenderer>()->pos = {1150,600};
+	sprLoading->GetComponent<SpriteRenderer>()->scale = { 1,1 };
+	sprLoading->GetComponent<SpriteRenderer>()->pivot = sprLoading->GetComponent<SpriteRenderer>()->GetSpriteSize()*DirectX::SimpleMath::Vector2(0.5f, 0.5f);
+
+
 	//スレッド開始
 	std::thread thread(LoadingThread, this);
 	//スレッドの管理を放棄
@@ -20,10 +30,14 @@ void SceneLoading::Initialize()
 }
 void SceneLoading::Finalize()
 {
-
+	sprLoading->Finalize();
+	delete sprLoading;
 }
 void SceneLoading::Update()
 {
+	sprLoading->GetComponent<SpriteRenderer>()->degree += 30 * SystemManager::Instance().GetElapsedTime();
+	sprLoading->Update();
+
 	//次のシーンの準備が完了したらシーンを切り替える
 	if (nextScene->IsReady())
 	{
@@ -32,8 +46,7 @@ void SceneLoading::Update()
 }
 void SceneLoading::Draw()
 {
-
-
+	sprLoading->Draw();
 }
 
 void SceneLoading::LoadingThread(SceneLoading* scene)
