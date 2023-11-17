@@ -505,6 +505,9 @@ void Falling::Enter()
 {
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
 
+	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
+	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
 }
 void Falling::Update()
 {
