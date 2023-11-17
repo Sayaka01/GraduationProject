@@ -77,9 +77,12 @@ public:
 	{
 		float theta = Random::Range(0, DirectX::XM_PI*2);
 		float range = Random::Range(0.0f, maxRange);
-		targetPosition.x = parent->GetComponent<Transform>()->pos.x + sinf(theta) * range;
-		targetPosition.y = parent->GetComponent<Transform>()->pos.y;
-		targetPosition.z = parent->GetComponent<Transform>()->pos.z + cosf(theta) * range;
+		targetPosition.x = sinf(theta) * range;
+		targetPosition.y;
+		targetPosition.z = cosf(theta) * range;
+		//targetPosition.x = parent->GetComponent<Transform>()->pos.x + sinf(theta) * range;
+		//targetPosition.y = parent->GetComponent<Transform>()->pos.y;
+		//targetPosition.z = parent->GetComponent<Transform>()->pos.z + cosf(theta) * range;
 	}
 
 	//–Ú“IˆÊ’u‚ÖˆÚ“®‚·‚é
@@ -168,7 +171,7 @@ private:
 	float pursuitRange{ 80.0f };
 
 	//œpœj‚ğŠJn‚·‚é”ÍˆÍ
-	float wanderRange{ 60.0f };
+	float wanderRange{ 150.0f };
 
 	//p¨‰ñ“]‚Ì—Ê
 	float rotateRatio{ 0.75f };
