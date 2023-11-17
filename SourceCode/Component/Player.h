@@ -55,7 +55,7 @@ private:
 	std::vector<PlayerState::Default*> states;//状態
 	PlayerState::Default* currentState = nullptr;
 
-	float height = 10.0f;//プレイヤーの身長
+	float height = 6.0f;//プレイヤーの身長
 
 	float runSpeed = 40.0f;//走る速さ
 	float jumpSpeed = 50.0f;//ジャンプの高さ

@@ -159,6 +159,7 @@ void SceneGame::PlayerInitialize()
 	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.05f;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
+	player->GetComponent<CapsuleCollider>("WireCapsule")->drawReleasePrimitive = true;
 
 	player->AddComponent(new SphereCollider("DebugSphere"));
 	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };

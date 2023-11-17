@@ -172,6 +172,17 @@ void CollideManager::Draw()
 			capsuleMesh->Draw(collider);
 		}
 	}
+#else
+	//ƒJƒvƒZƒ‹•`‰æ
+	capsuleMesh->DrawPrepare();
+	for (CapsuleCollider* collider : capsuleColliders)
+	{
+		if (collider->GetEnable() && collider->drawReleasePrimitive)
+		{
+			collider->CalcCapsuleParam();
+			capsuleMesh->Draw(collider);
+		}
+	}
 #endif
 }
 
