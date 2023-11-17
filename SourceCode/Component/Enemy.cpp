@@ -133,6 +133,8 @@ void Enemy::DebugGui()
 		ImGui::SliderFloat("AttackRange", &attackRange, 1,100);
 		ImGui::SliderFloat("PursuitRange", &pursuitRange, 1,100);
 		ImGui::SliderFloat("WanderRange", &wanderRange, 1,100);
+
+		ImGui::InputFloat("runTime", &runTimer);
 		ImGui::TreePop();
 	}
 }
