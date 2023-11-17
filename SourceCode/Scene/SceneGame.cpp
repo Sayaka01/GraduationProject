@@ -43,7 +43,10 @@ void SceneGame::Initialize()
 
 	stage = new GameObject("stage");
 	stage->AddComponent(new ModelRenderer("./Resources/Model/Stage/Stage.fbx"));
+	//stage->AddComponent(new ModelRenderer("./Resources/Model/Stage/GameObject.fbx"));
 	stage->GetComponent<Transform>()->pos = { 0.0f, -1.0f, 0.0f };
+	//stage->GetComponent<Transform>()->pos = { 0.0f, 4.0f, 0.0f };
+	//stage->GetComponent<Transform>()->scale = { 0.045f, 0.045f, 0.045f };
 	stage->GetComponent<Transform>()->scale = { 10.0f, 10.0f, 10.0f };
 
 	objectManager->AddChild(cameraController);
@@ -58,7 +61,7 @@ void SceneGame::Initialize()
 	SpriteInitialze();
 
 
-	CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
+	//CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
 
 void SceneGame::Finalize()
