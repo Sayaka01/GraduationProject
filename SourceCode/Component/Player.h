@@ -45,6 +45,11 @@ public:
 	bool GetIsAttack() { return isAttack; }
 	void SetIsAttack(bool flag) { isAttack = flag; }
 
+	int GetAttackPhase() { return attackPhase; }
+	void SetAttackPhase(int phase) { attackPhase = phase; }
+	void InitAttackPhase() { attackPhase = 0; }
+	void NextAttackPhase() { attackPhase++; if (attackPhase >= maxAttackPhase)attackPhase = 0; }
+
 private:
 
 	//-----< 関数 >-----//
@@ -69,4 +74,8 @@ private:
 	bool isHitAttackToEnemy = false;//敵用の攻撃が当たっているかのフラグ
 
 	bool isAttack = false;//プレイヤーが攻撃ステートかどうか
+
+	int attackPhase = 0;//攻撃段階（何段目か）
+	int maxAttackPhase = 3;
+
 };

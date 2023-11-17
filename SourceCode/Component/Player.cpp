@@ -29,6 +29,7 @@ void Player::Initialize()
 	states.emplace_back(new Landing(parent));//着地
 	states.emplace_back(new PunchRight(parent));//パンチ（右）
 	states.emplace_back(new PunchLeft(parent));//パンチ（左）
+	states.emplace_back(new Kick(parent));//パンチ（左）
 	states.emplace_back(new Damage(parent));//ダメージ
 	states.emplace_back(new Death(parent));//死亡
 	states.emplace_back(new AimWire(parent));//ワイヤーでの直線移動
@@ -54,7 +55,11 @@ void Player::Initialize()
 	//左手
 	parent->GetComponent<ModelRenderer>()->AddBonePositionData("leftHand", "mixamorig:LeftHandIndex4");
 	parent->GetComponent<ModelRenderer>()->GetBoneData("leftHand")->isCalc = true;
+	//右足
+	parent->GetComponent<ModelRenderer>()->AddBonePositionData("rightAnkle", "mixamorig:RightLeg");
+	parent->GetComponent<ModelRenderer>()->GetBoneData("rightAnkle")->isCalc = true;
 
+	//ルートモーション用
 	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("IdleHip","Idle","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("FallingHip","Falling","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 
@@ -81,6 +86,10 @@ void Player::Update()
 	//左手の球
 	DirectX::SimpleMath::Vector3 leftHandPos = parent->GetComponent<ModelRenderer>()->GetBonePositionFromName("leftHand");
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->center = leftHandPos;
+
+	//右足の球
+	DirectX::SimpleMath::Vector3 RightAnklePos = parent->GetComponent<ModelRenderer>()->GetBonePositionFromName("rightAnkle");
+	parent->GetComponent<SphereCollider>("RightAnkleSphere")->center = RightAnklePos;
 
 	//カプセルの位置補正
 	CapsuleCollider* capsuleCollider = parent->GetComponent<CapsuleCollider>("BodyCapsule");
@@ -127,6 +136,7 @@ void Player::DebugGui()
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed);
 		ImGui::DragFloat("knockBackSpeed", &knockBackSpeed);
 		ImGui::DragFloat("wireSpeed", &wireSpeed);
+		ImGui::SliderInt("attackPhase", &attackPhase, 0, maxAttackPhase);
 		ImGui::Text(currentState->GetName().c_str());
 		ImGui::TreePop();
 	}
