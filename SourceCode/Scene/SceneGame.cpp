@@ -128,22 +128,30 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/HookPunch.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");
 
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 2;
 
-	player->AddComponent(new SphereCollider("RightHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+	player->AddComponent(new SphereCollider("RightHandSphere"));
 	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightHandSphere")->type = Collider::Type::Offense;
 	player->GetComponent<SphereCollider>("RightHandSphere")->priority = 0;
-	player->AddComponent(new SphereCollider("LeftHandSphere"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
+
+	player->AddComponent(new SphereCollider("LeftHandSphere"));
 	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("LeftHandSphere")->type = Collider::Type::Offense;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->priority = 0;
+
+	player->AddComponent(new SphereCollider("RightAnkleSphere"));
+	player->GetComponent<SphereCollider>("RightAnkleSphere")->radius = 2.0f;
+	player->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
+	player->GetComponent<SphereCollider>("RightAnkleSphere")->type = Collider::Type::Offense;
+	player->GetComponent<SphereCollider>("RightAnkleSphere")->priority = 0;
 
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;

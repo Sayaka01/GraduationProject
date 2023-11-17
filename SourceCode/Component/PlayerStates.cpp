@@ -42,9 +42,11 @@ void PlayerState::Default::Update()
 
 	attackInterval += SystemManager::Instance().GetElapsedTime();
 
-	if (pushAttackButton && attackInterval > acceptAttackTime)
+	if (attackInterval > acceptAttackTime)
 	{
-		pushAttackButton = false;
+		parent->GetComponent<Player>()->InitAttackPhase();
+
+		if(pushAttackButton)pushAttackButton = false;
 	}
 }
 
@@ -213,17 +215,22 @@ bool PlayerState::Default::JudgeJumpState()
 	//Aボタンが押されていたらtrue
 	return (gamePad.GetButtonDown() & GamePad::BTN_A);
 }
-bool PlayerState::Default::JudgePunchRightState()
+bool PlayerState::Default::JudgeAttackState()
 {
-	//ゲームパッドの取得
-	GamePad gamePad = SystemManager::Instance().GetGamePad();
-	//Aボタンが押されていたらtrue
-	return (gamePad.GetButtonDown() & GamePad::BTN_X);
-}
-bool PlayerState::Default::JudgePunchLeftState()
-{
-	//Aボタンが押されていたらtrue
-	return (pushAttackButton && (attackInterval < acceptAttackTime));
+	int phase = parent->GetComponent<Player>()->GetAttackPhase();
+
+	if (phase == 0)
+	{
+		//ゲームパッドの取得
+		GamePad gamePad = SystemManager::Instance().GetGamePad();
+		//Aボタンが押されていたらtrue
+		return (gamePad.GetButtonDown() & GamePad::BTN_X);
+	}
+	else
+	{
+		//Aボタンが押されていたらtrue
+		return (pushAttackButton && (attackInterval < acceptAttackTime));
+	}
 }
 bool PlayerState::Default::JudgeAimWireState()
 {
@@ -276,16 +283,21 @@ void Idle::Exit()
 }
 std::string Idle::GetNext()
 {
-	//パンチ（左）ステートへ遷移できるか
-	if (JudgePunchLeftState())
+	//攻撃ステートに遷移できるか
+	if (JudgeAttackState())
 	{
-		return "PunchLeft";
-	}
+		int phase = parent->GetComponent<Player>()->GetAttackPhase();
+		
+		switch (phase)
+		{
+		case 0://パンチ（右）ステートへ遷移できるか
+			return "PunchRight";
+		case 1://パンチ（左）ステートへ遷移できるか
+			return "PunchLeft";
+		case 2://キックステートに遷移できるか
+			return "Kick";
+		}
 
-	//パンチ（右）ステートへ遷移できるか
-	if (JudgePunchRightState())
-	{
-		return "PunchRight";
 	}
 
 	//ワイヤーでの直線移動ステートに遷移できるか
@@ -350,16 +362,21 @@ void Run::Exit()
 }
 std::string Run::GetNext()
 {
-	//パンチ（左）ステートへ遷移できるか
-	if (JudgePunchLeftState())
+	//攻撃ステートに遷移できるか
+	if (JudgeAttackState())
 	{
-		return "PunchLeft";
-	}
+		int phase = parent->GetComponent<Player>()->GetAttackPhase();
 
-	//パンチ（右）ステートへ遷移できるか
-	if (JudgePunchRightState())
-	{
-		return "PunchRight";
+		switch (phase)
+		{
+		case 0://パンチ（右）ステートへ遷移できるか
+			return "PunchRight";
+		case 1://パンチ（左）ステートへ遷移できるか
+			return "PunchLeft";
+		case 2://キックステートに遷移できるか
+			return "Kick";
+		}
+
 	}
 
 	//回避ステートに遷移できるか
@@ -410,6 +427,7 @@ void Jump::Enter()
 
 	parent->GetComponent<RigidBody>()->Jump(parent->GetComponent<Player>()->GetJumpSpeed());
 
+	parent->GetComponent<Player>()->InitAttackPhase();
 }
 void Jump::Update()
 {
@@ -428,7 +446,7 @@ void Jump::Exit()
 std::string Jump::GetNext()
 {
 	//空中攻撃ステートに遷移できるか
-	if (JudgePunchRightState())
+	if (JudgeAttackState())
 	{
 		return "JumpAttack";
 	}
@@ -505,7 +523,7 @@ void Falling::Exit()
 std::string Falling::GetNext()
 {
 	//空中攻撃ステートに遷移できるか
-	if (JudgePunchRightState())
+	if (JudgeAttackState())
 	{
 		return "JumpAttack";
 	}
@@ -638,6 +656,8 @@ void PunchRight::Enter()
 
 	//攻撃中フラグをtrueに
 	parent->GetComponent<Player>()->SetIsAttack(true);
+
+	parent->GetComponent<Player>()->NextAttackPhase();
 }
 void PunchRight::Update()
 {
@@ -669,7 +689,7 @@ std::string PunchRight::GetNext()
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
 		//パンチ（左）ステートへ遷移できるか
-		if (JudgePunchLeftState())
+		if (JudgeAttackState())
 		{
 			return "PunchLeft";
 		}
@@ -703,7 +723,6 @@ void PunchLeft::Enter()
 	attackInterval = 0.0f;
 
 	//攻撃の入力フラグなどを初期化
-	acceptAttackButton = false;
 	pushAttackButton = false;
 
 	//攻撃用当たり判定のコンポーネントを有効化
@@ -720,7 +739,8 @@ void PunchLeft::Enter()
 
 	//攻撃中フラグをtrueに
 	parent->GetComponent<Player>()->SetIsAttack(true);
-
+	
+	parent->GetComponent<Player>()->NextAttackPhase();
 }
 void PunchLeft::Update()
 {
@@ -746,6 +766,89 @@ void PunchLeft::Exit()
 	parent->GetComponent<Player>()->SetIsAttack(false);
 }
 std::string PunchLeft::GetNext()
+{
+	//アニメーション再生が終わったら
+	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		//パンチ（左）ステートへ遷移できるか
+		if (JudgeAttackState())
+		{
+			return "Kick";
+		}
+
+		//待機ステートへ遷移
+		return "Idle";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< キック >-----//
+Kick::Kick()
+{
+	name = "Kick";
+}
+Kick::Kick(GameObject* parent)
+{
+	name = "Kick";
+	this->parent = parent;
+}
+void Kick::Enter()
+{
+	//アニメーションの再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Kick, false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
+
+	//今から攻撃するので初期化
+	attackInterval = 0.0f;
+
+	//攻撃の入力フラグなどを初期化
+	acceptAttackButton = false;
+	pushAttackButton = false;
+
+	//攻撃用当たり判定のコンポーネントを有効化
+	parent->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(true);
+
+	//攻撃力を設定
+	attackPower = 5.0f;
+
+	//一番近い敵の位置をparameterに格納
+	CalcEnemyDistance();
+
+	//敵への攻撃フラグをOFF
+	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
+	//攻撃中フラグをtrueに
+	parent->GetComponent<Player>()->SetIsAttack(true);
+
+	parent->GetComponent<Player>()->NextAttackPhase();
+}
+void Kick::Update()
+{
+	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
+	vec.y = 0.0f;
+	float length = LengthFloat3(vec);
+	if (length < attackRangeMax)
+	{
+		YAxisRotate(vec);
+		if (length > attackRangeMin)
+			AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
+	}
+
+	Default::Update();
+}
+void Kick::Exit()
+{
+	parent->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+	
+	//攻撃中フラグをfalseに
+	parent->GetComponent<Player>()->SetIsAttack(false);
+}
+std::string Kick::GetNext()
 {
 	//アニメーション再生が終わったら落下ステートへ遷移
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
@@ -1070,7 +1173,7 @@ void WireJump::Exit()
 std::string WireJump::GetNext()
 {
 	//空中攻撃ステートに遷移できるか
-	if (JudgePunchRightState())
+	if (JudgeAttackState())
 	{
 		return "JumpAttack";
 	}
@@ -1132,7 +1235,7 @@ void JumpAttack::Enter()
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(true);
 
 	//攻撃力を設定
-	attackPower = 1.0f;
+	attackPower = 2.0f;
 
 	//一番近い敵の位置をparameterに格納
 	CalcEnemyDistance();
@@ -1170,6 +1273,8 @@ void JumpAttack::Enter()
 
 	//攻撃中フラグをtrueに
 	parent->GetComponent<Player>()->SetIsAttack(true);
+
+	parent->GetComponent<Player>()->NextAttackPhase();
 
 }
 void JumpAttack::Update()

@@ -25,6 +25,7 @@ namespace PlayerState
 		HookPunch,//空中攻撃
 		Avoid,//回避
 		AvoidJump,//空中回避
+		Kick,//キック
 	};
 	
 	//基底クラス
@@ -82,10 +83,8 @@ namespace PlayerState
 		bool JudgeRunState();
 		//ジャンプステートの遷移条件
 		bool JudgeJumpState();
-		//パンチ（右）ステートの遷移条件
-		bool JudgePunchRightState();
-		//パンチ（左）ステートの遷移条件
-		bool JudgePunchLeftState();
+		//攻撃ステートの遷移条件
+		bool JudgeAttackState();
 		//ワイヤーでの直線移動ステートの遷移条件
 		bool JudgeAimWireState();
 		//ワイヤーでの弧を書いた移動ステートの遷移条件
@@ -115,6 +114,7 @@ namespace PlayerState
 		static DirectX::XMFLOAT3 parameter;//凡庸パラメータ
 
 		static bool isAvoid;//回避したかどうか
+
 	};
 
 	//待機
@@ -236,6 +236,27 @@ namespace PlayerState
 		PunchLeft();
 		PunchLeft(GameObject* parent);
 		~PunchLeft() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+	private:
+		float attackRangeMin = 8.0f;
+		float attackRangeMax = 25.0f;
+	};
+
+	//キック
+	class Kick : public Default
+	{
+	public:
+		Kick();
+		Kick(GameObject* parent);
+		~Kick() = default;
 
 		//ステート遷移時の処理
 		void Enter()override;
