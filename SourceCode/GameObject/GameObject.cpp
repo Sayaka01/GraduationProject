@@ -71,6 +71,7 @@ void GameObject::Draw()
 			component->Draw();
 	}
 
+
 	//子オブジェクトの描画
 	for (GameObject* childObj : children)
 	{

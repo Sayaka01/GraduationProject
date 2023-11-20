@@ -93,4 +93,6 @@ private:
 
 	NextSelectName selectNextScene = NextSelectName::Game;
 	int flashUIState = 0;
+
+	bool isOpenMenu = false;
 };

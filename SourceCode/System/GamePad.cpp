@@ -175,6 +175,8 @@ void GamePad::Update(float elapsedTime)
 		if (GetAsyncKeyState('G') & 0x8000)	newButtonState |= BTN_LEFT_TRIGGER;
 		if (GetAsyncKeyState('Y') & 0x8000)	newButtonState |= BTN_RIGHT_SHOULDER;
 		if (GetAsyncKeyState('T') & 0x8000)	newButtonState |= BTN_LEFT_SHOULDER;
+		if (GetAsyncKeyState(VK_TAB) & 0x8000)	newButtonState |= BTN_START;
+		if (GetAsyncKeyState(VK_BACK) & 0x8000)	newButtonState |= BTN_BACK;
 
 #if 1
 		if (newButtonState & BTN_UP)    ly = 1.0f;

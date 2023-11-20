@@ -35,7 +35,7 @@ void SceneLoading::Finalize()
 }
 void SceneLoading::Update()
 {
-	sprLoading->GetComponent<SpriteRenderer>()->degree += 30 * SystemManager::Instance().GetElapsedTime();
+	sprLoading->GetComponent<SpriteRenderer>()->degree += 90 * SystemManager::Instance().GetElapsedTime();
 	sprLoading->Update();
 
 	//次のシーンの準備が完了したらシーンを切り替える

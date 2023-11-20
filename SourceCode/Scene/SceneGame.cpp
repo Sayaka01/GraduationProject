@@ -42,12 +42,17 @@ void SceneGame::Initialize()
 	lightObject->AddComponent(new DirectionLight());
 
 	stage = new GameObject("stage");
+#if 1
+	// まっつの就活用作成ステージ
 	stage->AddComponent(new ModelRenderer("./Resources/Model/Stage/Stage.fbx"));
-	//stage->AddComponent(new ModelRenderer("./Resources/Model/Stage/GameObject.fbx"));
 	stage->GetComponent<Transform>()->pos = { 0.0f, -1.0f, 0.0f };
-	//stage->GetComponent<Transform>()->pos = { 0.0f, 4.0f, 0.0f };
-	//stage->GetComponent<Transform>()->scale = { 0.045f, 0.045f, 0.045f };
 	stage->GetComponent<Transform>()->scale = { 10.0f, 10.0f, 10.0f };
+#else
+	// Unity Asset Storeからとったステージ
+	stage->AddComponent(new ModelRenderer("./Resources/Model/Stage/GameObject.fbx"));
+	stage->GetComponent<Transform>()->pos = { 0.0f, 4.0f, 0.0f };
+	stage->GetComponent<Transform>()->scale = { 0.045f, 0.045f, 0.045f };
+#endif
 
 	objectManager->AddChild(cameraController);
 	objectManager->AddChild(lightObject);
@@ -82,6 +87,26 @@ void SceneGame::Update()
 	{
 		spriteManager->Update();
 		ResultUpdate();
+		return;
+	}
+
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+	if (gamePad.GetButtonUp() & GamePad::BTN_START)
+	{
+		isOpenMenu = !isOpenMenu;
+	}
+
+	//メニュー画面を開いているとき
+	if (isOpenMenu)
+	{
+#if _DEBUG
+		ImGui::Begin("Menu Screen");
+		ImGui::End();
+#endif
+
+		if (gamePad.GetButtonUp() & GamePad::BTN_BACK)
+			SceneManager::Instance().ChangeScene(new SceneTitle);
 		return;
 	}
 

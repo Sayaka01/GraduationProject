@@ -12,6 +12,7 @@ bool BattleJudgment::Judgment()
         if (!playerObj->GetComponent<Health>()->GetIsAlive())
             return false;
 
+        int count = 0;
         // ‘¼‚Ì“G‚ªUŒ‚’†‚È‚çUŒ‚‚µ‚È‚¢
         GameObject* enemyManager = owner->GetParent();
         for (int i=0;i< enemyManager->GetChildrenCount();i++)
@@ -53,9 +54,16 @@ bool AttackJudgment::Judgment()
     GameObject* playerObj = owner->GetParent()->GetParent()->GetChild("player");
     if (playerObj != nullptr)
     {
-        //ƒvƒŒƒCƒ„[‚ÌHP‚ª‚È‚¯‚ê‚ÎUŒ‚‚µ‚È‚¢
-        if (!playerObj->GetComponent<Health>()->GetIsAlive())
-            return false;
+        // ‘¼‚Ì“G‚ªUŒ‚’†‚È‚çUŒ‚‚µ‚È‚¢
+        GameObject* enemyManager = owner->GetParent();
+        for (int i = 0; i < enemyManager->GetChildrenCount(); i++)
+        {
+            Enemy* otherEnemy = enemyManager->GetGameObj(i)->GetComponent<Enemy>();
+            if (otherEnemy->GetStateName() == Enemy::StateName::Punch)
+                return false;
+            else if (otherEnemy->GetStateName() == Enemy::StateName::Slash)
+                return false;
+        }
 
         //ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£
         DirectX::SimpleMath::Vector3 vector = playerObj->GetComponent<Transform>()->pos - owner->GetComponent<Transform>()->pos;

@@ -5,6 +5,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneGame.h"
 #include "../Scene/SceneTitle.h"
+#include "../Scene/SceneLoading.h"
 
 #include "System/SystemManager.h"
 
@@ -168,7 +169,7 @@ bool Framework::Initialize()
 	// 
 	//****************************************************************
 	SceneManager::Instance().Initialize();
-	SceneManager::Instance().ChangeScene(new SceneGame);
+	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 	//SceneManager::Instance().ChangeScene(new SceneTitle);
 
 
