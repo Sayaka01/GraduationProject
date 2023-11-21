@@ -267,10 +267,7 @@ void CapsuleMeshRenderer::Draw(CapsuleCollider* capsuleCollider)
 	//-----< ‰~’Œ•”•ª >-----//
 	dc->IASetVertexBuffers(0, 1, cylinderVertexBuffer.GetAddressOf(), &stride, &offset);
 
-	float correctionY = max((capsuleCollider->radius - capsuleCollider->cylinderSize), 0.0f);
-	if (capsuleCollider->cylinderSize < capsuleCollider->radius)correctionY = 0.0f;
-
-	DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(capsuleCollider->radius,capsuleCollider->cylinderSize + correctionY,capsuleCollider->radius) };
+	DirectX::XMMATRIX S{ DirectX::XMMatrixScaling(capsuleCollider->radius,capsuleCollider->cylinderSize,capsuleCollider->radius) };
 	DirectX::XMMATRIX R{ DirectX::XMMatrixRotationRollPitchYaw(capsuleCollider->radian.x,capsuleCollider->radian.y,capsuleCollider->radian.z) };
 	DirectX::XMMATRIX T{ DirectX::XMMatrixTranslation(capsuleCollider->center.x,capsuleCollider->center.y,capsuleCollider->center.z) };
 	DirectX::XMFLOAT4X4 world;

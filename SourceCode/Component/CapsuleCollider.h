@@ -33,5 +33,8 @@ public:
 	float radius = 1.0f;
 	float cylinderSize = 1.0f;
 	DirectX::XMFLOAT3 radian{};
-	DirectX::XMFLOAT4 quaternion;
+	DirectX::XMFLOAT4 quaternion = { 0.0f,0.0f,0.0f,1.0f };
+
+private:
+	DirectX::XMFLOAT3 oldVec{ 0.0f,-1.0f,0.0f };
 };
