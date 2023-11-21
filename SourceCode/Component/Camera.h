@@ -36,6 +36,10 @@ public:
 
 	void Tracking() const;
 
+	// プレイヤーのステートによってカメラの距離を動かす
+	void ChangeRange();
+
+	void LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
 
 	//-----< Getter, Setter >-----//
 

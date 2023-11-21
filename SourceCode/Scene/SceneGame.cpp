@@ -276,7 +276,6 @@ void SceneGame::EnemyInitialize()
 		enemy->AddComponent(new Health(5));
 
 		enemyManager->AddChild(enemy);
-
 	}
 #endif
 

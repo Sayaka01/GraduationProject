@@ -33,6 +33,9 @@ public:
 	[[nodiscard]] DirectX::XMFLOAT3 GetAngle()const { return angle; }
 	void SetAngle(DirectX::XMFLOAT3 ang) { angle = ang; }
 
+	[[nodiscard]] float GetRange()const { return range; }
+	void SetRange(float rng) { range = rng; }
+
 
 	[[nodiscard]] DirectX::XMFLOAT3 GetCameraFront() const { return front; }
 	[[nodiscard]] DirectX::XMFLOAT3 GetCameraUp() const { return up; }
