@@ -61,8 +61,8 @@ void Player::Initialize()
 	parent->GetComponent<ModelRenderer>()->GetBoneData("rightAnkle")->isCalc = true;
 
 	//ルートモーション用
-	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("IdleHip","Idle","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
-	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("FallingHip","Falling","mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
+	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("IdleHip",(int)PlayerState::Animation::Idle,"mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
+	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("FallingHip",(int)PlayerState::Animation::Falling,"mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 
 }
 

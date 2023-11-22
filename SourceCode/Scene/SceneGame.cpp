@@ -65,9 +65,6 @@ void SceneGame::Initialize()
 	spriteManager = new GameObject("spriteManager");
 	SpriteInitialze();
 
-	GameObject* test = new GameObject("test");
-	test->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
-	objectManager->AddChild(test);
 
 	//CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
@@ -140,7 +137,7 @@ void SceneGame::PlayerInitialize()
 
 	player->SetTag(Tag::Player);
 
-	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo_Player.fbx");
+	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Death.fbx");
@@ -160,8 +157,6 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/SwordAndShieldSlash.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GreatSwordSlash.fbx");
 
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
