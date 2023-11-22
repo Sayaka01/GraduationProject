@@ -180,7 +180,7 @@ void ModelRenderer::PlayAnimation(int animationIndex, bool loop)
 
 	if (currentAnimationIndex == animationIndex && isPlayAnimation)return;
 
-	//interpolationAnim = true;
+	interpolationAnim = true;
 	isPlayAnimation = true;
 
 	oldAnimationIndex = currentAnimationIndex;
