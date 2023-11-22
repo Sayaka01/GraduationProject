@@ -142,7 +142,7 @@ void ModelRenderer::UpdateAnimation()
 		interpolationRatio += interpolationSpeed * elapsedTime;
 		if (interpolationRatio >= 1.0f)
 		{
-			interpolationRatio = 0.0f;
+			interpolationRatio = 1.0f;
 			interpolationAnim = false;
 		}
 
@@ -151,7 +151,7 @@ void ModelRenderer::UpdateAnimation()
 			&modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex)
 		};
 
-		modelData->BlendAnimations(keyframes, 0.5f, interpolationKeyframe);
+		modelData->BlendAnimations(keyframes, interpolationRatio, interpolationKeyframe);
 		modelData->UpdateGlobalTransform(interpolationKeyframe);
 
 		if (interpolationAnim)return;
@@ -181,6 +181,8 @@ void ModelRenderer::PlayAnimation(int animationIndex, bool loop)
 	if (currentAnimationIndex == animationIndex && isPlayAnimation)return;
 
 	interpolationAnim = true;
+	interpolationRatio = 0.0f;
+
 	isPlayAnimation = true;
 
 	oldAnimationIndex = currentAnimationIndex;

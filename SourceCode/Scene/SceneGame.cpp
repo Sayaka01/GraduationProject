@@ -65,9 +65,9 @@ void SceneGame::Initialize()
 	spriteManager = new GameObject("spriteManager");
 	SpriteInitialze();
 
-	GameObject* test = new GameObject("test");
-	test->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
-	objectManager->AddChild(test);
+	//GameObject* test = new GameObject("test");
+	//test->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
+	//objectManager->AddChild(test);
 
 	//CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
@@ -144,13 +144,13 @@ void SceneGame::PlayerInitialize()
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Death.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Falling.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallingIdle.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GetHit1.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GetHit2.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Idle.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Jump.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/KnifeIdle.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpingUp.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Jump-Flip.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Landing.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallingToLanding.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Revive.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Running.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Walking.fbx");
