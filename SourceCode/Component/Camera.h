@@ -41,6 +41,8 @@ public:
 
 	void LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
 
+	void ResetDefault();
+
 	//-----< Getter, Setter >-----//
 
 	[[nodiscard]] DirectX::XMFLOAT4X4 GetView() const { return cameraData->GetView(); }

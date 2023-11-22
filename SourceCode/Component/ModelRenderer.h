@@ -69,7 +69,7 @@ public:
 	void StopMotionXZVelocity(const std::string nodeName, std::string currentAnim = "");
 
 	//–¼‘O‚Æˆê’v‚·‚énode‚Ì”Ô†‚ğ•Û‘¶
-	void StoreNodeIndex(std::string callName, std::string BaseAnimName, std::string rigName);
+	void StoreNodeIndex(std::string callName, int baseAnimIndex, std::string rigName);
 
 private:
 	//-----< •Ï” >-----//

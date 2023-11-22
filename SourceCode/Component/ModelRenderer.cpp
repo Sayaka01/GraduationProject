@@ -277,18 +277,13 @@ void ModelRenderer::StopMotionXZVelocity(const std::string callName, std::string
 }
 
 //名前と一致するnodeの番号を保存
-void ModelRenderer::StoreNodeIndex(std::string callName,std::string BaseAnimName,std::string rigName)
+void ModelRenderer::StoreNodeIndex(std::string callName,int baseAnimIndex,std::string rigName)
 {
 	Animation* defaultAnimation{nullptr};
 	
 	//基準位置を取得するアニメーションを探す
-	for (Animation& anim : modelData->animationClips)
-	{
-		if (anim.name == BaseAnimName)
-		{
-			defaultAnimation = &anim;
-		}
-	}
+	defaultAnimation = &(modelData->animationClips[baseAnimIndex]);
+
 	//初めのキーフレームを取得
 	Animation::Keyframe keyframe = defaultAnimation->sequence.at(0);
 	int count = 0;

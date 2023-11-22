@@ -160,8 +160,6 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/SwordAndShieldSlash.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GreatSwordSlash.fbx");
 
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
