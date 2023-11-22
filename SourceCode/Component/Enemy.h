@@ -171,7 +171,7 @@ private:
 	float pursuitRange{ 80.0f };
 
 	//œpœj‚ğŠJn‚·‚é”ÍˆÍ
-	float wanderRange{ 150.0f };
+	float wanderRange{ 100.0f };
 
 	//p¨‰ñ“]‚Ì—Ê
 	float rotateRatio{ 0.75f };

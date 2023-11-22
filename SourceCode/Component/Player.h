@@ -50,6 +50,8 @@ public:
 	void InitAttackPhase() { attackPhase = 0; }
 	void NextAttackPhase() { attackPhase++; if (attackPhase >= maxAttackPhase)attackPhase = 0; }
 
+	PlayerState::Default* GetCurrentState() { return currentState; }
+
 private:
 
 	//-----< ŠÖ” >-----//
