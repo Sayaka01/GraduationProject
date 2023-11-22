@@ -137,7 +137,7 @@ void SceneGame::PlayerInitialize()
 
 	player->SetTag(Tag::Player);
 
-	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
+	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo_Player.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Death.fbx");
