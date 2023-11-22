@@ -38,6 +38,7 @@ void Player::Initialize()
 	states.emplace_back(new JumpAttack(parent));//空中攻撃（右）
 	states.emplace_back(new Avoid(parent));//回避
 	states.emplace_back(new AvoidJump(parent));//空中回避
+	states.emplace_back(new WieldThrow(parent));//オブジェクトにワイヤーを刺して振り回して投げる
 
 	//待機ステートに
 	ChangeState("Idle");

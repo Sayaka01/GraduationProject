@@ -248,7 +248,7 @@ bool PlayerState::Default::JudgeSwingWireState()
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
 	//ZRボタンが押されていたらtrue
-	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_SHOULDER) && (parent->GetComponent<Transform>()->pos.y > 11.5f);
+	return (gamePad.GetButton() & GamePad::BTN_RIGHT_SHOULDER) && (parent->GetComponent<Transform>()->pos.y > 11.5f);
 }
 bool PlayerState::Default::JudgeAvoidState()
 {
@@ -256,6 +256,14 @@ bool PlayerState::Default::JudgeAvoidState()
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 	//Bボタンが押されていたらtrue
 	return (gamePad.GetButtonDown() & GamePad::BTN_B);
+}
+bool PlayerState::Default::JudgeWieldThrowState()
+{
+	//ゲームパッドの取得
+	GamePad gamePad = SystemManager::Instance().GetGamePad();
+
+	//RTボタンが押されていたらtrue
+	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_TRIGGER);
 }
 
 //-----< 待機 >-----//
@@ -322,6 +330,11 @@ std::string Idle::GetNext()
 	if (JudgeAvoidState())
 	{
 		return "Avoid";
+	}
+
+	if (JudgeWieldThrowState())
+	{
+		return "WieldThrow";
 	}
 	
 	//変更なし
@@ -1437,6 +1450,56 @@ std::string AvoidJump::GetNext()
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
 		return "Falling";
+	}
+
+	//変更なし
+	return "";
+}
+
+//-----< オブジェクトにワイヤーを刺して振り回して投げる >-----//
+WieldThrow::WieldThrow()
+{
+	name = "WieldThrow";
+}
+WieldThrow::WieldThrow(GameObject* parent)
+{
+	name = "WieldThrow";
+	this->parent = parent;
+}
+void WieldThrow::Enter()
+{
+	//アニメーションの再生
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+
+	isThrow = false;
+}
+void WieldThrow::Update()
+{
+	if (!isThrow && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		//アニメーションの再生
+		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Throw, false);
+		//アニメーションの再生速度の変更
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
+
+		isThrow = true;
+	}
+
+	Default::Update();
+}
+void WieldThrow::Exit()
+{
+	//アニメーションの再生速度の変更
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+}
+std::string WieldThrow::GetNext()
+{
+	//アニメーション再生が終わったら待機ステートへ遷移
+	if (isThrow && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	{
+		return "Idle";
 	}
 
 	//変更なし

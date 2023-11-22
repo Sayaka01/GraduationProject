@@ -26,7 +26,10 @@ namespace PlayerState
 		Avoid,//回避
 		AvoidJump,//空中回避
 		Kick,//キック
+		Throw,//投げる
+		Wield,//振り回す
 	};
+
 	
 	//基底クラス
 	class Default
@@ -91,6 +94,8 @@ namespace PlayerState
 		bool JudgeSwingWireState();
 		//回避ステートの遷移条件
 		bool JudgeAvoidState();
+		//振り回して投げるステートの遷移条件
+		bool JudgeWieldThrowState();
 
 
 		std::string name = "";//ステートの名前
@@ -444,4 +449,24 @@ namespace PlayerState
 
 	};
 
+	//オブジェクトにワイヤーを刺して振り回して投げる
+	class WieldThrow : public Default
+	{
+	public:
+		WieldThrow();
+		WieldThrow(GameObject* parent);
+		~WieldThrow() = default;
+
+		//ステート遷移時の処理
+		void Enter()override;
+		//更新
+		void Update()override;
+		//終了処理
+		void Exit()override;
+		//ステート変更するかどうか
+		std::string GetNext()override;
+
+	private:
+		bool isThrow = false;
+	};
 }

@@ -39,9 +39,9 @@ void ModelRenderer::Draw()
 	if (!modelData->animationClips.empty())
 	{
 		//アニメ―ションがある
-		//if (interpolationAnim)
-		//	keyframe = interpolationKeyframe;
-		/*else*/ keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
+		if (interpolationAnim)
+			keyframe = interpolationKeyframe;
+		else keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
 	}
 
 	//for (const ModelData::Mesh& mesh : meshes)
@@ -151,7 +151,7 @@ void ModelRenderer::UpdateAnimation()
 			&modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex)
 		};
 
-		modelData->BlendAnimations(keyframes, interpolationRatio, interpolationKeyframe);
+		modelData->BlendAnimations(keyframes, 0.5f, interpolationKeyframe);
 		modelData->UpdateGlobalTransform(interpolationKeyframe);
 
 		if (interpolationAnim)return;
@@ -180,7 +180,7 @@ void ModelRenderer::PlayAnimation(int animationIndex, bool loop)
 
 	if (currentAnimationIndex == animationIndex && isPlayAnimation)return;
 
-	if (isPlayAnimation)interpolationAnim = true;
+	interpolationAnim = true;
 	isPlayAnimation = true;
 
 	oldAnimationIndex = currentAnimationIndex;
@@ -189,6 +189,7 @@ void ModelRenderer::PlayAnimation(int animationIndex, bool loop)
 
 	playAnimTimer = 0.0f;
 	keyframeIndex = 0;
+	finishAnimation = false;
 }
 void ModelRenderer::StopAnimation()
 {
