@@ -178,9 +178,41 @@ void Camera::LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate)
 
 void Camera::ResetDefault()
 {
-	// playerからカメラの視点　と　defaultの視点を内積して角度を算出し代入
+	DirectX::SimpleMath::Vector3 angle = cameraData->GetAngle();
 
-	//DirectX::SimpleMath::Vector3 eyeVector = 
+	// playerからカメラの視点　と　defaultの視点を内積して角度を算出し代入
+		
+	//カメラの回転値を回転行列に変換
+	const DirectX::XMMATRIX transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
+	//回転行列から前方向ベクトルを取り出す
+	DirectX::XMVECTOR Front = transform.r[2];
+	Front = DirectX::XMVector3Normalize(Front);
+	DirectX::XMFLOAT3 front{};
+	DirectX::XMStoreFloat3(&front, Front);
+
+	//カメラの現在の向いている向き
+	DirectX::SimpleMath::Vector3 eyeVector;
+	DirectX::XMStoreFloat3(&eyeVector, Front);
+
+	GameObject* pl = parent->GetParent()->GetChild("player");
+	if (pl == nullptr)return;
+	DirectX::SimpleMath::Vector3 playerPos = pl->GetComponent<Transform>()->pos;
+
+	//リセットしたときにカメラが見る位置
+	DirectX::SimpleMath::Vector3 targetPos;
+	targetPos.x = playerPos.x + targetCorrection.x;
+	targetPos.y = playerPos.y + targetCorrection.y;
+	targetPos.z = playerPos.z + targetCorrection.z;
+
+	// playerのfront
+	DirectX::SimpleMath::Vector3 plFront = pl->GetComponent<Transform>()->GetForward();
+	plFront.Normalize();
+
+	DirectX::SimpleMath::Vector3 eye = targetPos + -plFront * cameraData->GetRange();
 
 	cameraData->SetAngle({ 0, 0, 0 });
+
+	//カメラの情報を設定
+	cameraData->SetLookAt(eye, targetPos, { 0.0f,1,0.0001f });
+
 }
