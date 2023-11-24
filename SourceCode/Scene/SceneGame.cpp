@@ -154,7 +154,6 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");//Avoid
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/CrossPunch.fbx");//PunchRight
-	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JabToElbowPunch.fbx");//PunchLeft
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");//PunchLeft
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");//Kick
@@ -166,6 +165,7 @@ void SceneGame::PlayerInitialize()
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StylishFlip.fbx");//DangleWire
 
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/UpwardThrust.fbx");//Thrust
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GreatSwordSlash.fbx");//Wield
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/SwordAndShieldSlash.fbx");//Throw
 

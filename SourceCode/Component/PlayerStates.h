@@ -29,6 +29,7 @@ namespace PlayerState
 
 		DangleWire,//ƒƒCƒ„[‚Ô‚ç‰º‚ª‚è
 
+		Thrust,//“Ë‚«‚³‚·
 		Wield,//U‚è‰ñ‚·
 		Throw,//“Š‚°‚é
 
@@ -482,6 +483,12 @@ namespace PlayerState
 		std::string GetNext()override;
 
 	private:
-		bool isThrow = false;
+		enum State
+		{
+			Thrust,
+			Wield,
+			Throw,
+		};
+		int state = Thrust;
 	};
 }

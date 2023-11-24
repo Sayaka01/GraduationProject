@@ -1528,22 +1528,49 @@ WieldThrow::WieldThrow(GameObject* parent)
 void WieldThrow::Enter()
 {
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Thrust, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Thrust));
 
-	isThrow = false;
+	//ステートの初期化
+	state = Thrust;
 }
 void WieldThrow::Update()
 {
-	if (!isThrow && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	switch (state)
 	{
-		//アニメーションの再生
-		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Throw, false);
-		//アニメーションの再生速度の変更
-		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Throw));
+	case Thrust:
 
-		isThrow = true;
+		if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+		{
+			//アニメーションの再生
+			parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
+			//アニメーションの再生速度の変更
+			parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
+		
+			state = Wield;
+		}
+
+		break;
+	case Wield:
+
+		if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+		{
+			//アニメーションの再生
+			parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Throw, false);
+			//アニメーションの再生速度の変更
+			parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Throw));
+
+			state = Throw;
+		}
+
+		break;
+	case Throw:
+
+		//腰の位置のモーションによる移動を停止
+		parent->GetComponent<ModelRenderer>()->StopMotionXZVelocity("IdleHip");
+
+		break;
 	}
 
 	Default::Update();
@@ -1554,7 +1581,7 @@ void WieldThrow::Exit()
 std::string WieldThrow::GetNext()
 {
 	//アニメーション再生が終わったら待機ステートへ遷移
-	if (isThrow && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	if (state == Throw && parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
 		return "Idle";
 	}

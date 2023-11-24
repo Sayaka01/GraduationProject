@@ -46,6 +46,7 @@ void Player::Initialize()
 
 		animationSpeed[(int)PlayerState::Animation::DangleWire] = 1.0f;//ƒƒCƒ„[‚Ô‚ç‰º‚ª‚è
 
+		animationSpeed[(int)PlayerState::Animation::Thrust] = 1.2f;//‚³‚·
 		animationSpeed[(int)PlayerState::Animation::Wield] = 1.2f;//U‚è‰ñ‚·
 		animationSpeed[(int)PlayerState::Animation::Throw] = 1.5f;//“Š‚°‚é
 	}
