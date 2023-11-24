@@ -32,9 +32,17 @@ public:
 	//定数バッファの更新
 	void UpdateBuffer() const;
 
-	void MoveCameraAngle() const;
+	void MoveCameraAngle();
 
 	void Tracking() const;
+
+	//---- コントローラーのRスティックのX軸の移動値を取得 ----
+	//（戻り値：入力があるときtrue）
+	bool SetAngleToX();
+
+	//---- コントローラーのRスティックのY軸の移動値を取得 ----
+	//（戻り値：入力があるときtrue）
+	bool SetAngleToY();
 
 	// プレイヤーのステートによってカメラの距離を動かす
 	void ChangeRange();
@@ -42,6 +50,10 @@ public:
 	void LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
 
 	void ResetDefault();
+
+	//---- カメラの位置と注視点を算出し設定 ----
+	//（戻り値：入力があるときtrue）
+	void SetEyePoint();
 
 	//-----< Getter, Setter >-----//
 
@@ -75,7 +87,8 @@ private:
 
 	std::unique_ptr<CameraData> cameraData = nullptr;
 
-	float rotationSpeed = DirectX::XMConvertToRadians(90);
+	float rotationSpeed = 80;
+	//float rotationSpeed = DirectX::XMConvertToRadians(90);
 
 	GameObject* targetObj = nullptr;
 	bool tracking = false;
@@ -90,5 +103,9 @@ private:
 	float FovRadY = DirectX::XMConvertToRadians(45.0f);//視野の広さ
 	float nearZ = 0.1f;//カメラの最近距離
 	float farZ = 2000.0f;//カメラの最遠距離
+
+	float verticalDegree{ 0.0f };//縦方向の回転速度
+	float horizonDegree{ 0.0f };//横方向の回転速度
+	//DirectX::XMFLOAT3 eyeVector{ 0,0,0 };//targetからカメラへのベクトル
 
 };

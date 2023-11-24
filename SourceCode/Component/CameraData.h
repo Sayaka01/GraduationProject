@@ -23,6 +23,14 @@ public:
 
 	void SetShakeTimer(const float shakeTime) { shakeTimer = shakeTime; }
 
+	const DirectX::XMFLOAT3 GetFront() { return front; }
+	const DirectX::XMFLOAT3 GetRight() { return right; }
+	const DirectX::XMFLOAT3 GetUp() { return up; }
+
+	void SetRight(DirectX::XMFLOAT3 right) { this->right = right; }
+	void SetFront(DirectX::XMFLOAT3 front) { this->front = front; }
+	void SetUp(DirectX::XMFLOAT3 up) { this->up = up; }
+
 	[[nodiscard]] DirectX::XMFLOAT4X4 GetView() const { return view; }
 	[[nodiscard]] DirectX::XMFLOAT4X4 GetProjection() const { return projection; }
 	[[nodiscard]] DirectX::XMFLOAT4X4 GetViewProjection() const { return viewProjection; }
@@ -30,8 +38,8 @@ public:
 	void SetTarget(const DirectX::XMFLOAT3 t) { target = t; }
 	[[nodiscard]] DirectX::XMFLOAT3 GetTarget() const { return corTarget; }
 
-	[[nodiscard]] DirectX::XMFLOAT3 GetAngle()const { return angle; }
-	void SetAngle(DirectX::XMFLOAT3 ang) { angle = ang; }
+	//[[nodiscard]] DirectX::XMFLOAT3 GetAngle()const { return angle; }
+	//void SetAngle(DirectX::XMFLOAT3 ang) { angle = ang; }
 
 	[[nodiscard]] float GetRange()const { return range; }
 	void SetRange(float rng) { range = rng; }
@@ -48,6 +56,12 @@ public:
 
 	void SetShakePower(const DirectX::XMFLOAT3 shakePower) { this->shakePower = shakePower; }
 	
+	void SetEye(DirectX::XMFLOAT3 eye) { this->eye = eye; }
+	DirectX::XMFLOAT3 GetEye() const { return eye; }
+	
+	void SetEyeVector(DirectX::XMFLOAT3 eye) { this->eyeVector = eye; }
+	DirectX::XMFLOAT3 GetEyeVector() const { return eyeVector; }
+
 
 private:
 	void Shake();
@@ -71,9 +85,12 @@ private:
 	DirectX::XMFLOAT3 front;
 	DirectX::XMFLOAT3 right;
 
+	DirectX::XMFLOAT3 eye;//カメラの位置
+	DirectX::XMFLOAT3 eyeVector{ 0,0,0 };//targetからカメラへのベクトル
+
 	DirectX::XMFLOAT3 target = { 0,0,0 };//プレイヤーの位置
 	DirectX::XMFLOAT3 corTarget = { 0.0f,0.0f,0.0f };//計算後の実際にカメラが見ている位置
-	DirectX::XMFLOAT3 angle = { 0,0,0 };
+	//DirectX::XMFLOAT3 angle = { 0,0,0 };
 	float range = 30.0f;
 
 	//modelを追尾するときのmodelの原点からの補正値
