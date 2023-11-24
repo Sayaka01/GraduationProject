@@ -14,13 +14,43 @@
 
 #include "System/UserFunction.h"
 
+#include <magic_enum.hpp>
+
+
 using namespace PlayerState;
 
 void Player::Initialize()
 {
 	name = "Player";
 
-	//ステートの追加
+	//-----< アニメーションスピードの設定 >-----//
+	{
+		animationSpeed[(int)PlayerState::Animation::Idle] = 1.0f;//待機
+		animationSpeed[(int)PlayerState::Animation::Walking] = 1.0f;//歩き
+		animationSpeed[(int)PlayerState::Animation::Running] = 1.0f;//走り
+
+		animationSpeed[(int)PlayerState::Animation::Jump] = 2.0f;//ジャンプ
+		animationSpeed[(int)PlayerState::Animation::Falling] = 1.0f;//落下
+		animationSpeed[(int)PlayerState::Animation::Landing] = 2.0f;//着地
+		animationSpeed[(int)PlayerState::Animation::JumpFlip] = 1.5f;//2段ジャンプ（空中回避）
+
+		animationSpeed[(int)PlayerState::Animation::Avoid] = 1.5f;//回避
+
+		animationSpeed[(int)PlayerState::Animation::PunchRight] = 2.0f;//右パンチ
+		animationSpeed[(int)PlayerState::Animation::PunchLeft] = 2.0f;//左パンチ
+		animationSpeed[(int)PlayerState::Animation::Kick] = 1.5f;//キック	
+		animationSpeed[(int)PlayerState::Animation::JumpPunch] = 1.5f;//空中攻撃
+
+		animationSpeed[(int)PlayerState::Animation::Damage] = 1.5f;//ダメージ
+		animationSpeed[(int)PlayerState::Animation::Death] = 1.5f;//死亡
+
+		animationSpeed[(int)PlayerState::Animation::DangleWire] = 1.0f;//ワイヤーぶら下がり
+
+		animationSpeed[(int)PlayerState::Animation::Wield] = 1.2f;//振り回す
+		animationSpeed[(int)PlayerState::Animation::Throw] = 1.5f;//投げる
+	}
+
+	//-----< ステートの追加 >-----//
 	states.clear();
 	states.emplace_back(new Idle(parent));//待機
 	states.emplace_back(new Run(parent));//走り
@@ -63,6 +93,7 @@ void Player::Initialize()
 	//ルートモーション用
 	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("IdleHip",(int)PlayerState::Animation::Idle,"mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
 	parent->GetComponent<ModelRenderer>()->StoreNodeIndex("FallingHip",(int)PlayerState::Animation::Falling,"mixamorig:Hips");//ボーン:”Robot 4”のノード番号を取得
+
 
 }
 
@@ -139,6 +170,15 @@ void Player::DebugGui()
 		ImGui::DragFloat("wireSpeed", &wireSpeed);
 		ImGui::SliderInt("attackPhase", &attackPhase, 0, maxAttackPhase);
 		ImGui::Text(currentState->GetName().c_str());
+		
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(ImGui::GetWindowSize().x, 100), ImGuiWindowFlags_NoTitleBar);
+		for (int i = 0; i < (int)PlayerState::Animation::AnimNum; i++)
+		{
+			std::string str = magic_enum::enum_name((PlayerState::Animation)i).data();
+			ImGui::DragFloat(str.c_str(), &(animationSpeed[i]));
+		}
+		ImGui::EndChild();
+
 		ImGui::TreePop();
 	}
 }

@@ -8,26 +8,31 @@ namespace PlayerState
 	//アニメーション
 	enum class Animation
 	{
-		Attack,//左
-		Death,
-		Falling,
-		GetHit1,//ダメージ小
-		GetHit2,//ダメージ大
-		Idle,
-		Jump,
-		JumpFlip,
-		Landing,
-		Revive,//復活
-		Running,
-		Walking,
-		Punching,//右
-		StylishFlip,//ワイヤーぶら下がり
-		HookPunch,//空中攻撃
+		Idle,//待機
+		Walking,//歩き
+		Running,//走り
+
+		Jump,//ジャンプ
+		Falling,//落下
+		Landing,//着地
+		JumpFlip,//2段ジャンプ（空中回避）
+
 		Avoid,//回避
-		AvoidJump,//空中回避
-		Kick,//キック
-		Throw,//投げる
+
+		PunchRight,//右パンチ
+		PunchLeft,//左パンチ
+		Kick,//キック	
+		JumpPunch,//空中攻撃
+
+		Damage,//ダメージ
+		Death,//死亡
+
+		DangleWire,//ワイヤーぶら下がり
+
 		Wield,//振り回す
+		Throw,//投げる
+
+		AnimNum,
 	};
 
 	
@@ -46,6 +51,8 @@ namespace PlayerState
 		virtual void Exit() {}
 		//ステート変更するかどうか
 		virtual std::string GetNext() { return ""; }
+		//ImGui
+		virtual void DebugGui();
 
 		//名前の取得
 		std::string GetName() { return name; }
@@ -79,6 +86,10 @@ namespace PlayerState
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
 		//一番近い敵を取得
 		void CalcEnemyDistance();
+		//アニメーションスピードを取得
+		float GetAnimationSpeed(int index);
+		//アニメーションスピードの設定
+		void SetAnimationSpeed(int index, float speed);
 
 		//待機ステートの遷移条件
 		bool JudgeIdleState();
@@ -374,9 +385,13 @@ namespace PlayerState
 	private:
 		DirectX::XMFLOAT3 moveDirection = {};
 		DirectX::XMFLOAT3 oldPosition[2]{};
-		float falling = false;
 		float jumpSpeed = 0.0f;
 		float inputRatio = 0.5f;
+
+		float coolTimer = 0.0f;//ワイヤーを刺すためのクールタイム
+		float maxCoolTime = 1.0f;
+
+		bool falling = false;
 	};
 
 	//空中攻撃

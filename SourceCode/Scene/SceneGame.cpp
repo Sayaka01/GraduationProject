@@ -142,24 +142,34 @@ void SceneGame::PlayerInitialize()
 
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Attack.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Death.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallingIdle.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GetHit1.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GetHit2.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/KnifeIdle.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpingUp.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Jump-Flip.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallingToLanding.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Revive.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Running.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Walking.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StylishFlip.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/HookPunch.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");
-	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/KnifeIdle.fbx");//Idle
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Walking.fbx");//Walking
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Running.fbx");//Running
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StandingJumpRunningToRunForward.fbx");//Jump
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallALoop.fbx");//Falling
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/FallALandToStandingIdle01.fbx");//Landing
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/RunningForwardFlip.fbx");//JumpFlip（空中回避）
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");//Avoid
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/CrossPunch.fbx");//PunchRight
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");//PunchLeft
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");//Kick
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/HookPunch.fbx");//JumpPunch
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/BigHitToHead.fbx");//Damage
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StandingReactDeathBackward.fbx");//Death
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/StylishFlip.fbx");//DangleWire
+
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/GreatSwordSlash.fbx");//Wield
+	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/SwordAndShieldSlash.fbx");//Throw
+
+
+
 
 	player->AddComponent(modelRenderer);//Player Componentより先につける
 
@@ -219,7 +229,7 @@ void SceneGame::EnemyInitialize()
 	{
 		ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Enemy/miniRobotOrange.fbx");
 
-		enemies.emplace_back(new GameObject("enemy_"+std::to_string(i)));
+		enemies.emplace_back(new GameObject("enemy_" + std::to_string(i)));
 		enemies[i]->SetTag(Tag::Enemy);
 		enemies[i]->AddComponent(modelRenderer);
 
@@ -238,7 +248,7 @@ void SceneGame::EnemyInitialize()
 
 		// 姿勢等の設定
 		enemies[i]->GetComponent<Transform>()->scale = { 0.04f, 0.04f, 0.04f };
-		enemies[i]->GetComponent<Transform>()->pos = { 20+(i*20.0f), 0, 30 };
+		enemies[i]->GetComponent<Transform>()->pos = { 20 + (i * 20.0f), 0, 30 };
 
 		// HP設定
 		enemies[i]->AddComponent(new Health(10));
@@ -303,17 +313,17 @@ void SceneGame::EnemyInitialize()
 void SceneGame::SpriteInitialze()
 {
 	// プレイヤーUI画像の読み込み
-	SpriteLoad(&sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),			
-		{ 147.4f,48.7f },   { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
-	
+	SpriteLoad(&sprBoxBarBack, "boxBarBack", (L"./Resources/Sprite/box_bar.png"),
+		{ 147.4f,48.7f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+
 	SpriteLoad(&sprBoxBar, "boxBar", (L"./Resources/Sprite/box_bar.png"),
 		{ 147.4f,48.7f }, { 0.5f,0.5f }, { 0.3f,1.0f,0.3f,1.0f });//pos,scale,color
 
-	SpriteLoad(&sprCircleBar,  "circleBar",  (L"./Resources/Sprite/circle_bar_satisfy.png"), 
-		{ -7.12f,-17.56f },	{ 0.5f,0.5f }, { 1.0f,1.0f,0.0f,1.0f });//pos,scale,color
+	SpriteLoad(&sprCircleBar, "circleBar", (L"./Resources/Sprite/circle_bar_satisfy.png"),
+		{ -7.12f,-17.56f }, { 0.5f,0.5f }, { 1.0f,1.0f,0.0f,1.0f });//pos,scale,color
 
-	SpriteLoad(&sprUiFrame,	  "uiFrame",	(L"./Resources/Sprite/hp_bar.png"),				
-		{ 0.0f,0.0f },      { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
+	SpriteLoad(&sprUiFrame, "uiFrame", (L"./Resources/Sprite/hp_bar.png"),
+		{ 0.0f,0.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f });//pos,scale,color
 
 	// GameOver画像の読み込み
 	SpriteLoad(&sprOverBack, "gameOverBack", (L"./Resources/Sprite/gameOverBack.png"),
@@ -321,18 +331,18 @@ void SceneGame::SpriteInitialze()
 	sprOverBack->GetComponent<SpriteRenderer>()->SetEnable(false);
 
 	SpriteLoad(&sprOverText, "deadText", (L"./Resources/Sprite/text_dead.png"),
-		{ SCREEN_WIDTH*0.5f,SCREEN_HEIGHT*0.5f });//pos
+		{ SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f });//pos
 	//基準点を画像の真ん中に設定
 	sprOverText->GetComponent<SpriteRenderer>()->pivot = sprOverText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
 	sprOverText->GetComponent<SpriteRenderer>()->SetEnable(false);
-	
+
 	// GameClear画像の読み込み
 	SpriteLoad(&sprClearBack, "gameClearBack", (L"./Resources/Sprite/gameClearBack.png"),
 		{ 0.0f,0.0f });//pos
 	sprClearBack->GetComponent<SpriteRenderer>()->SetEnable(false);
 
 	SpriteLoad(&sprClearText, "clearText", (L"./Resources/Sprite/clear_text.png"),
-		{ SCREEN_WIDTH*0.5f,255.0f });//pos
+		{ SCREEN_WIDTH * 0.5f,255.0f });//pos
 	//基準点を画像の真ん中に設定
 	sprClearText->GetComponent<SpriteRenderer>()->pivot = sprClearText->GetComponent<SpriteRenderer>()->GetSpriteSize() * 0.5f;
 	sprClearText->GetComponent<SpriteRenderer>()->SetEnable(false);
@@ -352,7 +362,7 @@ void SceneGame::SpriteInitialze()
 
 }
 
-void SceneGame::SpriteLoad(GameObject** spr,std::string name,const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
+void SceneGame::SpriteLoad(GameObject** spr, std::string name, const wchar_t* filepath, SimpleMath::Vector2 pos, SimpleMath::Vector2 scale, SimpleMath::Vector4 color)
 {
 	if (name == "")
 		(*spr) = new GameObject();
@@ -371,7 +381,7 @@ void SceneGame::PlayerUIUpdate()
 {
 	float spriteSizeX = sprBoxBar->GetComponent<SpriteRenderer>()->GetSpriteSize().x;
 	// 描画サイズをHPに合わせて変更
-	sprBoxBar->GetComponent<SpriteRenderer>()->texSize.x = spriteSizeX*player->GetComponent<Health>()->GetHpRate();
+	sprBoxBar->GetComponent<SpriteRenderer>()->texSize.x = spriteSizeX * player->GetComponent<Health>()->GetHpRate();
 	// HPの割合から描画位置をずらす
 	float rate = player->GetComponent<Health>()->GetHpRate();
 	sprBoxBar->GetComponent<SpriteRenderer>()->texPos.x = spriteSizeX * (1 - rate);
@@ -385,7 +395,7 @@ void SceneGame::ResultUpdate()
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
-	
+
 	if (gamePad.GetAxisLY() >= 0.3f)//↑
 	{
 		if (selectNextScene == NextSelectName::Title)
@@ -418,7 +428,7 @@ void SceneGame::ResultUpdate()
 	if (gamePad.GetButtonUp() & GamePad::BTN_A)
 	{
 		//retryを選択
-		if (selectNextScene ==NextSelectName::Game)
+		if (selectNextScene == NextSelectName::Game)
 		{
 			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 		}
@@ -454,7 +464,7 @@ void SceneGame::FlashUiColor(SpriteRenderer* spr)
 void SceneGame::JudgeResult()
 {
 	bool isDeadP = player->GetComponent<Player>()->GetIsDead();
-	if (isDeadP || enemyManager->GetChildrenCount()<=0/*クエストがクリアされたら*/)
+	if (isDeadP || enemyManager->GetChildrenCount() <= 0/*クエストがクリアされたら*/)
 	{
 		if (isDeadP)
 		{

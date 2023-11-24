@@ -49,6 +49,9 @@ void PlayerState::Default::Update()
 		if(pushAttackButton)pushAttackButton = false;
 	}
 }
+void PlayerState::Default::DebugGui()
+{
+}
 
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
@@ -191,6 +194,14 @@ void PlayerState::Default::CalcEnemyDistance()
 	//GameObject* enemy = parent->GetParent()->GetChild("enemy");
 	//parameter = enemy->GetComponent<Transform>()->pos;
 }
+float PlayerState::Default::GetAnimationSpeed(int index)
+{
+	return parent->GetComponent<Player>()->GetAnimationSpeed(index);
+}
+void PlayerState::Default::SetAnimationSpeed(int index, float speed)
+{
+	parent->GetComponent<Player>()->SetAnimationSpeed(index, speed);
+}
 
 bool PlayerState::Default::JudgeIdleState()
 {
@@ -278,7 +289,11 @@ Idle::Idle(GameObject* parent)
 }
 void Idle::Enter()
 {
+	//アニメーションの変更
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Idle, true);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Idle));
+	
 	jumpCount = 0;
 }
 void Idle::Update()
@@ -353,7 +368,10 @@ Run::Run(GameObject* parent)
 }
 void Run::Enter()
 {
+	//アニメーションの切り替え
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Running, true);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Running));
 }
 void Run::Update()
 {
@@ -434,9 +452,19 @@ void Jump::Enter()
 {
 	jumpCount++;
 	if (jumpCount <= 1)//ジャンプ一回目
-		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+	{
+		//アニメーションの切り替え
+		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
+		//アニメーションスピードの調整
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
+	}
 	else//それ以降
+	{
+		//アニメーションの切り替え
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
+		//アニメーションスピードの調整
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::JumpFlip));
+	}
 
 	parent->GetComponent<RigidBody>()->Jump(parent->GetComponent<Player>()->GetJumpSpeed());
 
@@ -449,6 +477,12 @@ void Jump::Update()
 
 	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
+
+	if (jumpCount > 1)
+	{
+		//腰の位置のモーションによる移動を停止
+		parent->GetComponent<ModelRenderer>()->StopMotionVelocity("FallingHip");
+	}
 
 	Default::Update();
 }
@@ -516,7 +550,10 @@ Falling::Falling(GameObject* parent)
 }
 void Falling::Enter()
 {
+	//アニメーションの切り替え
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
@@ -591,7 +628,10 @@ Landing::Landing(GameObject* parent)
 }
 void Landing::Enter()
 {
+	//アニメーションの切り替え
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Landing, false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Landing));
 
 	jumpCount = 0;
 
@@ -648,9 +688,9 @@ PunchRight::PunchRight(GameObject* parent)
 void PunchRight::Enter()
 {
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Punching, false);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::PunchRight, false);
 	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.5f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::PunchRight));
 	
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
@@ -731,9 +771,9 @@ PunchLeft::PunchLeft(GameObject* parent)
 void PunchLeft::Enter()
 {
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Attack, false);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::PunchLeft, false);
 	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::PunchLeft));
 
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
@@ -775,8 +815,6 @@ void PunchLeft::Update()
 void PunchLeft::Exit()
 {
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
-	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 	
 	//攻撃中フラグをfalseに
 	parent->GetComponent<Player>()->SetIsAttack(false);
@@ -815,7 +853,7 @@ void Kick::Enter()
 	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Kick, false);
 	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Kick));
 
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
@@ -858,8 +896,6 @@ void Kick::Update()
 void Kick::Exit()
 {
 	parent->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
-	//アニメーションスピードの調整
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 	
 	//攻撃中フラグをfalseに
 	parent->GetComponent<Player>()->SetIsAttack(false);
@@ -888,7 +924,10 @@ Damage::Damage(GameObject* parent)
 }
 void Damage::Enter()
 {
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::GetHit2, false);
+	//アニメーションの切り替え
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Damage, false);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Damage));
 }
 void Damage::Update()
 {
@@ -928,8 +967,10 @@ Death::Death(GameObject* parent)
 }
 void Death::Enter()
 {
+	//アニメーションの切り替え
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Death, false);
-
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Death));
 }
 void Death::Update()
 {
@@ -963,6 +1004,7 @@ void AimWire::Enter()
 {
 	jumpCount = 0;
 
+	//アニメーションの切り替え
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
 
 }
@@ -1032,8 +1074,12 @@ void SwingWire::Enter()
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 
 	//parent->GetComponent<RigidBody>()->SetUseGravity(false);
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::StylishFlip, true);
-	
+
+	//アニメーションの切り替え
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::DangleWire, true);
+	//アニメーションスピードの調整
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::DangleWire));
+
 
 	swingTimer = 0.0f;
 }
@@ -1144,13 +1190,23 @@ void WireJump::Enter()
 	jumpCount++;
 	//アニメーションの切り替え
 	if (jumpCount <= 1)//ジャンプ一回目
-		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Jump, false);
+	{
+		//アニメーションの切り替え
+		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
+		//アニメーションスピードの調整
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
+	}
 	else//それ以降
+	{
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
+		//アニメーションスピードの調整
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::JumpFlip));
+	}
 
 	//ジャンプ
 	parent->GetComponent<RigidBody>()->Jump(jumpSpeed);
 
+	coolTimer = maxCoolTime;
 	falling = false;
 }
 void WireJump::Update()
@@ -1171,15 +1227,24 @@ void WireJump::Update()
 	AddMoveVelocity(moveVec);
 	YAxisRotate(inputVec);
 
-	//アニメーション再生が終わったら落下ステートへ遷移
-	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+	if (jumpCount > 1)
 	{
-		//アニメーションの切り替え
-		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
-
-		falling = true;
+		if (!falling)
+		{
+			//腰の位置のモーションによる移動を停止
+			parent->GetComponent<ModelRenderer>()->StopMotionVelocity("FallingHip");
+			if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+			{
+				falling = true;
+				//アニメーションの切り替え
+				parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Falling, true);
+				//アニメーションスピードの調整
+				parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
+			}
+		}
 	}
 
+	coolTimer -= SystemManager::Instance().GetElapsedTime();
 	
 	Default::Update();
 }
@@ -1195,13 +1260,13 @@ std::string WireJump::GetNext()
 	}
 
 	//ワイヤーでの弧を書いた移動ステートに遷移できるか
-	if (JudgeSwingWireState() && falling)
+	if (JudgeSwingWireState() && coolTimer < 0.0f)
 	{
 		return "SwingWire";
 	}
 
 	//ワイヤーでの直線移動ステートに遷移できるか
-	if (JudgeAimWireState() && falling)
+	if (JudgeAimWireState() && coolTimer < 0.0f)
 	{
 		return "AimWire";
 	}
@@ -1243,9 +1308,9 @@ JumpAttack::JumpAttack(GameObject* parent)
 void JumpAttack::Enter()
 {
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::HookPunch, false);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpPunch, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(3.0f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::JumpPunch));
 
 	//攻撃用当たり判定のコンポーネントを有効化
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(true);
@@ -1324,8 +1389,6 @@ void JumpAttack::Update()
 void JumpAttack::Exit()
 {
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
-	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 
 	//攻撃中フラグをfalseに
 	parent->GetComponent<Player>()->SetIsAttack(false);
@@ -1361,7 +1424,7 @@ void Avoid::Enter()
 	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Avoid, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Avoid));
 
 	//回避ベクトルを作成
 	avoidVec = CalcMoveVec() * avoidSpeed;
@@ -1384,8 +1447,6 @@ void Avoid::Update()
 }
 void Avoid::Exit()
 {
-	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 }
 std::string Avoid::GetNext()
 {
@@ -1399,7 +1460,7 @@ std::string Avoid::GetNext()
 	return "";
 }
 
-//-----< 回避 >-----//
+//-----< 空中回避 >-----//
 AvoidJump::AvoidJump()
 {
 	name = "AvoidJump";
@@ -1412,9 +1473,9 @@ AvoidJump::AvoidJump(GameObject* parent)
 void AvoidJump::Enter()
 {
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::AvoidJump, false);
+	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::JumpFlip, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(2.0f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::JumpFlip));
 
 	//回避ベクトルを作成
 	avoidVec = CalcMoveVec() * avoidSpeed;
@@ -1441,8 +1502,6 @@ void AvoidJump::Update()
 }
 void AvoidJump::Exit()
 {
-	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 }
 std::string AvoidJump::GetNext()
 {
@@ -1471,7 +1530,7 @@ void WieldThrow::Enter()
 	//アニメーションの再生
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
+	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
 
 	isThrow = false;
 }
@@ -1482,7 +1541,7 @@ void WieldThrow::Update()
 		//アニメーションの再生
 		parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Throw, false);
 		//アニメーションの再生速度の変更
-		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.5f);
+		parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Throw));
 
 		isThrow = true;
 	}
@@ -1491,8 +1550,6 @@ void WieldThrow::Update()
 }
 void WieldThrow::Exit()
 {
-	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 }
 std::string WieldThrow::GetNext()
 {

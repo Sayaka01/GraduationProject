@@ -50,6 +50,9 @@ public:
 	void InitAttackPhase() { attackPhase = 0; }
 	void NextAttackPhase() { attackPhase++; if (attackPhase >= maxAttackPhase)attackPhase = 0; }
 
+	float GetAnimationSpeed(int index) { return animationSpeed[index]; }
+	void SetAnimationSpeed(int index, float speed) { animationSpeed[index] = speed; }
+
 	PlayerState::Default* GetCurrentState() { return currentState; }
 
 private:
@@ -80,4 +83,5 @@ private:
 	int attackPhase = 0;//攻撃段階（何段目か）
 	int maxAttackPhase = 3;
 
+	float animationSpeed[(int)PlayerState::Animation::AnimNum];
 };

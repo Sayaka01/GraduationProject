@@ -89,7 +89,7 @@ private:
 	int oldKeyframeIndex = 0;//アニメ―ションを切り替えるときに使う
 	bool interpolationAnim = false;//アニメ―ションの補間中か
 	float interpolationRatio = 0.0f;//補間に使う
-	float interpolationSpeed = 20.0f;//補間の速さ
+	float interpolationSpeed = 5.0f;//補間の速さ
 	Animation::Keyframe interpolationKeyframe;
 
 	float playAnimTimer = 0.0f;//アニメ―ションの再生時間

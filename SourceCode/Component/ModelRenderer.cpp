@@ -135,6 +135,23 @@ void ModelRenderer::UpdateAnimation()
 
 	float elapsedTime = SystemManager::Instance().GetElapsedTime();
 
+	const float samplingRate = modelData->animationClips.at(currentAnimationIndex).samplingRate;
+	playAnimTimer += samplingRate * animationSpeed * elapsedTime;
+	const size_t maxKeyframe = modelData->animationClips.at(currentAnimationIndex).sequence.size();
+	if (static_cast<size_t>(playAnimTimer) >= maxKeyframe && isPlayAnimation)
+	{
+		playAnimTimer = 0.0f;
+
+		if (!isLoopAnimation)
+		{
+			isPlayAnimation = false;
+			playAnimTimer = static_cast<float>(maxKeyframe - 1);
+		}
+
+		finishAnimation = true;
+	}
+	keyframeIndex = static_cast<int>(playAnimTimer);
+
 	//アニメ―ション補間
 	if (interpolationAnim)
 	{
@@ -154,25 +171,8 @@ void ModelRenderer::UpdateAnimation()
 		modelData->BlendAnimations(keyframes, interpolationRatio, interpolationKeyframe);
 		modelData->UpdateGlobalTransform(interpolationKeyframe);
 
-		if (interpolationAnim)return;
+		//if (interpolationAnim)return;
 	}
-
-	const float samplingRate = modelData->animationClips.at(currentAnimationIndex).samplingRate;
-	playAnimTimer += samplingRate * animationSpeed * elapsedTime;
-	const size_t maxKeyframe = modelData->animationClips.at(currentAnimationIndex).sequence.size();
-	if (static_cast<size_t>(playAnimTimer) >= maxKeyframe && isPlayAnimation)
-	{
-		playAnimTimer = 0.0f;
-
-		if (!isLoopAnimation)
-		{
-			isPlayAnimation = false;
-			playAnimTimer = static_cast<float>(maxKeyframe - 1);
-		}
-
-		finishAnimation = true;
-	}
-	keyframeIndex = static_cast<int>(playAnimTimer);
 }
 void ModelRenderer::PlayAnimation(int animationIndex, bool loop)
 {
