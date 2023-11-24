@@ -40,7 +40,12 @@ void ModelRenderer::Draw()
 	{
 		//アニメ―ションがある
 		if (interpolationAnim)
-			keyframe = interpolationKeyframe;
+		{
+			if (interpolationRatio > FLT_EPSILON)
+				keyframe = interpolationKeyframe;
+			else
+				keyframe = modelData->animationClips.at(oldAnimationIndex).sequence.at(oldKeyframeIndex);
+		}
 		else keyframe = modelData->animationClips.at(currentAnimationIndex).sequence.at(keyframeIndex);
 	}
 
@@ -161,6 +166,7 @@ void ModelRenderer::UpdateAnimation()
 		{
 			interpolationRatio = 1.0f;
 			interpolationAnim = false;
+			return;
 		}
 
 		const Animation::Keyframe* keyframes[2] = {

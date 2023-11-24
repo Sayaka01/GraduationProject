@@ -86,12 +86,12 @@ void SceneGame::Finalize()
 void SceneGame::Update()
 {
 	//ゲームが終わっている場合(GameClear || GameOver)
-	if (isFinishGame)
-	{
-		spriteManager->Update();
-		ResultUpdate();
-		return;
-	}
+	//if (isFinishGame)
+	//{
+	//	spriteManager->Update();
+	//	ResultUpdate();
+	//	return;
+	//}
 
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
@@ -131,7 +131,7 @@ void SceneGame::Draw()
 
 	CollideManager::Instance().Draw();
 
-	spriteManager->Draw();
+	//spriteManager->Draw();
 }
 
 void SceneGame::PlayerInitialize()
@@ -154,6 +154,7 @@ void SceneGame::PlayerInitialize()
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JumpOver.fbx");//Avoid
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/CrossPunch.fbx");//PunchRight
+	//modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/JabToElbowPunch.fbx");//PunchLeft
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/Punching.fbx");//PunchLeft
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/MmaKick.fbx");//Kick
