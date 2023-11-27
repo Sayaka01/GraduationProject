@@ -3,6 +3,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 
 #include "Component.h"
 
@@ -49,7 +50,7 @@ public:
 
 	void LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
 
-	void ResetDefault();
+	//void ResetDefault();
 
 	//---- カメラの位置と注視点を算出し設定 ----
 	//（戻り値：入力があるときtrue）
@@ -108,4 +109,8 @@ private:
 	float horizonDegree{ 0.0f };//横方向の回転速度
 	//DirectX::XMFLOAT3 eyeVector{ 0,0,0 };//targetからカメラへのベクトル
 
+	DirectX::SimpleMath::Vector3 fetchFront{};//前方向へ向くときの前方向を保存(固定しなければ一生まわり続けるため)
+	bool lockingOn{ false };//ロックオン中か
+	float rateInCamera{ 3.0f };   //ロックオンカメラなどのイージングレート
+	float lockonDegree{ 0.0f };
 };

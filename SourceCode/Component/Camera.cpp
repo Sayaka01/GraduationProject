@@ -47,8 +47,28 @@ void Camera::Update()
 	if (gamePad.GetButtonUp() & GamePad::BTN_RIGHT_THUMB)// Rスティック押し込み
 	{
 		//プレイヤーの前方向へカメラをリセット
+		if (targetObj != nullptr)
+		{
+			fetchFront = targetObj->GetComponent<Transform>()->GetForward();
+			lockingOn = true;
+		}
+	}
+
+	if (lockingOn)
+	{
+		DirectX::XMFLOAT3 velo = { fetchFront.x *10, fetchFront.y * 10, fetchFront.z * 10 };
+		LockOnTarget(cameraData->GetTarget() + velo, rateInCamera);
+		if (rateInCamera < 1)
+			rateInCamera += SystemManager::Instance().GetElapsedTime() * 3;
+		else
+		{
+			rateInCamera = 0;
+			lockingOn = false;
+		}
 
 	}
+
+
 
 	// カメラの距離を動かす
 	ChangeRange();
@@ -66,10 +86,13 @@ void Camera::DebugGui()
 	if (ImGui::TreeNode(name.c_str()))
 	{
 		cameraData->DebugGui();
-		if (ImGui::Button("reset"))
-		{
-			ResetDefault();
-		}
+		//if (ImGui::Button("reset"))
+		//{
+		//	ResetDefault();
+		//}
+
+		ImGui::SliderFloat("rate", &rateInCamera,0.0f,1.0f);
+
 #if 0
 		ImGui::DragFloat("fov", &FovRadY, 0.1f);
 		constexpr float aspect = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT);
@@ -252,86 +275,22 @@ void Camera::ChangeRange()
 //watcherPosition:視点の位置、targetPosition:注視点の位置
 void Camera::LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate)
 {
-	//DirectX::SimpleMath::Vector3 angle = cameraData->GetAngle();
+	//目から注視点へのベクトルを算出し保存
+	DirectX::SimpleMath::Vector3 eyeVector = cameraData->GetTarget() - targetPosition;
+	eyeVector.Normalize();//正規化
+	DirectX::SimpleMath::Vector3 currentVector = cameraData->GetEyeVector();
+	currentVector.Normalize();//正規化
+	//線形補間する
+	currentVector = DirectX::XMVectorLerp(currentVector, eyeVector, rate);
+	//currentVectorY = LerpFloat(currentVectorY, eyeVectorY, rate);
+	cameraData->SetEyeVector(currentVector);
 
-	////カメラの回転値を回転行列に変換
-	//const DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-	////回転行列から前方向ベクトルを取り出す
-	//const DirectX::XMVECTOR Front = Transform.r[2];
-	//Front = DirectX::XMVector3Normalize(Front);
-	//DirectX::XMFLOAT3 front{};
-	//DirectX::XMStoreFloat3(&front, Front);
+	//カメラの位置を算出
+	DirectX::SimpleMath::Vector3 eyePoint = cameraData->GetTarget();
+	DirectX::SimpleMath::Vector3 eye = eyePoint + currentVector * cameraData->GetRange();
 
-	//DirectX::XMFLOAT3 corEye{};
-	//DirectX::XMFLOAT3 corTarget{};
+	cameraData->SetEye(eye);
 
-	////各視点のカメラ位置（eye）と注視点（target）を求める
-	//corTarget.x = cameraData->GetTarget().x + targetCorrection.x * front.x;
-	//corTarget.y = cameraData->GetTarget().y + targetCorrection.y;
-	//corTarget.z = cameraData->GetTarget().z + targetCorrection.z * front.z;
-	//corEye = corTarget - front * cameraData->GetRange();
-
-
-	////DirectX::XMVECTOR WatcherPos = DirectX::XMLoadFloat3(&focus);
-	////DirectX::XMVECTOR TargetPos = DirectX::XMLoadFloat3(&targetPosition);
-	////目から注視点へのベクトルを算出し保存
-	////DirectX::XMVECTOR EyeVector = (WatcherPos - TargetPos);
-	////EyeVector = DirectX::XMVector3Normalize(EyeVector);//正規化
-	////DirectX::XMVECTOR CurrentFront = DirectX::XMLoadFloat3(&eyeVectorN);
-	////CurrentVector = DirectX::XMVector3Normalize(CurrentVector);
-	////線形補間する
-	//CurrentVector = DirectX::XMVectorLerp(CurrentVector, EyeVector, rate);
-	//DirectX::XMStoreFloat3(&eyeVectorN, CurrentVector);
-	//EyeVector = CurrentVector;
-
-	////カメラの位置を算出
-	//DirectX::XMVECTOR EyePoint = WatcherPos;
-	//DirectX::XMVECTOR Eye = EyePoint + EyeVector * range;
-
-	//DirectX::XMStoreFloat3(&eye, Eye);
-	//DirectX::XMStoreFloat3(&focus, EyePoint);
-
-	////カメラの情報を設定
-	//cameraData->SetLookAt(eye, focus, up);
-}
-
-void Camera::ResetDefault()
-{
-	//DirectX::SimpleMath::Vector3 angle = cameraData->GetAngle();
-
-	// playerからカメラの視点　と　defaultの視点を内積して角度を算出し代入
-		
-	//カメラの回転値を回転行列に変換
-	//const DirectX::XMMATRIX transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);
-	//回転行列から前方向ベクトルを取り出す
-	//DirectX::XMVECTOR Front = transform.r[2];
-	//Front = DirectX::XMVector3Normalize(Front);
-	//DirectX::XMFLOAT3 front{};
-	//DirectX::XMStoreFloat3(&front, Front);
-
-	////カメラの現在の向いている向き
-	//DirectX::SimpleMath::Vector3 eyeVector;
-	//DirectX::XMStoreFloat3(&eyeVector, Front);
-
-	//GameObject* pl = parent->GetParent()->GetChild("player");
-	//if (pl == nullptr)return;
-	//DirectX::SimpleMath::Vector3 playerPos = pl->GetComponent<Transform>()->pos;
-
-	////リセットしたときにカメラが見る位置
-	//DirectX::SimpleMath::Vector3 targetPos;
-	//targetPos.x = playerPos.x + targetCorrection.x;
-	//targetPos.y = playerPos.y + targetCorrection.y;
-	//targetPos.z = playerPos.z + targetCorrection.z;
-
-	//// playerのfront
-	//DirectX::SimpleMath::Vector3 plFront = pl->GetComponent<Transform>()->GetForward();
-	//plFront.Normalize();
-
-	//DirectX::SimpleMath::Vector3 eye = targetPos + -plFront * cameraData->GetRange();
-
-	//cameraData->SetAngle({ 0, 0, 0 });
-
-	////カメラの情報を設定
-	//cameraData->SetLookAt(eye, targetPos, { 0.0f,1,0.0001f });
-
+	//カメラの情報を設定
+	cameraData->SetLookAt(eye, cameraData->GetTarget(), { 0.0f,1,0.0001f });
 }
