@@ -86,12 +86,12 @@ void SceneGame::Finalize()
 void SceneGame::Update()
 {
 	//ゲームが終わっている場合(GameClear || GameOver)
-	//if (isFinishGame)
-	//{
-	//	spriteManager->Update();
-	//	ResultUpdate();
-	//	return;
-	//}
+	if (isFinishGame)
+	{
+		spriteManager->Update();
+		ResultUpdate();
+		return;
+	}
 
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
@@ -131,7 +131,7 @@ void SceneGame::Draw()
 
 	CollideManager::Instance().Draw();
 
-	//spriteManager->Draw();
+	spriteManager->Draw();
 }
 
 void SceneGame::PlayerInitialize()
