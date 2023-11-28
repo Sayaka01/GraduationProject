@@ -303,6 +303,10 @@ void PlayerState::Default::SearchThrowObj()
 		//距離がサーチ範囲を超えるならcontinue
 		if (distance > searchRange)continue;
 
+
+		//カメラの前方向ベクトルを取得
+		DirectX::XMFLOAT3 cameraFront = GetCameraFront();
+
 		//カメラの方向にオブジェクトがいるかどうか
 	}
 }
