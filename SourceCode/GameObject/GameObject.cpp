@@ -47,9 +47,6 @@ void GameObject::Update()
 			component->Update();
 	}
 
-	//ImGui
-	DebugGui();
-
 	//子オブジェクトの更新
 	for(GameObject* childObj : children)
 	{
@@ -91,6 +88,13 @@ void GameObject::DebugGui()
 			component->DebugGui();
 	}
 	ImGui::End();
+
+	//子オブジェクトのIMGUI
+	for (GameObject* childObj : children)
+	{
+		childObj->DebugGui();
+	}
+
 #endif
 }
 

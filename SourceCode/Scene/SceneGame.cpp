@@ -123,6 +123,23 @@ void SceneGame::Update()
 	PlayerUIUpdate();
 	spriteManager->Update();
 
+	//-----< IMGUI >-----//
+	{
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("ImGui"))
+			{
+				if (ImGui::MenuItem("ObjectManager", "", &imguiObjctManager)) {}
+
+				if (ImGui::MenuItem("SpriteManager", "", &imguiSpriteManager)) {}
+
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+		if(imguiObjctManager) { objectManager->DebugGui(); }
+		if(imguiSpriteManager) { spriteManager->DebugGui(); }
+	}
 }
 
 void SceneGame::Draw()

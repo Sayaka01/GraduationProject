@@ -95,4 +95,8 @@ private:
 	int flashUIState = 0;
 
 	bool isOpenMenu = false;
+
+	//IMGUI
+	bool imguiObjctManager = true;
+	bool imguiSpriteManager = false;
 };
