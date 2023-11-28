@@ -48,7 +48,7 @@ public:
 	// プレイヤーのステートによってカメラの距離を動かす
 	void ChangeRange();
 
-	void LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
+	bool LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate);
 
 	//void ResetDefault();
 

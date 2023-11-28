@@ -57,14 +57,14 @@ void Camera::Update()
 	if (lockingOn)
 	{
 		DirectX::XMFLOAT3 velo = fetchFront * cameraData->GetRange();
-		LockOnTarget(cameraData->GetTarget() + cameraData->GetTargetCorrection() - velo/*eye*/, rateInCamera);
-		if (rateInCamera < 1)
-			rateInCamera += SystemManager::Instance().GetElapsedTime();
-		else
-		{
-			rateInCamera = 0;
-			lockingOn = false;
-		}
+		lockingOn = LockOnTarget(cameraData->GetTarget() + cameraData->GetTargetCorrection() - velo/*eye*/, rateInCamera);
+		//if (rateInCamera < 1)
+		//	rateInCamera += SystemManager::Instance().GetElapsedTime();
+		//else
+		//{
+		//	rateInCamera = 0;
+		//	lockingOn = false;
+		//}
 
 	}
 
@@ -201,6 +201,7 @@ void Camera::Tracking() const
 {
 	if (!tracking)return;
 
+	//cameraData->SetTarget({0,0,0});
 	cameraData->SetTarget(targetObj->GetComponent<Transform>()->pos);
 }
 
@@ -273,9 +274,9 @@ void Camera::ChangeRange()
 
 //---- カメラが見ている先を目的地に設定 ----
 //watcherPosition:視点の位置、targetPosition:注視点の位置
-void Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
+bool Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
 {
-	//eyeからtargetへのベクトル
+	//回転後のeyeからtargetへのベクトル
 	DirectX::SimpleMath::Vector3 eyeVector = eyeP - cameraData->GetTarget();
 	eyeVector.Normalize();//正規化
 
@@ -285,9 +286,11 @@ void Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
 
 	DirectX::SimpleMath::Vector3 up = CrossFloat3(eyeVector, currentVector);
 	up.Normalize();
-	if (up.Length() == 0)return;
+	if (up.Length() == 0)return false;
 	float dot = DotFloat3(eyeVector, currentVector);
 	dot = acosf(dot);// 角度算出
+
+	if (fabsf(DirectX::XMConvertToDegrees(dot)) <= 1)return false;
 
 	DirectX::XMVECTOR EyeVector = DirectX::XMLoadFloat3(&eyeVector);
 
@@ -295,9 +298,16 @@ void Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
 	//if (horizonDegree > 0.01f || horizonDegree < -0.01f)
 	{
 		DirectX::XMVECTOR Axis = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&up));
-		DirectX::XMVECTOR Quaternion = DirectX::XMQuaternionRotationAxis(DirectX::XMLoadFloat3(&up), dot*rate);
+		DirectX::XMVECTOR Quaternion = DirectX::XMQuaternionRotationAxis(DirectX::XMLoadFloat3(&up),0);
 		EyeVector = DirectX::XMVector3Rotate(EyeVector, Quaternion);
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("camera reset");
+	ImGui::SliderFloat3("up",&up.x, -1.0f, 1.0f);
+	ImGui::End();
+
+#endif
 
 	EyeVector = DirectX::XMVector3Normalize(EyeVector);
 	DirectX::XMStoreFloat3(&eyeVector, EyeVector);
@@ -328,4 +338,6 @@ void Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
 
 	//カメラの情報を設定
 	//cameraData->SetLookAt(eye, target, { 0.0f,1,0.0001f });
+
+	return true;
 }
