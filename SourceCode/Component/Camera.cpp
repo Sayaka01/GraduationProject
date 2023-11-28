@@ -56,10 +56,10 @@ void Camera::Update()
 
 	if (lockingOn)
 	{
-		DirectX::XMFLOAT3 velo = { fetchFront.x *10, fetchFront.y * 10, fetchFront.z * 10 };
-		LockOnTarget(cameraData->GetTarget() + velo, rateInCamera);
+		DirectX::XMFLOAT3 velo = fetchFront * cameraData->GetRange();
+		LockOnTarget(cameraData->GetTarget() + cameraData->GetTargetCorrection() - velo/*eye*/, rateInCamera);
 		if (rateInCamera < 1)
-			rateInCamera += SystemManager::Instance().GetElapsedTime() * 3;
+			rateInCamera += SystemManager::Instance().GetElapsedTime();
 		else
 		{
 			rateInCamera = 0;
@@ -273,24 +273,59 @@ void Camera::ChangeRange()
 
 //---- カメラが見ている先を目的地に設定 ----
 //watcherPosition:視点の位置、targetPosition:注視点の位置
-void Camera::LockOnTarget(DirectX::XMFLOAT3 targetPosition, float rate)
+void Camera::LockOnTarget(DirectX::XMFLOAT3 eyeP, float rate)
 {
-	//目から注視点へのベクトルを算出し保存
-	DirectX::SimpleMath::Vector3 eyeVector = cameraData->GetTarget() - targetPosition;
+	//eyeからtargetへのベクトル
+	DirectX::SimpleMath::Vector3 eyeVector = eyeP - cameraData->GetTarget();
 	eyeVector.Normalize();//正規化
+
+	//現在のカメラの前ベクトル
 	DirectX::SimpleMath::Vector3 currentVector = cameraData->GetEyeVector();
 	currentVector.Normalize();//正規化
+
+	DirectX::SimpleMath::Vector3 up = CrossFloat3(eyeVector, currentVector);
+	up.Normalize();
+	if (up.Length() == 0)return;
+	float dot = DotFloat3(eyeVector, currentVector);
+	dot = acosf(dot);// 角度算出
+
+	DirectX::XMVECTOR EyeVector = DirectX::XMLoadFloat3(&eyeVector);
+
+	//左右に回転
+	//if (horizonDegree > 0.01f || horizonDegree < -0.01f)
+	{
+		DirectX::XMVECTOR Axis = DirectX::XMVector3Normalize(DirectX::XMLoadFloat3(&up));
+		DirectX::XMVECTOR Quaternion = DirectX::XMQuaternionRotationAxis(DirectX::XMLoadFloat3(&up), dot*rate);
+		EyeVector = DirectX::XMVector3Rotate(EyeVector, Quaternion);
+	}
+
+	EyeVector = DirectX::XMVector3Normalize(EyeVector);
+	DirectX::XMStoreFloat3(&eyeVector, EyeVector);
+	cameraData->SetEyeVector(eyeVector);
+
+	//cameraData->SetTarget(cameraData->GetEye() + eyeVector * cameraData->GetRange());
+
+	//float cy = currentVector.y;
+	//float ey = eyeVector.y;
+
+	//currentVector.y = 0;
+	//eyeVector.y = 0;
+
+
+
 	//線形補間する
-	currentVector = DirectX::XMVectorLerp(currentVector, eyeVector, rate);
-	//currentVectorY = LerpFloat(currentVectorY, eyeVectorY, rate);
-	cameraData->SetEyeVector(currentVector);
+	//currentVector = DirectX::XMVectorLerp(currentVector, -eyeVector, rate);
+	//cameraData->SetEyeVector(currentVector);
+	//currentVector.y = cy;
+
 
 	//カメラの位置を算出
-	DirectX::SimpleMath::Vector3 eyePoint = cameraData->GetTarget();
-	DirectX::SimpleMath::Vector3 eye = eyePoint + currentVector * cameraData->GetRange();
+	//DirectX::SimpleMath::Vector3 target = cameraData->GetTarget();
+	//DirectX::SimpleMath::Vector3 targetCorrection = cameraData->GetTargetCorrection();
+	//DirectX::SimpleMath::Vector3 eye = target + targetCorrection + (currentVector * cameraData->GetRange());
 
-	cameraData->SetEye(eye);
+	//cameraData->SetEye(eye);
 
 	//カメラの情報を設定
-	cameraData->SetLookAt(eye, cameraData->GetTarget(), { 0.0f,1,0.0001f });
+	//cameraData->SetLookAt(eye, target, { 0.0f,1,0.0001f });
 }

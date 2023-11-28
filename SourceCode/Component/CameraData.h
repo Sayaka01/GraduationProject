@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 
 #include "System/ConstantBuffer.h"
 
@@ -53,11 +54,12 @@ public:
 	{
 		targetCorrection = cor;
 	}
+	DirectX::XMFLOAT3 GetTargetCorrection() { return targetCorrection; }
 
 	void SetShakePower(const DirectX::XMFLOAT3 shakePower) { this->shakePower = shakePower; }
 	
-	void SetEye(DirectX::XMFLOAT3 eye) { this->eye = eye; }
-	DirectX::XMFLOAT3 GetEye() const { return eye; }
+	void SetEye(DirectX::SimpleMath::Vector3 eye) { this->eye = eye; }
+	DirectX::SimpleMath::Vector3 GetEye() const { return eye; }
 	
 	void SetEyeVector(DirectX::XMFLOAT3 eye) { this->eyeVector = eye; }
 	DirectX::XMFLOAT3 GetEyeVector() const { return eyeVector; }

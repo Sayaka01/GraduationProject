@@ -111,6 +111,6 @@ private:
 
 	DirectX::SimpleMath::Vector3 fetchFront{};//前方向へ向くときの前方向を保存(固定しなければ一生まわり続けるため)
 	bool lockingOn{ false };//ロックオン中か
-	float rateInCamera{ 3.0f };   //ロックオンカメラなどのイージングレート
+	float rateInCamera{ 0.01f };   //ロックオンカメラなどのイージングレート
 	float lockonDegree{ 0.0f };
 };
