@@ -277,6 +277,36 @@ bool PlayerState::Default::JudgeWieldThrowState()
 	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_TRIGGER);
 }
 
+void PlayerState::Default::SearchThrowObj()
+{
+	//manager枠のオブジェクトを取得
+	GameObject* throwObjects = parent->GetParent()->GetChild("throwObjects");
+
+	GameObject* throwObj = nullptr;//ターゲット用オブジェクト
+	float minDist = FLT_MAX;//最短距離
+
+	for (size_t i = 0; i < throwObjects->GetChildrenCount(); i++)
+	{
+		//オブジェクトの取得
+		GameObject* obj = throwObjects->GetGameObj(i);
+		DirectX::XMFLOAT3 objPos = obj->GetComponent<Transform>()->pos;
+
+		//プレイヤーの位置を取得
+		DirectX::XMFLOAT3 plPos = parent->GetComponent<Transform>()->pos;
+
+		//プレイヤーとオブジェクトのベクトルを計算
+		DirectX::XMFLOAT3 vec = objPos - plPos;
+
+		//プレイヤーとの距離を計算
+		float distance = LengthFloat3(vec);
+
+		//距離がサーチ範囲を超えるならcontinue
+		if (distance > searchRange)continue;
+
+		//カメラの方向にオブジェクトがいるかどうか
+	}
+}
+
 //-----< 待機 >-----//
 Idle::Idle()
 {

@@ -52,6 +52,7 @@ private:
 	GameObject* stage = nullptr;
 	CameraController* cameraController = nullptr;
 	DirectionLight* directionLight = nullptr;
+	GameObject* throwObjects = nullptr;
 
 	// ÉvÉåÉCÉÑÅ[ÇÃUIån
 	GameObject* spriteManager = nullptr;
