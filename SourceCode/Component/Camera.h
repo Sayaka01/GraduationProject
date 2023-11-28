@@ -64,6 +64,8 @@ public:
 
 	void SetTarget(const DirectX::XMFLOAT3 target) const { cameraData->SetTarget(target); }
 	[[nodiscard]] DirectX::XMFLOAT3 GetTarget() const { return cameraData->GetTarget(); }
+	
+	[[nodiscard]] DirectX::XMFLOAT3 GetEye() const { return cameraData->GetEye(); }
 
 	void SetTargetObj(GameObject* obj) 
 	{ 

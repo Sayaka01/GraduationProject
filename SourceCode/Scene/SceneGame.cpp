@@ -62,12 +62,15 @@ void SceneGame::Initialize()
 	EnemyInitialize();
 	objectManager->AddChild(enemyManager);
 
+
+	objectManager->AddChild(throwObjects);
+
+
+
 	spriteManager = new GameObject("spriteManager");
 	SpriteInitialze();
 
-	//GameObject* test = new GameObject("test");
-	//test->AddComponent(new ModelRenderer("./Resources/Model/Player/Animations0707.fbx"));
-	//objectManager->AddChild(test);
+
 
 	//CollideManager::Instance().CreateBoundingBox(stage->GetComponent<ModelRenderer>());
 }
@@ -157,6 +160,8 @@ void SceneGame::PlayerInitialize()
 
 	player->SetTag(Tag::Player);
 
+	player->GetComponent<Transform>()->pos.z = -170.0f;
+
 	ModelRenderer* modelRenderer = new ModelRenderer("./Resources/Model/Player/Jammo.fbx");
 
 	modelRenderer->AppendAnimation("./Resources/Model/Player/Animations/KnifeIdle.fbx");//Idle
@@ -230,6 +235,24 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new SphereCollider("DebugSphere"));
 	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
+
+	player->AddComponent(new SpriteRenderer(L"./Resources/Sprite/AimTarget.png"));
+
+
+	//-----< Playerが投げる用のオブジェクト >-----//
+	{
+		throwObjects = new GameObject("throwObjects");
+
+		GameObject* throwObj = new GameObject("throwObj");
+		throwObj->AddComponent(new ModelRenderer("./Resources/Model/Object/cube.fbx"));
+		throwObj->GetComponent<Transform>()->pos = { 0.0f, 1.0f, -150.0f };
+		throwObj->GetComponent<Transform>()->scale = { 2.0f, 2.0f, 2.0f };
+		throwObj->AddComponent(new SphereCollider());
+		throwObj->GetComponent<SphereCollider>()->radius = 2.0f;
+		throwObj->GetComponent<SphereCollider>()->useTransform = true;
+
+		throwObjects->AddChild(throwObj);
+	}
 }
 
 void SceneGame::EnemyInitialize()

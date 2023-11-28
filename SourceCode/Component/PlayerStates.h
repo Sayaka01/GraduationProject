@@ -109,6 +109,9 @@ namespace PlayerState
 		//振り回して投げるステートの遷移条件
 		bool JudgeWieldThrowState();
 
+		//振り回すオブジェクトの検索
+		void SearchThrowObj();
+
 
 		std::string name = "";//ステートの名前
 
@@ -131,6 +134,8 @@ namespace PlayerState
 		static DirectX::XMFLOAT3 parameter;//凡庸パラメータ
 
 		static bool isAvoid;//回避したかどうか
+
+		float searchRange = 300.0f;
 
 	};
 

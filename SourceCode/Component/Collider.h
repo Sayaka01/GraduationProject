@@ -11,6 +11,9 @@ public:
 	~Collider() override = default;
 
 	//-----< 関数 >-----//
+	
+	//更新
+	void Update()override;
 
 	//ImGui
 	void DebugGui()override;
@@ -39,6 +42,8 @@ public:
 	bool useHitEvent = true;//当たり判定を行うかどうか
 
 	DirectX::XMFLOAT4 debugColor = { 1,1,1,1 };
+
+	bool useTransform = false;//parentのTransformコンポーネントを参照するかどうか
 
 private:
 	void (Component::*HitProcessFunc)(Collider* collider);
