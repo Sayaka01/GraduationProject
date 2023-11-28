@@ -7,6 +7,7 @@
 
 #include "Component/Transform.h"
 #include "Component/ModelRenderer.h"
+#include "Component/SpriteRenderer.h"
 #include "Component/Camera.h"
 #include "Component/RigidBody.h"
 #include "Component/Player.h"
@@ -48,6 +49,9 @@ void PlayerState::Default::Update()
 
 		if(pushAttackButton)pushAttackButton = false;
 	}
+
+	//ターゲットスプライトの位置計算
+	SearchThrowObj();
 }
 void PlayerState::Default::DebugGui()
 {
@@ -273,8 +277,11 @@ bool PlayerState::Default::JudgeWieldThrowState()
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
 
-	//RTボタンが押されていたらtrue
-	return (gamePad.GetButtonDown() & GamePad::BTN_RIGHT_TRIGGER);
+	//RTボタンが押されていなければreturn false
+	if (!(gamePad.GetButtonDown() & GamePad::BTN_RIGHT_TRIGGER))return false;
+
+	//プレイヤーコンポーネントのThrowObjがnullがどうか
+	return (parent->GetComponent<Player>()->GetThrowObj());
 }
 
 void PlayerState::Default::SearchThrowObj()
@@ -283,31 +290,82 @@ void PlayerState::Default::SearchThrowObj()
 	GameObject* throwObjects = parent->GetParent()->GetChild("throwObjects");
 
 	GameObject* throwObj = nullptr;//ターゲット用オブジェクト
-	float minDist = FLT_MAX;//最短距離
+	DirectX::XMFLOAT2 nearScreenPos = { 0.0f,0.0f };
+	float minScreenDist = FLT_MAX;//最短距離
+	float minWorldDist = FLT_MAX;//最短距離
 
 	for (size_t i = 0; i < throwObjects->GetChildrenCount(); i++)
 	{
 		//オブジェクトの取得
 		GameObject* obj = throwObjects->GetGameObj(i);
 		DirectX::XMFLOAT3 objPos = obj->GetComponent<Transform>()->pos;
-
 		//プレイヤーの位置を取得
 		DirectX::XMFLOAT3 plPos = parent->GetComponent<Transform>()->pos;
-
 		//プレイヤーとオブジェクトのベクトルを計算
 		DirectX::XMFLOAT3 vec = objPos - plPos;
-
 		//プレイヤーとの距離を計算
-		float distance = LengthFloat3(vec);
+		float plObjDist = LengthFloat3(vec);
 
 		//距離がサーチ範囲を超えるならcontinue
-		if (distance > searchRange)continue;
+		if (plObjDist > searchRange)continue;
 
 
+		//カメラの取得
+		Camera* camera = parent->GetParent()->GetChild("CameraController")->GetComponent<Camera>();
 		//カメラの前方向ベクトルを取得
-		DirectX::XMFLOAT3 cameraFront = GetCameraFront();
+		DirectX::XMFLOAT3 cameraFront = camera->GetCameraFront();
+		//カメラの位置を取得
+		DirectX::XMFLOAT3 cameraEye = camera->GetEye();
+		//カメラの位置からオブジェクトへのベクトルを作成
+		vec = objPos - cameraEye;
 
-		//カメラの方向にオブジェクトがいるかどうか
+		//カメラの方向にオブジェクトがいるかどうか計算
+		float dot = DotFloat3(cameraFront, vec);
+		if (dot < 0.0f)continue;
+
+		//オブジェクトの位置をスクリーン座標系に変換する
+		ID3D11DeviceContext* dc = SystemManager::Instance().GetDeviceContext();
+		DirectX::XMFLOAT2 screenPos = GetScreenPosition(dc, objPos, camera->GetProjection(), camera->GetView());
+
+		//画面外にいるかどうか
+		float radius = obj->GetComponent<SphereCollider>()->radius;
+		DirectX::XMFLOAT2 minSearchPos = { radius,radius };
+		DirectX::XMFLOAT2 maxSearchPos = { (float)SCREEN_WIDTH - radius,(float)SCREEN_HEIGHT - radius };
+		if (minSearchPos.x < screenPos.x && minSearchPos.y < screenPos.y)
+		{
+			if (maxSearchPos.x > screenPos.x && maxSearchPos.y > screenPos.y)
+			{
+				//画面中央位置
+				DirectX::XMFLOAT2 screenCenter = { (float)SCREEN_WIDTH * 0.5f,(float)SCREEN_HEIGHT * 0.5f };
+				//画面中央との距離を計算
+				float distance = LengthFloat2(screenCenter - screenCenter);
+				//最短距離なら保存
+				if (distance < minScreenDist)
+				{
+					minScreenDist = distance;
+					minWorldDist = plObjDist;
+					nearScreenPos = screenPos;
+					throwObj = obj;
+				}
+			}
+		}
+	}
+
+	//計算した場所にスプライトを表示
+	if (throwObj)
+	{
+		parent->GetComponent<SpriteRenderer>()->SetEnable(true);
+		parent->GetComponent<SpriteRenderer>()->pos = nearScreenPos;
+		float defaultDistance = 50.0f;
+		float scale = (defaultDistance - minWorldDist) / searchRange;
+		parent->GetComponent<SpriteRenderer>()->scale = { 1.1f + scale, 1.1f + scale };
+
+		parent->GetComponent<Player>()->SetThrowObj(throwObj);
+	}
+	else
+	{
+		parent->GetComponent<SpriteRenderer>()->SetEnable(false);
+		parent->GetComponent<Player>()->SetThrowObj(nullptr);
 	}
 }
 

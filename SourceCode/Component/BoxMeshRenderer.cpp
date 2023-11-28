@@ -58,7 +58,7 @@ void BoxMeshRenderer::Initialize()
 
 void BoxMeshRenderer::DrawPrepare()
 {
-	PrimitiveMeshRenderer::Draw();
+	PrimitiveMeshRenderer::Draw3D();
 }
 
 void BoxMeshRenderer::Draw(BoxCollider* boxCollider)

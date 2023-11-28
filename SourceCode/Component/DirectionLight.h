@@ -12,7 +12,7 @@ public:
 	~DirectionLight()override = default;
 
 	//ä÷êî
-	void Draw()override;
+	void Draw3D()override;
 	void DebugGui()override;
 
 	void UpdateBuffer();

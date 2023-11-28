@@ -18,8 +18,6 @@ public:
 	void Initialize() override;
 	//更新
 	void Update() override;
-	//描画
-	void Draw() override;
 	//終了処理
 	void Finalize()override;
 	//ImGui
@@ -55,11 +53,13 @@ public:
 
 	PlayerState::Default* GetCurrentState() { return currentState; }
 
+	GameObject* GetThrowObj() { return throwObj; }
+	void SetThrowObj(GameObject* obj) { throwObj = obj; }
+
 private:
 
 	//-----< 関数 >-----//
 	void ChangeState(std::string nextStateName);
-
 
 	//-----< 変数 >-----//
 	std::vector<PlayerState::Default*> states;//状態
@@ -84,4 +84,6 @@ private:
 	int maxAttackPhase = 3;
 
 	float animationSpeed[(int)PlayerState::Animation::AnimNum];
+
+	GameObject* throwObj = nullptr;//投げるオブジェクト
 };

@@ -75,7 +75,7 @@ void Camera::Update()
 }
 
 //•`‰æ
-void Camera::Draw()
+void Camera::Draw3D()
 {
 	UpdateBuffer();
 }

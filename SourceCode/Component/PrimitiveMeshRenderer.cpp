@@ -41,7 +41,7 @@ void PrimitiveMeshRenderer::DrawPrepare()
 	dc->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 }
 
-void PrimitiveMeshRenderer::Draw()
+void PrimitiveMeshRenderer::Draw3D()
 {
 	DrawPrepare();
 

@@ -147,11 +147,13 @@ void SceneGame::Update()
 
 void SceneGame::Draw()
 {
-	objectManager->Draw();
+	objectManager->Draw3D();
 
 	CollideManager::Instance().Draw();
 
-	spriteManager->Draw();
+	objectManager->Draw2D();
+
+	spriteManager->Draw2D();
 }
 
 void SceneGame::PlayerInitialize()
@@ -236,7 +238,10 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(new SphereCollider("DebugSphere"));
 	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
 
-	player->AddComponent(new SpriteRenderer(L"./Resources/Sprite/AimTarget.png"));
+	SpriteRenderer* spriteRenderer = new SpriteRenderer(L"./Resources/Sprite/AimTarget.png");
+	spriteRenderer->pivot = spriteRenderer->texSize * 0.5f;
+	player->AddComponent(spriteRenderer);
+
 
 
 	//-----< Playerが投げる用のオブジェクト >-----//

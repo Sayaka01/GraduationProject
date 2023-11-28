@@ -26,7 +26,7 @@ public:
 	//XV
 	void Update() override;
 	//•`‰æ
-	void Draw() override;
+	void Draw3D() override;
 	//ImGui
 	void DebugGui() override;
 

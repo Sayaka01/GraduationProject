@@ -18,7 +18,7 @@ public:
 	//‰Šú‰»
 	void Initialize(const wchar_t* filePath, size_t max_sprites = 1);
 	//•`‰æ
-	void Draw()override;
+	void Draw2D()override;
 	//ImGui
 	void DebugGui() override;
 

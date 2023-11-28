@@ -135,7 +135,7 @@ namespace PlayerState
 
 		static bool isAvoid;//‰ñ”ð‚µ‚½‚©‚Ç‚¤‚©
 
-		float searchRange = 300.0f;
+		float searchRange = 120.0f;
 
 	};
 

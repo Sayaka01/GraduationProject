@@ -10,7 +10,7 @@ DirectionLight::DirectionLight()
 	constantBuffer.Initialize(SystemManager::Instance().GetDevice() ,&lightConstants);
 }
 
-void DirectionLight::Draw()
+void DirectionLight::Draw3D()
 {
 	UpdateBuffer();
 }

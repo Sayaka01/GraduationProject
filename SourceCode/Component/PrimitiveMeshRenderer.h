@@ -19,7 +19,7 @@ public:
 	//•`‰æ€”õ
 	void DrawPrepare();
 	//•`‰æ
-	void Draw()override;
+	void Draw3D()override;
 
 protected:
 	//-----< \‘¢‘Ì >-----//

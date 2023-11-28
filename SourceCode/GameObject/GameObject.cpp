@@ -59,20 +59,36 @@ void GameObject::Update()
 }
 
 //描画
-void GameObject::Draw()
+void GameObject::Draw3D()
 {
 	//各コンポーネントの描画
 	for (Component* component : components)
 	{
 		if (component->GetEnable())
-			component->Draw();
+			component->Draw3D();
 	}
 
 
 	//子オブジェクトの描画
 	for (GameObject* childObj : children)
 	{
-		childObj->Draw();
+		childObj->Draw3D();
+	}
+}
+void GameObject::Draw2D()
+{
+	//各コンポーネントの描画
+	for (Component* component : components)
+	{
+		if (component->GetEnable())
+			component->Draw2D();
+	}
+
+
+	//子オブジェクトの描画
+	for (GameObject* childObj : children)
+	{
+		childObj->Draw2D();
 	}
 }
 

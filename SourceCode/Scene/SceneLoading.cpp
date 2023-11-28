@@ -46,7 +46,7 @@ void SceneLoading::Update()
 }
 void SceneLoading::Draw()
 {
-	sprLoading->Draw();
+	sprLoading->Draw2D();
 }
 
 void SceneLoading::LoadingThread(SceneLoading* scene)

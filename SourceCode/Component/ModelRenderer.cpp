@@ -33,7 +33,7 @@ void ModelRenderer::Update()
 }
 
 //•`‰æ
-void ModelRenderer::Draw()
+void ModelRenderer::Draw3D()
 {
 	Animation::Keyframe keyframe;
 	if (!modelData->animationClips.empty())

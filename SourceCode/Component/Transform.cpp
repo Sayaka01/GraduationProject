@@ -20,12 +20,6 @@ void Transform::Update()
 	DirectX::XMStoreFloat4x4(&world, C * S * R * T);
 }
 
-//•`‰æ
-void Transform::Draw()
-{
-	
-}
-
 //ImGui
 void Transform::DebugGui()
 {

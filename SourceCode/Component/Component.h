@@ -19,7 +19,8 @@ public:
 	//XV
 	virtual void Update(){}
 	//•`‰æ
-	virtual void Draw(){}
+	virtual void Draw3D(){}
+	virtual void Draw2D(){}
 	//I—¹ˆ—
 	virtual void Finalize(){}
 	//ImGui

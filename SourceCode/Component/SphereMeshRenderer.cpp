@@ -97,7 +97,7 @@ void SphereMeshRenderer::Initialize()
 
 void SphereMeshRenderer::DrawPrepare()
 {
-	PrimitiveMeshRenderer::Draw();
+	PrimitiveMeshRenderer::Draw3D();
 }
 
 void SphereMeshRenderer::Draw(SphereCollider* sphereCollider)

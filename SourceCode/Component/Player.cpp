@@ -133,11 +133,6 @@ void Player::Update()
 
 }
 
-void Player::Draw()
-{
-
-}
-
 void Player::Finalize()
 {
 	std::vector<PlayerState::Default*> removes;//ó‘Ô

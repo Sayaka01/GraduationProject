@@ -56,11 +56,11 @@ void SceneTest::Update()
 
 void SceneTest::Draw()
 {
-	cameraController->Draw();
+	cameraController->Draw3D();
 
-	lightObject->Draw();
+	lightObject->Draw3D();
 
-	player->Draw();
+	player->Draw3D();
 }
 
 void SceneTest::PlayerInitialize()

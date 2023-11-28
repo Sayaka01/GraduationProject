@@ -25,5 +25,5 @@ void SceneCommunicate::Update()
 
 void SceneCommunicate::Draw()
 {
-	gameObject->Draw();
+	gameObject->Draw3D();
 }

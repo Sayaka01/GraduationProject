@@ -17,8 +17,6 @@ public:
 	void Initialize() override;
 	//XV
 	void Update() override;
-	//•`‰æ
-	void Draw() override;
 	//ImGui
 	void DebugGui() override;
 

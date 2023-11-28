@@ -21,7 +21,7 @@ void SpriteRenderer::Initialize(const wchar_t* filePath, size_t max_sprites)
 }
 
 //•`‰æ
-void SpriteRenderer::Draw()
+void SpriteRenderer::Draw2D()
 {
 	SystemManager::Instance().SetBlendState(SystemManager::BlendState::Alpha);
 	SystemManager::Instance().SetDepthStencilState(SystemManager::DepthStencilState::SortOffWriteOff);

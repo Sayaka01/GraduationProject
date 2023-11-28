@@ -217,13 +217,13 @@ void SceneTitle::Draw()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		sprBackGears[i]->Draw();
+		sprBackGears[i]->Draw2D();
 	}
 	for (auto& textes : sprMenuText)
 	{
-		textes.second->Draw();
+		textes.second->Draw2D();
 	}
-	sprTitleLogo->Draw();
+	sprTitleLogo->Draw2D();
 
 }
 
