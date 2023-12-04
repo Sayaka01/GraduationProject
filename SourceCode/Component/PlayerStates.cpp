@@ -783,10 +783,10 @@ void PunchRight::Enter()
 	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::PunchRight, false);
 	//アニメーションスピードの調整
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::PunchRight));
-	
+
 	//今から攻撃するので初期化
 	attackInterval = 0.0f;
-	
+
 	//2段以降の攻撃の入力の取得を開始
 	acceptAttackButton = true;
 
@@ -818,13 +818,12 @@ void PunchRight::Update()
 		if (length > attackRangeMin)
 			AddMoveVelocity(NormalizeFloat3(vec) * parent->GetComponent<Player>()->GetRunSpeed());
 	}
-		
+
 
 	Default::Update();
 }
 void PunchRight::Exit()
 {
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(1.0f);
 	parent->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 
 	//攻撃中フラグをfalseに
@@ -887,7 +886,7 @@ void PunchLeft::Enter()
 
 	//攻撃中フラグをtrueに
 	parent->GetComponent<Player>()->SetIsAttack(true);
-	
+
 	parent->GetComponent<Player>()->NextAttackPhase();
 }
 void PunchLeft::Update()
@@ -907,7 +906,7 @@ void PunchLeft::Update()
 void PunchLeft::Exit()
 {
 	parent->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
-	
+
 	//攻撃中フラグをfalseに
 	parent->GetComponent<Player>()->SetIsAttack(false);
 }
@@ -988,7 +987,7 @@ void Kick::Update()
 void Kick::Exit()
 {
 	parent->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
-	
+
 	//攻撃中フラグをfalseに
 	parent->GetComponent<Player>()->SetIsAttack(false);
 }
@@ -1176,7 +1175,7 @@ void SwingWire::Enter()
 	swingTimer = 0.0f;
 }
 void SwingWire::Update()
-{	
+{
 	//経過時間
 	swingTimer += SystemManager::Instance().GetElapsedTime();
 
@@ -1302,7 +1301,7 @@ void WireJump::Enter()
 	falling = false;
 }
 void WireJump::Update()
-{	
+{
 	//位置の保存
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	oldPosition[0] = oldPosition[1];
@@ -1337,7 +1336,7 @@ void WireJump::Update()
 	}
 
 	coolTimer -= SystemManager::Instance().GetElapsedTime();
-	
+
 	Default::Update();
 }
 void WireJump::Exit()
@@ -1425,13 +1424,13 @@ void JumpAttack::Enter()
 		{
 			float animSpeed = parent->GetComponent<ModelRenderer>()->GetAnimationSpeed();
 			parameter = NormalizeFloat3(vec) * (length / maxMoveTime * animSpeed);
-			
+
 			//重力を無視する
 			parent->GetComponent<RigidBody>()->SetUseGravity(false);
-			
+
 			//2段以降の攻撃の入力の取得を開始
 			acceptAttackButton = true;
-		
+
 			//今から攻撃するので初期化
 			attackInterval = 0.0f;
 		}
@@ -1451,7 +1450,7 @@ void JumpAttack::Enter()
 
 }
 void JumpAttack::Update()
-{	
+{
 	float animSpeed = parent->GetComponent<ModelRenderer>()->GetAnimationSpeed();
 	attackTimer += SystemManager::Instance().GetElapsedTime() * animSpeed;
 
@@ -1626,6 +1625,14 @@ void WieldThrow::Enter()
 
 	//ステートの初期化
 	state = Thrust;
+
+	//Debug描画
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(true);
+	DirectX::XMFLOAT3 objPos = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<Transform>()->pos;
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->begin = objPos;
+	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
+	pos.y += parent->GetComponent<Player>()->GetHeight();
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
 }
 void WieldThrow::Update()
 {
@@ -1639,7 +1646,7 @@ void WieldThrow::Update()
 			parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
 			//アニメーションの再生速度の変更
 			parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
-		
+
 			state = Wield;
 		}
 

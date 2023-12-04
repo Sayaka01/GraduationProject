@@ -167,13 +167,17 @@ void Player::DebugGui()
 		ImGui::SliderInt("attackPhase", &attackPhase, 0, maxAttackPhase);
 		ImGui::Text(currentState->GetName().c_str());
 		
-		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(ImGui::GetWindowSize().x, 100), ImGuiWindowFlags_NoTitleBar);
-		for (int i = 0; i < (int)PlayerState::Animation::AnimNum; i++)
+		if (ImGui::TreeNode("AnimationSpeed"))
 		{
-			std::string str = magic_enum::enum_name((PlayerState::Animation)i).data();
-			ImGui::DragFloat(str.c_str(), &(animationSpeed[i]));
+			ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(ImGui::GetWindowSize().x, 100), ImGuiWindowFlags_NoTitleBar);
+			for (int i = 0; i < (int)PlayerState::Animation::AnimNum; i++)
+			{
+				std::string str = magic_enum::enum_name((PlayerState::Animation)i).data();
+				ImGui::DragFloat(str.c_str(), &(animationSpeed[i]));
+			}
+			ImGui::EndChild();
+			ImGui::TreePop();
 		}
-		ImGui::EndChild();
 
 		ImGui::TreePop();
 	}
