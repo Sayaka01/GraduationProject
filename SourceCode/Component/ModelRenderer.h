@@ -48,7 +48,9 @@ public:
 	[[nodiscard]] float GetAnimationSpeed()const { return modelData->animationClips.at(currentAnimationIndex).samplingRate * animationSpeed; }
 	void SetAnimationSpeed(const float speed) { animationSpeed = speed; }
 	[[nodiscard]] int GetAnimationIndex() const { return currentAnimationIndex; }
-
+#if _APPEND
+	float GetSamplingRate() { return modelData->animationClips.at(currentAnimationIndex).samplingRate; }
+#endif
 	//[[nodiscard]] DirectX::XMFLOAT4X4 SearchBoneMatrix(std::string name) const
 	//{
 	//	DirectX::XMFLOAT4X4 mat{};

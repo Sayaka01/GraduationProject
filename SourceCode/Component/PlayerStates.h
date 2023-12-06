@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SimpleMath.h"
+
 class GameObject;
 
 //プレイヤーの状態
@@ -495,5 +497,13 @@ namespace PlayerState
 			Throw,
 		};
 		int state = Thrust;
+#if _APPEND
+		float maxThrustInterval = 24.0f;
+		float maxThrustTime = 0.5f;
+		float wireSpeed = 0.0f;
+		DirectX::SimpleMath::Vector3 wireTipPos{};//ワイヤーの先端位置
+		bool appearWire = false;//ワイヤーの出現
+		bool thrust = false;//オブジェクトに刺さっているかどうか
+#endif
 	};
 }

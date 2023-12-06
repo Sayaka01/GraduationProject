@@ -17,7 +17,9 @@
 #include "System/SystemManager.h"
 #include "System/UserFunction.h"
 
+
 using namespace PlayerState;
+using namespace DirectX::SimpleMath;
 
 //static変数の初期化
 float Default::attackInterval = 0.0f;
@@ -286,6 +288,10 @@ bool PlayerState::Default::JudgeWieldThrowState()
 
 void PlayerState::Default::SearchThrowObj()
 {
+#if _APPEND
+	if (name == "WieldThrow")return;
+#endif
+
 	//manager枠のオブジェクトを取得
 	GameObject* throwObjects = parent->GetParent()->GetChild("throwObjects");
 
@@ -1618,39 +1624,101 @@ WieldThrow::WieldThrow(GameObject* parent)
 }
 void WieldThrow::Enter()
 {
+#if _APPEND
+	//コンポーネントの取得
+	ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
+
 	//アニメーションの再生
-	parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Thrust, false);
+	modelRenderer->PlayAnimation((int)Animation::Thrust, false);
 	//アニメーションの再生速度の変更
-	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Thrust));
+	modelRenderer->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Thrust));
 
 	//ステートの初期化
 	state = Thrust;
 
-	//Debug描画
-	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(true);
-	DirectX::XMFLOAT3 objPos = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<Transform>()->pos;
-	parent->GetComponent<CapsuleCollider>("WireCapsule")->begin = objPos;
-	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
-	pos.y += parent->GetComponent<Player>()->GetHeight();
-	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
+	Vector3 objPos = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<Transform>()->pos;
+	Vector3 pos = parent->GetComponent<Transform>()->pos;
+
+	float samplingRate = modelRenderer->GetSamplingRate();
+	float length = (objPos - pos).Length();
+	wireSpeed = length * samplingRate * GetAnimationSpeed((int)Animation::Thrust);
+
+	appearWire = false;
+	thrust = false;
+#endif
 }
 void WieldThrow::Update()
 {
 	switch (state)
 	{
 	case Thrust:
+#if _APPEND
+	{
+		//オブジェクトの方を向く
+		GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+		Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+		Vector3 pos = parent->GetComponent<Transform>()->pos;
+		Vector3 plObjVec = objPos - pos;
+		YAxisRotate(plObjVec);
 
-		if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+		//コンポーネントの取得
+		ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
+
+		//アニメーションが一定のフレームを過ぎたらワイヤーを出す
+		if (modelRenderer->GetPlayAnimTimer() > maxThrustInterval)
+		{
+			CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+
+			//右手の位置
+			Vector3 rightHandPos = modelRenderer->GetBonePositionFromName("rightHand");
+
+			//ワイヤーの出現
+			if (!appearWire)
+			{
+				capsule->SetEnable(true);
+
+				wireTipPos = rightHandPos;
+
+				appearWire = true;
+			}
+
+			//ワイヤーの移動
+			if (!thrust)
+			{
+				Vector3 handObjVec = objPos - rightHandPos;
+				handObjVec.Normalize();
+				wireTipPos += handObjVec * wireSpeed * SystemManager::Instance().GetElapsedTime();
+			}
+
+			//ワイヤーの先端とオブジェクトの距離がオブジェクトのスフィアの半径以下ならオブジェクトにワイヤーを刺せた
+			OutputDebugLog("length", (objPos - wireTipPos).Length());
+			Vector3 wireTipObjvec = objPos - wireTipPos;
+			if (wireTipObjvec.Length() < throwObj->GetComponent<SphereCollider>()->radius
+				|| plObjVec.Dot(wireTipObjvec) < 0.0f)
+			{
+				thrust = true;
+				wireTipPos = objPos;
+			}
+
+			capsule->begin = wireTipPos;
+			capsule->end = rightHandPos;
+
+		}
+
+		//アニメーションが終わったら次のステートへ
+		if (modelRenderer->IsFinishAnimation())
 		{
 			//アニメーションの再生
-			parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Wield, false);
+			modelRenderer->PlayAnimation((int)Animation::Wield, false);
 			//アニメーションの再生速度の変更
-			parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
+			modelRenderer->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
 
 			state = Wield;
 		}
 
 		break;
+	}
+#endif
 	case Wield:
 
 		if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
