@@ -179,6 +179,17 @@ void Player::DebugGui()
 			ImGui::TreePop();
 		}
 
+		if (ImGui::TreeNode("State"))
+		{
+			ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(ImGui::GetWindowSize().x, 100), ImGuiWindowFlags_NoTitleBar);
+			for (Default* state : states)
+			{
+				state->DebugGui();
+			}
+			ImGui::EndChild();
+			ImGui::TreePop();
+		}
+
 		ImGui::TreePop();
 	}
 }

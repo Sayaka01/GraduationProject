@@ -71,7 +71,7 @@ void Camera::Update()
 
 
 	// ƒJƒƒ‰‚Ì‹——£‚ğ“®‚©‚·
-	ChangeRange();
+	//ChangeRange();
 }
 
 //•`‰æ

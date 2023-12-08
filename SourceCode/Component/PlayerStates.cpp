@@ -55,9 +55,6 @@ void PlayerState::Default::Update()
 	//ターゲットスプライトの位置計算
 	SearchThrowObj();
 }
-void PlayerState::Default::DebugGui()
-{
-}
 
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
@@ -167,8 +164,11 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
-void PlayerState::Default::CalcEnemyDistance()
+#if _APPEND
+void PlayerState::Default::SearchNearEnemy(Transform* transform)
 {
+	transform = nullptr;
+
 	//今は敵が1体なのでこのやり方。後で頑張る
 	GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
 	DirectX::SimpleMath::Vector3 playerPos = parent->GetComponent<Transform>()->pos;
@@ -176,30 +176,35 @@ void PlayerState::Default::CalcEnemyDistance()
 	{
 		int enemyCounut = int(enemyManager->GetChildrenCount());
 		float minLength = FLT_MAX;
+
 		if (enemyCounut > 0)
 		{
 			for (int i = 0; i < enemyCounut; i++)
 			{
-				DirectX::SimpleMath::Vector3 enemyPos= enemyManager->GetGameObj(i)->GetComponent<Transform>()->pos;
-				DirectX::SimpleMath::Vector3 vec = playerPos - enemyPos;
+				Transform* enemyTransform = enemyManager->GetGameObj(i)->GetComponent<Transform>();
+				Vector3 enemyPos= enemyTransform->pos;
+				Vector3 vec = playerPos - enemyPos;
 				float length = vec.Length();
 
 				if (minLength > length)
 				{
 					minLength = length;
 					parameter = enemyPos;
+
+					transform = enemyTransform;
 				}
 			}
 			return;
 		}
 	}
 
-	//敵が見つからない場合は自分自身の位置を返す
+	//敵が見つからない場合は自分自身の位置を入れる
 	parameter = playerPos;
 
 	//GameObject* enemy = parent->GetParent()->GetChild("enemy");
 	//parameter = enemy->GetComponent<Transform>()->pos;
 }
+#endif
 float PlayerState::Default::GetAnimationSpeed(int index)
 {
 	return parent->GetComponent<Player>()->GetAnimationSpeed(index);
@@ -803,7 +808,7 @@ void PunchRight::Enter()
 	attackPower = 1.0f;
 
 	//一番近い敵の位置をparameterに格納
-	CalcEnemyDistance();
+	SearchNearEnemy();
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
@@ -885,7 +890,7 @@ void PunchLeft::Enter()
 	attackPower = 3.0f;
 
 	//一番近い敵の位置をparameterに格納
-	CalcEnemyDistance();
+	SearchNearEnemy();
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
@@ -966,7 +971,7 @@ void Kick::Enter()
 	attackPower = 5.0f;
 
 	//一番近い敵の位置をparameterに格納
-	CalcEnemyDistance();
+	SearchNearEnemy();
 
 	//敵への攻撃フラグをOFF
 	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
@@ -1416,7 +1421,7 @@ void JumpAttack::Enter()
 	attackPower = 2.0f;
 
 	//一番近い敵の位置をparameterに格納
-	CalcEnemyDistance();
+	SearchNearEnemy();
 
 	//移動ベクトルを計算
 	DirectX::XMFLOAT3 vec = parameter - parent->GetComponent<Transform>()->pos;
@@ -1691,7 +1696,6 @@ void WieldThrow::Update()
 			}
 
 			//ワイヤーの先端とオブジェクトの距離がオブジェクトのスフィアの半径以下ならオブジェクトにワイヤーを刺せた
-			OutputDebugLog("length", (objPos - wireTipPos).Length());
 			Vector3 wireTipObjvec = objPos - wireTipPos;
 			if (wireTipObjvec.Length() < throwObj->GetComponent<SphereCollider>()->radius
 				|| plObjVec.Dot(wireTipObjvec) < 0.0f)
@@ -1714,36 +1718,173 @@ void WieldThrow::Update()
 			modelRenderer->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Wield));
 
 			state = Wield;
+
+			//現在の回転角を計算
+			//rotateRadian = atan2f(plObjVec.z, plObjVec.x);
+			//回転速度を計算
+			float samplingRate = modelRenderer->GetSamplingRate();
+			rotateSpeed = maxWieldRadian / ((float)modelRenderer->GetPlayAnimMaxTimer() / (samplingRate * GetAnimationSpeed((int)Animation::Wield)));
+
+			rotateVec = objPos - pos;
 		}
 
 		break;
 	}
 #endif
 	case Wield:
+#if _APPEND
+	{
+		//回転軸
+		const Vector3 axis = { 0.0f,1.0f,0.0f };
 
-		if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
+		//クオータニオンの作成
+		const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, -rotateSpeed * SystemManager::Instance().GetElapsedTime());
+
+		//回転行列の作成
+		const Matrix R = Matrix::CreateFromQuaternion(Q);
+
+		//ベクトルを回転させる
+		Vector4 v = Float4MultiplyFloat4x4({ rotateVec.x,rotateVec.y,rotateVec.z,1.0f }, R);
+		rotateVec = { v.x,v.y,v.z };
+
+		//オブジェクトの位置の更新
+		GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+		Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+		Vector3 pos = parent->GetComponent<Transform>()->pos;
+
+		objPos = pos + rotateVec;
+		throwObj->GetComponent<Transform>()->pos = objPos;
+
+		//コンポーネントの取得
+		ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
+
+		//右手の位置を取得
+		Vector3 rightHandPos = modelRenderer->GetBonePositionFromName("rightHand");
+
+		//カプセルを取得
+		CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+		//カプセルの位置を更新
+		capsule->begin = objPos;
+		capsule->end = rightHandPos;
+
+		if (modelRenderer->IsFinishAnimation())
 		{
 			//アニメーションの再生
-			parent->GetComponent<ModelRenderer>()->PlayAnimation((int)Animation::Throw, false);
+			modelRenderer->PlayAnimation((int)Animation::Throw, false);
 			//アニメーションの再生速度の変更
-			parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Throw));
+			modelRenderer->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Throw));
 
 			state = Throw;
+
+			//回転速度を計算
+			float samplingRate = modelRenderer->GetSamplingRate();
+			float t = (float)modelRenderer->GetPlayAnimMaxTimer();
+			rotateSpeed = maxThrowRadian / (maxRotateTime / (samplingRate * GetAnimationSpeed((int)Animation::Throw)));
+			rotateAxis = { 0.0f,1.0f,0.0f };
+			rotateRadian = 0.0f;
+
+			//誰に投げつけるか決める
+			enemyTransform = nullptr;
+			SearchNearEnemy(enemyTransform);//一番近い敵のTransformを取得
+			
+			if (enemyTransform != nullptr)
+			{
+				//敵の位置
+				Vector3 enePos = enemyTransform->pos;
+				//プレイヤーから敵へのベクトル
+				Vector3 vec = enePos - pos;
+				//敵までの距離
+				float distance = vec.Length();
+				//敵までの距離が一定より離れているならクリア
+				if (distance > searchRange)
+				{
+					enemyTransform = nullptr;
+				}
+			}
 		}
 
 		break;
+	}
+#endif
 	case Throw:
+#if _APPEND
+	{
+		//コンポーネントの取得
+		ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
+
+		float animTimer = modelRenderer->GetPlayAnimTimer();
+		if (animTimer < maxThrowTime)
+		{
+			//右手の位置を取得
+			Vector3 rightHandPos = modelRenderer->GetBonePositionFromName("rightHand");
+			//プレイヤーの位置
+			Vector3 pos = parent->GetComponent<Transform>()->pos;
+
+			//回転軸をプレイヤーの前方向を軸に回転する
+			if (animTimer > maxRotateTime)
+			{
+				rotateSpeed = DirectX::XMConvertToRadians(360.0f);
+				//回転角度を計算
+				float speed = rotateSpeed * SystemManager::Instance().GetElapsedTime();
+				rotateRadian += speed;
+				constexpr float maxRad = DirectX::XMConvertToRadians(90.0f);
+				if (rotateRadian > maxRad)
+				{
+					speed -= rotateRadian - maxRad;
+					rotateRadian = maxRad;
+				}
+
+				//プレイヤーの前方向
+				Vector3 axis = parent->GetComponent<Transform>()->GetForward();
+				//クオータニオンの作成
+				const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, speed);
+				//回転行列の作成
+				const Matrix R = Matrix::CreateFromQuaternion(Q);
+
+				//ベクトルを回転させる
+				Vector4 v = Float4MultiplyFloat4x4({ rotateAxis.x,rotateAxis.y,rotateAxis.z,1.0f }, R);
+
+				rotateAxis = { v.x,v.y,v.z };
+			}
+
+			//クオータニオンの作成
+			const Quaternion Q = Quaternion::CreateFromAxisAngle(rotateAxis, -rotateSpeed * SystemManager::Instance().GetElapsedTime());
+
+			//回転行列の作成
+			const Matrix R = Matrix::CreateFromQuaternion(Q);
+
+			//ベクトルを回転させる
+			Vector4 v = Float4MultiplyFloat4x4({ rotateVec.x,rotateVec.y,rotateVec.z,1.0f }, R);
+			rotateVec = { v.x,v.y,v.z };
+
+			//オブジェクトの位置の更新
+			GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+			Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+
+			objPos = pos + rotateVec;
+			throwObj->GetComponent<Transform>()->pos = objPos;
+
+			//カプセルを取得
+			CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+			//カプセルの位置を更新
+			capsule->begin = objPos;
+			capsule->end = rightHandPos;
+		}
 
 		//腰の位置のモーションによる移動を停止
-		parent->GetComponent<ModelRenderer>()->StopMotionXZVelocity("IdleHip");
+		modelRenderer->StopMotionXZVelocity("IdleHip");
 
 		break;
+	}
+#endif
 	}
 
 	Default::Update();
 }
 void WieldThrow::Exit()
 {
+	//カプセルを非表示に
+	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 }
 std::string WieldThrow::GetNext()
 {
@@ -1755,4 +1896,18 @@ std::string WieldThrow::GetNext()
 
 	//変更なし
 	return "";
+}
+
+void WieldThrow::DebugGui()
+{
+	if (ImGui::TreeNode(name.c_str()))
+	{
+		float degree = DirectX::XMConvertToDegrees(maxWieldRadian);
+		ImGui::DragFloat("maxWieldDegree", &degree);
+		maxWieldRadian = DirectX::XMConvertToRadians(degree);
+		
+		ImGui::DragFloat("maxThrowTime", &maxThrowTime);
+
+		ImGui::TreePop();
+	}
 }

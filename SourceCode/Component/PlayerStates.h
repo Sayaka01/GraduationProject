@@ -3,6 +3,7 @@
 #include "SimpleMath.h"
 
 class GameObject;
+class Transform;
 
 //プレイヤーの状態
 namespace PlayerState
@@ -55,7 +56,7 @@ namespace PlayerState
 		//ステート変更するかどうか
 		virtual std::string GetNext() { return ""; }
 		//ImGui
-		virtual void DebugGui();
+		virtual void DebugGui() {}
 
 		//名前の取得
 		std::string GetName() { return name; }
@@ -88,7 +89,9 @@ namespace PlayerState
 		//移動ベクトルに応じたY軸回転
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
 		//一番近い敵を取得
-		void CalcEnemyDistance();
+#if _APPEND
+		void SearchNearEnemy(Transform* transform = nullptr);
+#endif
 		//アニメーションスピードを取得
 		float GetAnimationSpeed(int index);
 		//アニメーションスピードの設定
@@ -489,6 +492,11 @@ namespace PlayerState
 		//ステート変更するかどうか
 		std::string GetNext()override;
 
+#if _APPEND
+		//IMGUI
+		void DebugGui() override;
+#endif
+
 	private:
 		enum State
 		{
@@ -498,12 +506,24 @@ namespace PlayerState
 		};
 		int state = Thrust;
 #if _APPEND
+		//-----< Thrustで使用 >-----//
 		float maxThrustInterval = 24.0f;
 		float maxThrustTime = 0.5f;
 		float wireSpeed = 0.0f;
 		DirectX::SimpleMath::Vector3 wireTipPos{};//ワイヤーの先端位置
 		bool appearWire = false;//ワイヤーの出現
 		bool thrust = false;//オブジェクトに刺さっているかどうか
+		//-----< Wieldで使用 >-----//
+		float rotateRadian = 0.0f;//回転角
+		float rotateSpeed = 0.0f;//回転速度
+		float maxWieldRadian = DirectX::XMConvertToRadians(270.0f);
+		DirectX::SimpleMath::Vector3 rotateVec{};
+		//-----< Throwで使用 >-----//
+		float maxThrowTime = 45.0f;
+		float maxRotateTime = 25.0f;
+		float maxThrowRadian = DirectX::XMConvertToRadians(180.0f);
+		DirectX::SimpleMath::Vector3 rotateAxis{};
+		Transform* enemyTransform = nullptr;
 #endif
 	};
 }
