@@ -255,6 +255,10 @@ void SceneGame::PlayerInitialize()
 		throwObj->AddComponent(new SphereCollider());
 		throwObj->GetComponent<SphereCollider>()->radius = 2.0f;
 		throwObj->GetComponent<SphereCollider>()->useTransform = true;
+#if _APPEND
+		throwObj->AddComponent(new RigidBody());
+		throwObj->GetComponent<RigidBody>()->useGravity = false;
+#endif
 
 		throwObjects->AddChild(throwObj);
 	}

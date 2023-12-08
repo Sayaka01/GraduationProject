@@ -1780,6 +1780,7 @@ void WieldThrow::Update()
 			float samplingRate = modelRenderer->GetSamplingRate();
 			float t = (float)modelRenderer->GetPlayAnimMaxTimer();
 			rotateSpeed = maxThrowRadian / (maxRotateTime / (samplingRate * GetAnimationSpeed((int)Animation::Throw)));
+			oldRotateSpeed = rotateSpeed;
 			rotateAxis = { 0.0f,1.0f,0.0f };
 			rotateRadian = 0.0f;
 
@@ -1823,9 +1824,9 @@ void WieldThrow::Update()
 			//回転軸をプレイヤーの前方向を軸に回転する
 			if (animTimer > maxRotateTime)
 			{
-				rotateSpeed = DirectX::XMConvertToRadians(360.0f);
+				rotateSpeed += rotateSpeed * accelRatio * GetAnimationSpeed((int)Animation::Throw) * SystemManager::Instance().GetElapsedTime();
 				//回転角度を計算
-				float speed = rotateSpeed * SystemManager::Instance().GetElapsedTime();
+				float speed = oldRotateSpeed * SystemManager::Instance().GetElapsedTime();
 				rotateRadian += speed;
 				constexpr float maxRad = DirectX::XMConvertToRadians(90.0f);
 				if (rotateRadian > maxRad)
@@ -1834,17 +1835,20 @@ void WieldThrow::Update()
 					rotateRadian = maxRad;
 				}
 
-				//プレイヤーの前方向
-				Vector3 axis = parent->GetComponent<Transform>()->GetForward();
-				//クオータニオンの作成
-				const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, speed);
-				//回転行列の作成
-				const Matrix R = Matrix::CreateFromQuaternion(Q);
+				if (fabsf(speed) > DirectX::XMConvertToRadians(1.0f))
+				{
+					//プレイヤーの前方向
+					Vector3 axis = parent->GetComponent<Transform>()->GetForward();
+					//クオータニオンの作成
+					const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, speed);
+					//回転行列の作成
+					const Matrix R = Matrix::CreateFromQuaternion(Q);
 
-				//ベクトルを回転させる
-				Vector4 v = Float4MultiplyFloat4x4({ rotateAxis.x,rotateAxis.y,rotateAxis.z,1.0f }, R);
+					//ベクトルを回転させる
+					Vector4 v = Float4MultiplyFloat4x4({ rotateAxis.x,rotateAxis.y,rotateAxis.z,1.0f }, R);
 
-				rotateAxis = { v.x,v.y,v.z };
+					rotateAxis = { v.x,v.y,v.z };
+				}
 			}
 
 			//クオータニオンの作成
@@ -1860,16 +1864,89 @@ void WieldThrow::Update()
 			//オブジェクトの位置の更新
 			GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
 			Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+			Vector3 oldObjPos = objPos;
 
 			objPos = pos + rotateVec;
 			throwObj->GetComponent<Transform>()->pos = objPos;
 
-			//カプセルを取得
-			CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
-			//カプセルの位置を更新
-			capsule->begin = objPos;
-			capsule->end = rightHandPos;
+			////カプセルを取得
+			//CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+			////カプセルの位置を更新
+			//capsule->begin = objPos;
+			//capsule->end = rightHandPos;
+
+			//投げるスピードの更新
+			throwSpeed = (oldObjPos - objPos).Length() / SystemManager::Instance().GetElapsedTime();
+
+			//投げるベクトルの更新
+			throwVelocity = (objPos - oldObjPos) / SystemManager::Instance().GetElapsedTime();
+			throwVelocity.y = 0.0f;
+			throwVelocity.Normalize();
+
+			throwFlag = true;
 		}
+		else//回転はやめてターゲットに投げる
+		{
+			if (throwFlag)
+			{
+				//オブジェクトの取得
+				GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+				throwObj->GetComponent<RigidBody>()->useGravity = true;
+
+#if 0
+				//プレイヤーのtransform
+				Transform* plTransform = parent->GetComponent<Transform>();
+				//プレイヤーの位置
+				Vector3 pos = plTransform->pos;
+				//プレイヤーの前方向
+				Vector3 forward = plTransform->GetForward();
+				//一旦仮でプレイヤーの前方向に投げる
+				Vector3 targetPos = pos + forward * searchRange;
+				targetPos.y = 2.0f;//仮で固定値
+				
+				//投げるベクトル
+				Vector3 throwVec = targetPos - objPos;
+				throwVec.Normalize();
+#endif
+
+				//オブジェクトの位置取得
+				Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+
+				float elapsedTime = SystemManager::Instance().GetElapsedTime();
+
+				//空気抵抗仮実装
+				throwSpeed -= throwSpeed * 4.0f * elapsedTime;
+
+				float c = (float)modelRenderer->GetPlayAnimMaxTimer() - maxThrowTime;
+				float samplingRate = modelRenderer->GetSamplingRate();
+				c /= samplingRate * GetAnimationSpeed((int)Animation::Throw) * elapsedTime;
+
+				objPos += throwVelocity * throwSpeed * elapsedTime;
+
+				if (objPos.y < 2.0f)
+				{
+					objPos.y = 2.0f;
+					throwFlag = false;
+
+					RigidBody* rigidBody = throwObj->GetComponent<RigidBody>();
+					//オブジェクトに重力をかけない
+					rigidBody->useGravity = false;
+					//オブジェクトの速度をリセット
+					rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
+
+				}
+
+				throwObj->GetComponent<Transform>()->pos = objPos;
+			}
+		}
+
+		//カプセルを取得
+		CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+		//オブジェクトの取得
+		GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+		//カプセルの位置を更新
+		capsule->begin = throwObj->GetComponent<Transform>()->pos;
+		capsule->end = modelRenderer->GetBonePositionFromName("rightHand");
 
 		//腰の位置のモーションによる移動を停止
 		modelRenderer->StopMotionXZVelocity("IdleHip");
@@ -1885,6 +1962,13 @@ void WieldThrow::Exit()
 {
 	//カプセルを非表示に
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
+
+	RigidBody* rigidBody = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<RigidBody>();
+	//オブジェクトに重力をかけない
+	rigidBody->useGravity = false;
+	//オブジェクトの速度をリセット
+	rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
+
 }
 std::string WieldThrow::GetNext()
 {
@@ -1906,7 +1990,13 @@ void WieldThrow::DebugGui()
 		ImGui::DragFloat("maxWieldDegree", &degree);
 		maxWieldRadian = DirectX::XMConvertToRadians(degree);
 		
+		degree = DirectX::XMConvertToDegrees(maxThrowRadian);
+		ImGui::DragFloat("maxThrowDegree", &degree);
+		maxThrowRadian = DirectX::XMConvertToRadians(degree);
+		
 		ImGui::DragFloat("maxThrowTime", &maxThrowTime);
+		ImGui::DragFloat("maxRotateTime", &maxRotateTime);
+		ImGui::DragFloat("accelRatio", &accelRatio);
 
 		ImGui::TreePop();
 	}

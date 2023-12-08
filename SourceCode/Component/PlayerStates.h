@@ -140,7 +140,7 @@ namespace PlayerState
 
 		static bool isAvoid;//‰ñ”ð‚µ‚½‚©‚Ç‚¤‚©
 
-		float searchRange = 120.0f;
+		float searchRange = 70.0f;
 
 	};
 
@@ -518,12 +518,19 @@ namespace PlayerState
 		float rotateSpeed = 0.0f;//‰ñ“]‘¬“x
 		float maxWieldRadian = DirectX::XMConvertToRadians(270.0f);
 		DirectX::SimpleMath::Vector3 rotateVec{};
+		float baseWireLength = 20.0f;
+		float corWireLengthRatio = 0.0f;
 		//-----< Throw‚ÅŽg—p >-----//
-		float maxThrowTime = 45.0f;
-		float maxRotateTime = 25.0f;
-		float maxThrowRadian = DirectX::XMConvertToRadians(180.0f);
+		float maxThrowTime = 27.0f;
+		float maxRotateTime = 20.0f;
+		float maxThrowRadian = DirectX::XMConvertToRadians(235.0f);
 		DirectX::SimpleMath::Vector3 rotateAxis{};
 		Transform* enemyTransform = nullptr;
+		float accelRatio = 2.0f;
+		float oldRotateSpeed = 0.0f;
+		float throwSpeed = 0.0f;
+		bool throwFlag = false;
+		DirectX::SimpleMath::Vector3 throwVelocity{};
 #endif
 	};
 }
