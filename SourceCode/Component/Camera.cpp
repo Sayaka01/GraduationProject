@@ -92,6 +92,7 @@ void Camera::DebugGui()
 		//}
 
 		ImGui::SliderFloat("rate", &rateInCamera,0.0f,1.0f);
+		ImGui::SliderFloat("rotationSpeed", &rotationSpeed,1.0f,100.0f);
 
 #if 0
 		ImGui::DragFloat("fov", &FovRadY, 0.1f);
@@ -112,8 +113,8 @@ void Camera::MoveCameraAngle()
 {
 	const GamePad& gamepad = SystemManager::Instance().GetGamePad();
 
-	const float rx = gamepad.GetAxisRX();
-	const float ry = gamepad.GetAxisRY();
+	//const float rx = gamepad.GetAxisRX();
+	//const float ry = gamepad.GetAxisRY();
 
 	bool inputX = SetAngleToX();
 	bool inputY = SetAngleToY();
@@ -213,8 +214,14 @@ bool Camera::SetAngleToX()
 
 	//ゲームパッドの取得
 	GamePad gamePad = SystemManager::Instance().GetGamePad();
-	//コントローラーのRスティックの移動ベクトルを取得
-	float vec = (float)(gamePad.GetAxisRX());
+	float vec = 0;
+	if (targetObj->GetComponent<Player>()->GetCurrentState()->GetName() == "SwingWire"
+		|| targetObj->GetComponent<Player>()->GetCurrentState()->GetName() == "WireJump")
+		//コントローラーのLスティックの移動ベクトルを取得
+		vec = (float)(gamePad.GetAxisLX());
+	else
+		//コントローラーのRスティックの移動ベクトルを取得
+		vec = (float)(gamePad.GetAxisRX());
 
 	if (vec > 0.1f || vec < -0.1f)
 	{
