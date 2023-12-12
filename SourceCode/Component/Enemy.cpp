@@ -305,10 +305,11 @@ void Enemy::OnCollisionEnter(Collider* collider)
 
 	if (collider->GetParent()->GetTag() != Tag::Player)return;
 
-	if (collider->type == Collider::Type::Offense && !collider->GetParent()->GetComponent<Player>()->GetIsHitAttackToEnemy())
+	if (collider->type == Collider::Type::Offense && !isHitPlayerAttack /*&& !collider->GetParent()->GetComponent<Player>()->GetIsHitAttackToEnemy()*/)
 	{
 		hitFlag = true;
-		collider->GetParent()->GetComponent<Player>()->SetIsHitAttackToEnemy(true);
+		isHitPlayerAttack = true;
+		//collider->GetParent()->GetComponent<Player>()->SetIsHitAttackToEnemy(true);
 	
 		SphereCollider* spCollider = parent->GetComponent<SphereCollider>("waist");
 		parent->GetComponent<Transform>()->pos.x = spCollider->center.x;

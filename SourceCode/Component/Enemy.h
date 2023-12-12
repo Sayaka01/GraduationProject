@@ -130,6 +130,9 @@ public:
 
 	void SetStateName(StateName sName) { stateName = sName; }
 	StateName GetStateName() { return stateName; }
+
+	void SetIsHitPlayerAttack(bool b) { isHitPlayerAttack = b; }
+	bool GetIsHitPlayerAttack() { return isHitPlayerAttack; }
 private:
 
 	//-----< 関数 >-----//
@@ -179,6 +182,10 @@ private:
 	//それぞれの攻撃力
 	float punchPower{ 2 };
 	float slashPower{ 4 };
+
+#if _APPEND
+	bool isHitPlayerAttack;//プレイヤーの攻撃が当たったフラグ
+#endif
 
 	StateName stateName = StateName::Idle;
 

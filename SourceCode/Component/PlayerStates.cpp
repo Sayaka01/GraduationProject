@@ -659,7 +659,8 @@ void Falling::Enter()
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
 
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	SetClearEnemyHitFlag();
 
 }
 void Falling::Update()
@@ -811,7 +812,8 @@ void PunchRight::Enter()
 	SearchNearEnemy();
 
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	SetClearEnemyHitFlag();
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -893,7 +895,8 @@ void PunchLeft::Enter()
 	SearchNearEnemy();
 
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	SetClearEnemyHitFlag();
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -974,7 +977,8 @@ void Kick::Enter()
 	SearchNearEnemy();
 
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	SetClearEnemyHitFlag();
+	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -1452,7 +1456,8 @@ void JumpAttack::Enter()
 	attackTimer = 0.0f;
 
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-	parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+	SetClearEnemyHitFlag();
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
