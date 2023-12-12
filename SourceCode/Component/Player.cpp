@@ -48,7 +48,7 @@ void Player::Initialize()
 
 		animationSpeed[(int)PlayerState::Animation::Thrust] = 1.2f;//さす
 		animationSpeed[(int)PlayerState::Animation::Wield] = 1.2f;//振り回す
-		animationSpeed[(int)PlayerState::Animation::Throw] = 1.5f;//投げる
+		animationSpeed[(int)PlayerState::Animation::Throw] = 1.7f;//投げる
 	}
 
 	//-----< ステートの追加 >-----//

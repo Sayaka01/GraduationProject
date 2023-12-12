@@ -42,6 +42,7 @@ void CapsuleCollider::DebugGui()
 
 		//radian = QuaternionToEuler(quaternion);
 		ImGui::DragFloat3("radian", &radian.x);
+		ImGui::DragFloat4("quaternion", &quaternion.x);
 		//quaternion = EulerToQuaternion(radian);
 		
 		ImGui::DragFloat("radius", &radius);
@@ -67,7 +68,7 @@ void CapsuleCollider::CalcCapsuleParam()
 
 	float rad = acosf(dot);
 #if _APPEND
-	if (fabsf(rad) < FLT_EPSILON)return;
+	if (fabsf(rad) < DirectX::XMConvertToRadians(1.0f))return;
 #endif
 
 	////ƒJƒƒ‰‚ÌŽæ“¾

@@ -496,7 +496,10 @@ namespace PlayerState
 		//IMGUI
 		void DebugGui() override;
 #endif
-
+#if _APPEND
+		//ワイヤーの長さを振り回しながら調整する
+		void CorWireLength();
+#endif
 	private:
 		enum State
 		{
@@ -518,8 +521,11 @@ namespace PlayerState
 		float rotateSpeed = 0.0f;//回転速度
 		float maxWieldRadian = DirectX::XMConvertToRadians(270.0f);
 		DirectX::SimpleMath::Vector3 rotateVec{};
-		float baseWireLength = 20.0f;
-		float corWireLengthRatio = 0.0f;
+		float minWireLength = 15.0f;
+		float maxWireLength = 30.0f;
+		float beforeWireLength = 0.0f;
+		float maxPullRatio = 0.45f;
+		bool pull = false;
 		//-----< Throwで使用 >-----//
 		float maxThrowTime = 27.0f;
 		float maxRotateTime = 20.0f;

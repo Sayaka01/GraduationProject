@@ -1648,12 +1648,23 @@ void WieldThrow::Enter()
 	float length = (objPos - pos).Length();
 	wireSpeed = length * samplingRate * GetAnimationSpeed((int)Animation::Thrust);
 
+	//変数の初期化
 	appearWire = false;
 	thrust = false;
+	pull = true;
+
+
 #endif
 }
 void WieldThrow::Update()
 {
+	GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+	Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
+	if (objPos.y < 1.9f)
+	{
+		objPos.y = 2.0f;
+	}
+
 	switch (state)
 	{
 	case Thrust:
@@ -1726,6 +1737,10 @@ void WieldThrow::Update()
 			rotateSpeed = maxWieldRadian / ((float)modelRenderer->GetPlayAnimMaxTimer() / (samplingRate * GetAnimationSpeed((int)Animation::Wield)));
 
 			rotateVec = objPos - pos;
+
+			beforeWireLength = rotateVec.Length();
+
+			OutputDebugLog("wieldします\n");
 		}
 
 		break;
@@ -1746,6 +1761,9 @@ void WieldThrow::Update()
 		//ベクトルを回転させる
 		Vector4 v = Float4MultiplyFloat4x4({ rotateVec.x,rotateVec.y,rotateVec.z,1.0f }, R);
 		rotateVec = { v.x,v.y,v.z };
+
+		//ワイヤーの長さの調整
+		CorWireLength();
 
 		//オブジェクトの位置の更新
 		GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
@@ -1802,6 +1820,7 @@ void WieldThrow::Update()
 					enemyTransform = nullptr;
 				}
 			}
+
 		}
 
 		break;
@@ -1876,7 +1895,7 @@ void WieldThrow::Update()
 			//capsule->end = rightHandPos;
 
 			//投げるスピードの更新
-			throwSpeed = (oldObjPos - objPos).Length() / SystemManager::Instance().GetElapsedTime();
+			throwSpeed = (oldObjPos - objPos).Length() / SystemManager::Instance().GetElapsedTime() * 1.5f;
 
 			//投げるベクトルの更新
 			throwVelocity = (objPos - oldObjPos) / SystemManager::Instance().GetElapsedTime();
@@ -1915,7 +1934,7 @@ void WieldThrow::Update()
 				float elapsedTime = SystemManager::Instance().GetElapsedTime();
 
 				//空気抵抗仮実装
-				throwSpeed -= throwSpeed * 4.0f * elapsedTime;
+				throwSpeed -= throwSpeed * 3.5f * elapsedTime;
 
 				float c = (float)modelRenderer->GetPlayAnimMaxTimer() - maxThrowTime;
 				float samplingRate = modelRenderer->GetSamplingRate();
@@ -1963,11 +1982,13 @@ void WieldThrow::Exit()
 	//カプセルを非表示に
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 
+#if _APPEND
 	RigidBody* rigidBody = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<RigidBody>();
 	//オブジェクトに重力をかけない
 	rigidBody->useGravity = false;
 	//オブジェクトの速度をリセット
 	rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
+#endif
 
 }
 std::string WieldThrow::GetNext()
@@ -1994,10 +2015,61 @@ void WieldThrow::DebugGui()
 		ImGui::DragFloat("maxThrowDegree", &degree);
 		maxThrowRadian = DirectX::XMConvertToRadians(degree);
 		
-		ImGui::DragFloat("maxThrowTime", &maxThrowTime);
-		ImGui::DragFloat("maxRotateTime", &maxRotateTime);
-		ImGui::DragFloat("accelRatio", &accelRatio);
+		ImGui::DragFloat("minWireLength", &minWireLength);
+		ImGui::DragFloat("maxWireLength", &maxWireLength);
+		ImGui::DragFloat("maxPullRatio", &maxPullRatio);
 
 		ImGui::TreePop();
 	}
 }
+
+#if _APPEND
+void WieldThrow::CorWireLength()
+{
+	//コンポーネントの取得
+	ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
+
+	//現在のアニメーションの比率
+	float ratio = (float)modelRenderer->GetPlayAnimTimer() / (float)modelRenderer->GetPlayAnimMaxTimer();
+
+
+	if (ratio < maxPullRatio)
+	{
+		if (beforeWireLength > minWireLength)
+		{
+			ratio = ratio / maxPullRatio;
+
+			//イージング関数(easeInSine)
+			ratio = sinf((ratio * DirectX::XM_PI) / 2.0f);
+
+			//長さを計算
+			float length = LerpFloat(beforeWireLength, minWireLength, ratio);
+
+			//ワイヤーの長さ更新
+			rotateVec.Normalize();
+			rotateVec *= length;
+		}
+	}
+	else
+	{
+		if (pull)
+		{
+			beforeWireLength = rotateVec.Length();
+			pull = false;
+		}
+
+		ratio = (ratio - maxPullRatio) / (1.0f - maxPullRatio);
+
+		//イージング関数(easeInSine)
+		ratio = 1.0f - cosf((ratio * DirectX::XM_PI) / 2.0f);
+
+		//長さを計算
+		float length = LerpFloat(beforeWireLength, maxWireLength, ratio);
+
+		//ワイヤーの長さ更新
+		rotateVec.Normalize();
+		rotateVec *= length;
+	}
+
+}
+#endif

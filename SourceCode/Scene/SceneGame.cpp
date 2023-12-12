@@ -250,7 +250,7 @@ void SceneGame::PlayerInitialize()
 
 		GameObject* throwObj = new GameObject("throwObj");
 		throwObj->AddComponent(new ModelRenderer("./Resources/Model/Object/cube.fbx"));
-		throwObj->GetComponent<Transform>()->pos = { 0.0f, 1.0f, -150.0f };
+		throwObj->GetComponent<Transform>()->pos = { 0.0f, 2.0f, -150.0f };
 		throwObj->GetComponent<Transform>()->scale = { 2.0f, 2.0f, 2.0f };
 		throwObj->AddComponent(new SphereCollider());
 		throwObj->GetComponent<SphereCollider>()->radius = 2.0f;
