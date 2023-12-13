@@ -74,19 +74,8 @@ namespace PlayerState
 		//ジャンプ回数の初期化
 		void InitJumpCount() { jumpCount = 0; }
 
-		void SetClearEnemyHitFlag()
-		{
-			GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
-			if (enemyManager->GetChildrenCount() > 0)
-			{
-				for (int i = 0; i < enemyManager->GetChildrenCount(); i++)
-				{
-					Enemy* enemy = enemyManager->GetGameObj(i)->GetComponent<Enemy>();
-					if (enemy->GetIsHitPlayerAttack())
-						enemy->SetIsHitPlayerAttack(false);
-				}
-			}
-		}
+		//敵の攻撃被弾フラグを全てOFFに
+		void SetClearEnemyHitFlag();
 
 	protected:
 		//移動ベクトルをRigidBodyコンポーネントに保存

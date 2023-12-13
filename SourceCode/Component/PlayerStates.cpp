@@ -57,6 +57,21 @@ void PlayerState::Default::Update()
 	SearchThrowObj();
 }
 
+//“G‚ÌUŒ‚”í’eƒtƒ‰ƒO‚ð‘S‚ÄOFF‚É
+void PlayerState::Default::SetClearEnemyHitFlag()
+{
+	GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
+	if (enemyManager->GetChildrenCount() > 0)
+	{
+		for (int i = 0; i < enemyManager->GetChildrenCount(); i++)
+		{
+			Enemy* enemy = enemyManager->GetGameObj(i)->GetComponent<Enemy>();
+			if (enemy->GetIsHitPlayerAttack())
+				enemy->SetIsHitPlayerAttack(false);
+		}
+	}
+}
+
 void Default::SetMoveVelocity(DirectX::XMFLOAT3 velocity)
 {
 	//RigidBodyƒRƒ“ƒ|[ƒlƒ“ƒg‚ÉMoveVelocity‚ðÝ’è
@@ -659,9 +674,12 @@ void Falling::Enter()
 	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒs[ƒh‚Ì’²®
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
 
+#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
+#endif
+
 
 }
 void Falling::Update()
@@ -812,9 +830,11 @@ void PunchRight::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
+#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
+#endif 
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -895,9 +915,11 @@ void PunchLeft::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
+#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
+#endif 
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -977,9 +999,11 @@ void Kick::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
+#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	SetClearEnemyHitFlag();
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+#endif
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -1456,9 +1480,11 @@ void JumpAttack::Enter()
 	//UŒ‚’†‘‚¦‘±‚¯‚é
 	attackTimer = 0.0f;
 
+#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
+#endif
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -1748,7 +1774,8 @@ void WieldThrow::Update()
 			throwObj->GetComponent<ThrowObstacle>()->OnThrowFlag();
 
 			//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-			parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+			SetClearEnemyHitFlag();
+			//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 
 		}
 
@@ -1832,7 +1859,8 @@ void WieldThrow::Update()
 			}
 
 			//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
-			parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+			SetClearEnemyHitFlag();
+			//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 		}
 
 		break;

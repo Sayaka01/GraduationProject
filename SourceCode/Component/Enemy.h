@@ -183,9 +183,7 @@ private:
 	float punchPower{ 2 };
 	float slashPower{ 4 };
 
-#if _APPEND
 	bool isHitPlayerAttack;//プレイヤーの攻撃が当たったフラグ
-#endif
 
 	StateName stateName = StateName::Idle;
 
