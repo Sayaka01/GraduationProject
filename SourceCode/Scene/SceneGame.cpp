@@ -130,6 +130,7 @@ void SceneGame::Update()
 	spriteManager->Update();
 
 	//-----< IMGUI >-----//
+#if _DEBUG
 	{
 		if (ImGui::BeginMainMenuBar())
 		{
@@ -146,6 +147,7 @@ void SceneGame::Update()
 		if(imguiObjctManager) { objectManager->DebugGui(); }
 		if(imguiSpriteManager) { spriteManager->DebugGui(); }
 	}
+#endif
 }
 
 void SceneGame::Draw()
