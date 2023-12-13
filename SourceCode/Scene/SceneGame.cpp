@@ -16,6 +16,9 @@
 #include "Component/DirectionLight.h"
 #include "Component/Player.h"
 #include "Component/Enemy.h"
+#if _APPEND
+#include "Component/ThrowObstacle.h"
+#endif
 #include "Component/SphereCollider.h"
 #include "Component/BoxCollider.h"
 #include "Component/CapsuleCollider.h"
@@ -231,12 +234,15 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new CapsuleCollider("WireCapsule"));
 	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.05f;
+	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 2.0f;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 	player->GetComponent<CapsuleCollider>("WireCapsule")->drawReleasePrimitive = true;
 
 	player->AddComponent(new SphereCollider("DebugSphere"));
 	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
+	player->AddComponent(new CapsuleCollider("DebugCapsule"));
+	player->GetComponent<CapsuleCollider>("DebugCapsule")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
 
 	SpriteRenderer* spriteRenderer = new SpriteRenderer(L"./Resources/Sprite/AimTarget.png");
 	spriteRenderer->pivot = spriteRenderer->texSize * 0.5f;
@@ -249,6 +255,7 @@ void SceneGame::PlayerInitialize()
 		throwObjects = new GameObject("throwObjects");
 
 		GameObject* throwObj = new GameObject("throwObj");
+		throwObj->SetTag(Tag::Player);
 		throwObj->AddComponent(new ModelRenderer("./Resources/Model/Object/cube.fbx"));
 		throwObj->GetComponent<Transform>()->pos = { 0.0f, 2.0f, -150.0f };
 		throwObj->GetComponent<Transform>()->scale = { 2.0f, 2.0f, 2.0f };
@@ -257,7 +264,7 @@ void SceneGame::PlayerInitialize()
 		throwObj->GetComponent<SphereCollider>()->useTransform = true;
 #if _APPEND
 		throwObj->AddComponent(new RigidBody());
-		throwObj->GetComponent<RigidBody>()->useGravity = false;
+		throwObj->AddComponent(new ThrowObstacle());
 #endif
 
 		throwObjects->AddChild(throwObj);

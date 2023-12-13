@@ -263,6 +263,7 @@
     <ClCompile Include="SourceCode\Component\SphereMeshRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\SpriteData.cpp" />
     <ClCompile Include="SourceCode\Component\SpriteRenderer.cpp" />
+    <ClCompile Include="SourceCode\Component\ThrowObject.cpp" />
     <ClCompile Include="SourceCode\Component\Transform.cpp" />
     <ClCompile Include="SourceCode\GameObject\CameraController.cpp" />
     <ClCompile Include="SourceCode\GameObject\GameObject.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="SourceCode\Component\SphereMeshRenderer.h" />
     <ClInclude Include="SourceCode\Component\SpriteData.h" />
     <ClInclude Include="SourceCode\Component\SpriteRenderer.h" />
+    <ClInclude Include="SourceCode\Component\ThrowObstacle.h" />
     <ClInclude Include="SourceCode\Component\Transform.h" />
     <ClInclude Include="SourceCode\GameObject\CameraController.h" />
     <ClInclude Include="SourceCode\GameObject\GameObject.h" />

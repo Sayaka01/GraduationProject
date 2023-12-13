@@ -517,8 +517,8 @@ namespace PlayerState
 		bool appearWire = false;//ワイヤーの出現
 		bool thrust = false;//オブジェクトに刺さっているかどうか
 		//-----< Wieldで使用 >-----//
-		float rotateRadian = 0.0f;//回転角
-		float rotateSpeed = 0.0f;//回転速度
+		float wieldRadian = 0.0f;//回転角
+		float wieldSpeed = 0.0f;//回転速度
 		float maxWieldRadian = DirectX::XMConvertToRadians(270.0f);
 		DirectX::SimpleMath::Vector3 rotateVec{};
 		float minWireLength = 15.0f;
@@ -533,7 +533,7 @@ namespace PlayerState
 		DirectX::SimpleMath::Vector3 rotateAxis{};
 		Transform* enemyTransform = nullptr;
 		float accelRatio = 2.0f;
-		float oldRotateSpeed = 0.0f;
+		float oldWieldSpeed = 0.0f;
 		float throwSpeed = 0.0f;
 		bool throwFlag = false;
 		DirectX::SimpleMath::Vector3 throwVelocity{};

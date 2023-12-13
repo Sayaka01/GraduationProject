@@ -11,6 +11,7 @@
 #include "Component/Camera.h"
 #include "Component/RigidBody.h"
 #include "Component/Player.h"
+#include "Component/ThrowObstacle.h"
 #include "Component/SphereCollider.h"
 #include "Component/CapsuleCollider.h"
 
@@ -1653,17 +1654,12 @@ void WieldThrow::Enter()
 	thrust = false;
 	pull = true;
 
+	attackPower = 3.0f;
 
 #endif
 }
 void WieldThrow::Update()
 {
-	GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
-	Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
-	if (objPos.y < 1.9f)
-	{
-		objPos.y = 2.0f;
-	}
 
 	switch (state)
 	{
@@ -1734,13 +1730,21 @@ void WieldThrow::Update()
 			//rotateRadian = atan2f(plObjVec.z, plObjVec.x);
 			//回転速度を計算
 			float samplingRate = modelRenderer->GetSamplingRate();
-			rotateSpeed = maxWieldRadian / ((float)modelRenderer->GetPlayAnimMaxTimer() / (samplingRate * GetAnimationSpeed((int)Animation::Wield)));
+			wieldSpeed = maxWieldRadian / ((float)modelRenderer->GetPlayAnimMaxTimer() / (samplingRate * GetAnimationSpeed((int)Animation::Wield)));
 
 			rotateVec = objPos - pos;
 
 			beforeWireLength = rotateVec.Length();
 
-			OutputDebugLog("wieldします\n");
+			//攻撃属性に変更
+			CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+			capsule->useHitEvent = true;
+			capsule->type = Collider::Type::Offense;
+			throwObj->GetComponent<ThrowObstacle>()->OnThrowFlag();
+
+			//敵への攻撃フラグをOFF
+			parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
+
 		}
 
 		break;
@@ -1753,7 +1757,7 @@ void WieldThrow::Update()
 		const Vector3 axis = { 0.0f,1.0f,0.0f };
 
 		//クオータニオンの作成
-		const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, -rotateSpeed * SystemManager::Instance().GetElapsedTime());
+		const Quaternion Q = Quaternion::CreateFromAxisAngle(axis, -wieldSpeed * SystemManager::Instance().GetElapsedTime());
 
 		//回転行列の作成
 		const Matrix R = Matrix::CreateFromQuaternion(Q);
@@ -1785,6 +1789,7 @@ void WieldThrow::Update()
 		capsule->begin = objPos;
 		capsule->end = rightHandPos;
 
+		//アニメーションが終わったら次のステートへ
 		if (modelRenderer->IsFinishAnimation())
 		{
 			//アニメーションの再生
@@ -1797,10 +1802,10 @@ void WieldThrow::Update()
 			//回転速度を計算
 			float samplingRate = modelRenderer->GetSamplingRate();
 			float t = (float)modelRenderer->GetPlayAnimMaxTimer();
-			rotateSpeed = maxThrowRadian / (maxRotateTime / (samplingRate * GetAnimationSpeed((int)Animation::Throw)));
-			oldRotateSpeed = rotateSpeed;
+			wieldSpeed = maxThrowRadian / (maxRotateTime / (samplingRate * GetAnimationSpeed((int)Animation::Throw)));
+			oldWieldSpeed = wieldSpeed;
 			rotateAxis = { 0.0f,1.0f,0.0f };
-			rotateRadian = 0.0f;
+			wieldRadian = 0.0f;
 
 			//誰に投げつけるか決める
 			enemyTransform = nullptr;
@@ -1821,6 +1826,8 @@ void WieldThrow::Update()
 				}
 			}
 
+			//敵への攻撃フラグをOFF
+			parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 		}
 
 		break;
@@ -1843,15 +1850,15 @@ void WieldThrow::Update()
 			//回転軸をプレイヤーの前方向を軸に回転する
 			if (animTimer > maxRotateTime)
 			{
-				rotateSpeed += rotateSpeed * accelRatio * GetAnimationSpeed((int)Animation::Throw) * SystemManager::Instance().GetElapsedTime();
+				wieldSpeed += wieldSpeed * accelRatio * GetAnimationSpeed((int)Animation::Throw) * SystemManager::Instance().GetElapsedTime();
 				//回転角度を計算
-				float speed = oldRotateSpeed * SystemManager::Instance().GetElapsedTime();
-				rotateRadian += speed;
+				float speed = oldWieldSpeed * SystemManager::Instance().GetElapsedTime();
+				wieldRadian += speed;
 				constexpr float maxRad = DirectX::XMConvertToRadians(90.0f);
-				if (rotateRadian > maxRad)
+				if (wieldRadian > maxRad)
 				{
-					speed -= rotateRadian - maxRad;
-					rotateRadian = maxRad;
+					speed -= wieldRadian - maxRad;
+					wieldRadian = maxRad;
 				}
 
 				if (fabsf(speed) > DirectX::XMConvertToRadians(1.0f))
@@ -1871,14 +1878,35 @@ void WieldThrow::Update()
 			}
 
 			//クオータニオンの作成
-			const Quaternion Q = Quaternion::CreateFromAxisAngle(rotateAxis, -rotateSpeed * SystemManager::Instance().GetElapsedTime());
+			Quaternion Q = Quaternion::CreateFromAxisAngle(rotateAxis, -wieldSpeed * SystemManager::Instance().GetElapsedTime());
 
 			//回転行列の作成
-			const Matrix R = Matrix::CreateFromQuaternion(Q);
+			Matrix R = Matrix::CreateFromQuaternion(Q);
 
 			//ベクトルを回転させる
 			Vector4 v = Float4MultiplyFloat4x4({ rotateVec.x,rotateVec.y,rotateVec.z,1.0f }, R);
 			rotateVec = { v.x,v.y,v.z };
+
+			//近くに敵がいるなら敵の方向を向く
+			if (enemyTransform)
+			{
+				//敵の位置
+				Vector3 enePos = enemyTransform->pos;
+				//プレイヤーから敵へのベクトル
+				Vector3 plEneVec = enePos - pos;
+				plEneVec.y = 0.0f;
+				plEneVec.Normalize();
+				//回転軸
+				Vector3 axis = { 0.0f,1.0f,0.0f };
+				//プレイヤーの前方向ベクトル
+				Vector3 frontVec = parent->GetComponent<Transform>()->GetForward();
+				//回転角
+				float rot = (frontVec.x * plEneVec.x) + (frontVec.z * plEneVec.z);
+				rot = acosf(rot);
+				//オリエンテーションの取得
+				Quaternion orientation = parent->GetComponent<Transform>()->orientation;
+
+			}
 
 			//オブジェクトの位置の更新
 			GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
@@ -1934,7 +1962,7 @@ void WieldThrow::Update()
 				float elapsedTime = SystemManager::Instance().GetElapsedTime();
 
 				//空気抵抗仮実装
-				throwSpeed -= throwSpeed * 3.5f * elapsedTime;
+				throwSpeed -= throwSpeed * 4.5f * elapsedTime;
 
 				float c = (float)modelRenderer->GetPlayAnimMaxTimer() - maxThrowTime;
 				float samplingRate = modelRenderer->GetSamplingRate();
@@ -1988,6 +2016,14 @@ void WieldThrow::Exit()
 	rigidBody->useGravity = false;
 	//オブジェクトの速度をリセット
 	rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
+
+	//守り属性に変更
+	CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+	capsule->useHitEvent = false;
+	capsule->type = Collider::Type::Deffense;
+	GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
+	throwObj->GetComponent<SphereCollider>()->type = Collider::Type::Deffense;
+
 #endif
 
 }
@@ -2002,7 +2038,6 @@ std::string WieldThrow::GetNext()
 	//変更なし
 	return "";
 }
-
 void WieldThrow::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
@@ -2022,7 +2057,6 @@ void WieldThrow::DebugGui()
 		ImGui::TreePop();
 	}
 }
-
 #if _APPEND
 void WieldThrow::CorWireLength()
 {

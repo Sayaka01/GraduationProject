@@ -266,6 +266,9 @@
     <ClCompile Include="SourceCode\Component\Health.cpp">
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Component\ThrowObject.cpp">
+      <Filter>Sources\Component\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Lib\imgui\imconfig.h">
@@ -488,6 +491,9 @@
       <Filter>Sources\Component\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Component\Health.h">
+      <Filter>Sources\Component\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component\ThrowObstacle.h">
       <Filter>Sources\Component\Character</Filter>
     </ClInclude>
   </ItemGroup>
