@@ -1,5 +1,7 @@
 #pragma once
 
+#if _APPEND
+
 #include <SimpleMath.h>
 
 #include "Component.h"
@@ -18,16 +20,25 @@ public:
 	void Update() override;
 	//ImGui
 	void DebugGui() override;
+	//当たり判定
+	void OnCollisionEnter(Collider* collider)override;
+
+	void GraspFromPlayer();
+	void ThrowFree(DirectX::SimpleMath::Vector3 velocity, float speed);
+	void ThrowTarget(DirectX::SimpleMath::Vector3 targetPos, float speed);
 
 	//setter, getter
 	bool GetThrowFlag() { return throwFlag; }
-	void OnThrowFlag();
-	void Throw();
+
 
 private:
-	bool throwFlag = false;
-	DirectX::SimpleMath::Vector3 throwVec{};
-	float throwSpeed = 0.0f;
-	DirectX::SimpleMath::Vector3 targetPos{};
+	bool throwFlag = false;//投げられたかどうか
+	DirectX::SimpleMath::Vector3 throwVec{};//投げるベクトル
+	float throwSpeed = 0.0f;//投げるスピード
+	DirectX::SimpleMath::Vector3 targetPos{};//投げつける目標位置
+	bool throwTarget = false;
 	float floorPos = 2.0f;
+	float airResistance = 10.0f;
 };
+
+#endif

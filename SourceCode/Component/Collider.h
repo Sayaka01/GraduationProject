@@ -31,6 +31,20 @@ public:
 	};
 	Type type = Type::Deffense;
 
+#if _APPEND
+	enum class Priority
+	{
+		None = -1,
+		Obstacle,//ThrowObject etc.
+		PlayerAttack,//playerの攻撃判定
+		EnemyAttack,//enemyの攻撃判定
+		PlayerBody,//playerのくらい判定
+		EnemyBody,//enemyのくらい判定
+		PriorityCount,
+	};
+	Priority priority = Priority::None;//当たり判定の優先度（０が一番優先度高い）
+#endif
+
 	//-----< getter, setter >-----//
 
 
@@ -38,7 +52,6 @@ public:
 	DirectX::XMFLOAT3 center = {};//コライダーの中央位置（カプセルでは不使用）
 	bool drawDebugPrimitive = true;//デバッグ描画を行うか
 	bool drawReleasePrimitive = false;//デバッグ描画を行うか
-	int priority = 0;//当たり判定の優先度（０が一番優先度高い）
 	bool useHitEvent = true;//当たり判定を行うかどうか
 
 	DirectX::XMFLOAT4 debugColor = { 1,1,1,1 };

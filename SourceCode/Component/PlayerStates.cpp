@@ -181,9 +181,9 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
 #if _APPEND
-Transform* PlayerState::Default::SearchNearEnemy()
+SphereCollider* PlayerState::Default::SearchNearEnemy()
 {
-	Transform* transform = nullptr;
+	SphereCollider* collider = nullptr;
 
 	//今は敵が1体なのでこのやり方。後で頑張る
 	GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
@@ -197,8 +197,8 @@ Transform* PlayerState::Default::SearchNearEnemy()
 		{
 			for (int i = 0; i < enemyCounut; i++)
 			{
-				Transform* enemyTransform = enemyManager->GetGameObj(i)->GetComponent<Transform>();
-				Vector3 enemyPos= enemyTransform->pos;
+				SphereCollider* enemyCollider = enemyManager->GetGameObj(i)->GetComponent<SphereCollider>("waist");
+				Vector3 enemyPos = enemyManager->GetGameObj(i)->GetComponent <Transform>()->pos;
 				Vector3 vec = playerPos - enemyPos;
 				float length = vec.Length();
 
@@ -207,10 +207,10 @@ Transform* PlayerState::Default::SearchNearEnemy()
 					minLength = length;
 					parameter = enemyPos;
 
-					transform = enemyTransform;
+					collider = enemyCollider;
 				}
 			}
-			if (transform)return transform;
+			if (collider)return collider;
 		}
 	}
 
@@ -1773,7 +1773,7 @@ void WieldThrow::Update()
 			CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
 			capsule->useHitEvent = true;
 			capsule->type = Collider::Type::Offense;
-			throwObj->GetComponent<ThrowObstacle>()->OnThrowFlag();
+			throwObj->GetComponent<ThrowObstacle>()->GraspFromPlayer();
 
 			//敵への攻撃フラグをOFF
 			SetClearEnemyHitFlag();
@@ -1842,13 +1842,13 @@ void WieldThrow::Update()
 			wieldRadian = 0.0f;
 
 			//誰に投げつけるか決める
-			enemyTransform = nullptr;
-			enemyTransform = SearchNearEnemy();//一番近い敵のTransformを取得
+			enemyCollider = nullptr;
+			enemyCollider = SearchNearEnemy();//一番近い敵のTransformを取得
 			
-			if (enemyTransform != nullptr)
+			if (enemyCollider != nullptr)
 			{
 				//敵の位置
-				Vector3 enePos = enemyTransform->pos;
+				Vector3 enePos = enemyCollider->center;
 				//プレイヤーから敵へのベクトル
 				Vector3 vec = enePos - pos;
 				//敵までの距離
@@ -1856,12 +1856,12 @@ void WieldThrow::Update()
 				//敵までの距離が一定より離れているならクリア
 				if (distance > searchRange)
 				{
-					enemyTransform = nullptr;
+					enemyCollider = nullptr;
 				}
 				else
 				{
 					//敵の位置
-					Vector3 enePos = enemyTransform->pos;
+					Vector3 enePos = enemyCollider->center;
 					//プレイヤーから敵へのベクトル
 					Vector3 plEneVec = enePos - pos;
 					plEneVec.y = 0.0f;
@@ -1941,10 +1941,10 @@ void WieldThrow::Update()
 			rotateVec = { v.x,v.y,v.z };
 
 			//近くに敵がいるなら敵の方向を向く
-			if (enemyTransform)
+			if (enemyCollider)
 			{
 				//敵の位置
-				Vector3 enePos = enemyTransform->pos;
+				Vector3 enePos = enemyCollider->center;
 				//プレイヤーから敵へのベクトル
 				Vector3 plEneVec = enePos - pos;
 				plEneVec.y = 0.0f;
@@ -2004,9 +2004,12 @@ void WieldThrow::Update()
 			throwSpeed = (oldObjPos - objPos).Length() / SystemManager::Instance().GetElapsedTime() * 1.5f;
 
 			//投げるベクトルの更新
-			throwVelocity = (objPos - oldObjPos) / SystemManager::Instance().GetElapsedTime();
-			throwVelocity.y = 0.0f;
-			throwVelocity.Normalize();
+			if (enemyCollider == nullptr)
+			{
+				throwVelocity = (objPos - oldObjPos) / SystemManager::Instance().GetElapsedTime();
+				throwVelocity.y = 0.0f;
+				throwVelocity.Normalize();
+			}
 
 			throwFlag = true;
 		}
@@ -2016,53 +2019,24 @@ void WieldThrow::Update()
 			{
 				//オブジェクトの取得
 				GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
-				
-				throwObj->GetComponent<ThrowObstacle>()->Throw();
 
-#if 0
-				//プレイヤーのtransform
-				Transform* plTransform = parent->GetComponent<Transform>();
-				//プレイヤーの位置
-				Vector3 pos = plTransform->pos;
-				//プレイヤーの前方向
-				Vector3 forward = plTransform->GetForward();
-				//一旦仮でプレイヤーの前方向に投げる
-				Vector3 targetPos = pos + forward * searchRange;
-				targetPos.y = 2.0f;//仮で固定値
-				
-				//投げるベクトル
-				Vector3 throwVec = targetPos - objPos;
-				throwVec.Normalize();
-#endif
-
-				//オブジェクトの位置取得
-				Vector3 objPos = throwObj->GetComponent<Transform>()->pos;
-
-				float elapsedTime = SystemManager::Instance().GetElapsedTime();
-
-				//空気抵抗仮実装
-				throwSpeed -= throwSpeed * 4.5f * elapsedTime;
-
-				float c = (float)modelRenderer->GetPlayAnimMaxTimer() - maxThrowTime;
-				float samplingRate = modelRenderer->GetSamplingRate();
-				c /= samplingRate * GetAnimationSpeed((int)Animation::Throw) * elapsedTime;
-
-				objPos += throwVelocity * throwSpeed * elapsedTime;
-
-				if (objPos.y < 2.0f)
+				if (enemyCollider)
 				{
-					objPos.y = 2.0f;
-					throwFlag = false;
-
-					RigidBody* rigidBody = throwObj->GetComponent<RigidBody>();
-					//オブジェクトに重力をかけない
-					rigidBody->useGravity = false;
-					//オブジェクトの速度をリセット
-					rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
-
+					//オブジェクトにターゲットの位置と速度を設定
+					throwObj->GetComponent<ThrowObstacle>()->ThrowTarget(enemyCollider->center, throwSpeed);
+				}
+				else
+				{
+					//オブジェクトに投げるベクトルと速度を設定
+					throwObj->GetComponent<ThrowObstacle>()->ThrowFree(throwVelocity, throwSpeed);
 				}
 
-				throwObj->GetComponent<Transform>()->pos = objPos;
+				throwFlag = false;
+
+				//ワイヤー用カプセルの当たり判定を消す
+				CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
+				capsule->useHitEvent = false;
+				capsule->type = Collider::Type::Deffense;
 			}
 		}
 
@@ -2088,22 +2062,6 @@ void WieldThrow::Exit()
 {
 	//カプセルを非表示に
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
-
-#if _APPEND
-	RigidBody* rigidBody = parent->GetComponent<Player>()->GetThrowObj()->GetComponent<RigidBody>();
-	//オブジェクトに重力をかけない
-	rigidBody->useGravity = false;
-	//オブジェクトの速度をリセット
-	rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
-
-	//守り属性に変更
-	CapsuleCollider* capsule = parent->GetComponent<CapsuleCollider>("WireCapsule");
-	capsule->useHitEvent = false;
-	capsule->type = Collider::Type::Deffense;
-	GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
-	throwObj->GetComponent<SphereCollider>()->type = Collider::Type::Deffense;
-
-#endif
 
 }
 std::string WieldThrow::GetNext()
@@ -2138,6 +2096,8 @@ void WieldThrow::DebugGui()
 		ImGui::DragFloat("maxWireLength", &maxWireLength);
 		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("maxPullRatio", &maxPullRatio);
+		ImGui::SetNextItemWidth(100.0f);
+		ImGui::DragFloat("accelRatio", &accelRatio);
 
 		ImGui::TreePop();
 	}

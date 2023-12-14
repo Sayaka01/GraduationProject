@@ -204,25 +204,33 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = 2;
+#if _APPEND
+	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = Collider::Priority::PlayerBody;
+#endif
 
 	player->AddComponent(new SphereCollider("RightHandSphere"));
 	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightHandSphere")->type = Collider::Type::Offense;
-	player->GetComponent<SphereCollider>("RightHandSphere")->priority = 0;
+#if _APPEND
+	player->GetComponent<SphereCollider>("RightHandSphere")->priority = Collider::Priority::PlayerAttack;
+#endif
 
 	player->AddComponent(new SphereCollider("LeftHandSphere"));
 	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("LeftHandSphere")->type = Collider::Type::Offense;
-	player->GetComponent<SphereCollider>("LeftHandSphere")->priority = 0;
+#if _APPEND
+	player->GetComponent<SphereCollider>("LeftHandSphere")->priority = Collider::Priority::PlayerAttack;
+#endif
 
 	player->AddComponent(new SphereCollider("RightAnkleSphere"));
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->radius = 2.0f;
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->type = Collider::Type::Offense;
-	player->GetComponent<SphereCollider>("RightAnkleSphere")->priority = 0;
+#if _APPEND
+	player->GetComponent<SphereCollider>("RightAnkleSphere")->priority = Collider::Priority::PlayerAttack;
+#endif
 
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;
@@ -261,10 +269,12 @@ void SceneGame::PlayerInitialize()
 		throwObj->AddComponent(new ModelRenderer("./Resources/Model/Object/cube.fbx"));
 		throwObj->GetComponent<Transform>()->pos = { 0.0f, 2.0f, -150.0f };
 		throwObj->GetComponent<Transform>()->scale = { 2.0f, 2.0f, 2.0f };
-		throwObj->AddComponent(new SphereCollider());
-		throwObj->GetComponent<SphereCollider>()->radius = 2.0f;
-		throwObj->GetComponent<SphereCollider>()->useTransform = true;
 #if _APPEND
+		SphereCollider* sphereCollider = new SphereCollider();
+		throwObj->AddComponent(sphereCollider);
+		sphereCollider->radius = 2.0f;
+		sphereCollider->useTransform = true;
+		sphereCollider->priority = Collider::Priority::Obstacle;
 		throwObj->AddComponent(new RigidBody());
 		throwObj->AddComponent(new ThrowObstacle());
 #endif
@@ -334,7 +344,11 @@ void SceneGame::EnemyInitialize()
 		enemy->AddComponent(new SphereCollider("HandCollider"));
 		enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
 		enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
-		enemy->GetComponent<SphereCollider>("HandCollider")->priority = 1;
+
+#if _APPEND
+		enemy->GetComponent<SphereCollider>("HandCollider")->priority = Collider::Priority::EnemyAttack;
+#endif
+
 		// ˆÚ“®Ý’è
 		enemy->AddComponent(new RigidBody());
 

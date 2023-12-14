@@ -3,7 +3,7 @@
 #include "SimpleMath.h"
 
 class GameObject;
-class Transform;
+class SphereCollider;
 #include "Enemy.h"
 
 //プレイヤーの状態
@@ -94,7 +94,7 @@ namespace PlayerState
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
 		//一番近い敵を取得
 #if _APPEND
-		Transform* SearchNearEnemy();
+		SphereCollider* SearchNearEnemy();
 #endif
 		//アニメーションスピードを取得
 		float GetAnimationSpeed(int index);
@@ -535,8 +535,8 @@ namespace PlayerState
 		float maxRotateTime = 20.0f;
 		float maxThrowRadian = DirectX::XMConvertToRadians(235.0f);
 		DirectX::SimpleMath::Vector3 rotateAxis{};
-		Transform* enemyTransform = nullptr;
-		float accelRatio = 2.0f;
+		SphereCollider* enemyCollider = nullptr;
+		float accelRatio = 4.5;
 		float oldWieldSpeed = 0.0f;
 		float corRadian = 0.0f;//回転補正値
 		float addRotateSpeed = 0.0f;
