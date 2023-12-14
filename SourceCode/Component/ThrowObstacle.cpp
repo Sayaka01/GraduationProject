@@ -14,14 +14,16 @@
 
 using namespace DirectX::SimpleMath;
 
-#if _APPEND
-
 void ThrowObstacle::Initialize()
 {
 	name = "ThrowObstacle";
 
 	//フラグの初期化
 	throwFlag = false;
+
+	//ヒットイベントの設定
+	parent->GetComponent<SphereCollider>()->SetHitProcessFunc(this, &Component::OnCollisionEnter);
+
 }
 
 void ThrowObstacle::Update()
@@ -145,5 +147,3 @@ void ThrowObstacle::ThrowTarget(Vector3 targetPos, float speed)
 	parent->GetComponent<RigidBody>()->useGravity = true;
 
 }
-
-#endif

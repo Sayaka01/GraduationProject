@@ -16,9 +16,7 @@
 #include "Component/DirectionLight.h"
 #include "Component/Player.h"
 #include "Component/Enemy.h"
-#if _APPEND
 #include "Component/ThrowObstacle.h"
-#endif
 #include "Component/SphereCollider.h"
 #include "Component/BoxCollider.h"
 #include "Component/CapsuleCollider.h"
@@ -204,33 +202,25 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(modelRenderer);//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 
 	player->AddComponent(new CapsuleCollider("BodyCapsule"));//Player Component‚æ‚èæ‚É‚Â‚¯‚é
-#if _APPEND
 	player->GetComponent<CapsuleCollider>("BodyCapsule")->priority = Collider::Priority::PlayerBody;
-#endif
 
 	player->AddComponent(new SphereCollider("RightHandSphere"));
 	player->GetComponent<SphereCollider>("RightHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("RightHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightHandSphere")->type = Collider::Type::Offense;
-#if _APPEND
 	player->GetComponent<SphereCollider>("RightHandSphere")->priority = Collider::Priority::PlayerAttack;
-#endif
 
 	player->AddComponent(new SphereCollider("LeftHandSphere"));
 	player->GetComponent<SphereCollider>("LeftHandSphere")->radius = 2.5f;
 	player->GetComponent<SphereCollider>("LeftHandSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("LeftHandSphere")->type = Collider::Type::Offense;
-#if _APPEND
 	player->GetComponent<SphereCollider>("LeftHandSphere")->priority = Collider::Priority::PlayerAttack;
-#endif
 
 	player->AddComponent(new SphereCollider("RightAnkleSphere"));
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->radius = 2.0f;
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->SetEnable(false);
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->type = Collider::Type::Offense;
-#if _APPEND
 	player->GetComponent<SphereCollider>("RightAnkleSphere")->priority = Collider::Priority::PlayerAttack;
-#endif
 
 	player->AddComponent(new RigidBody());//Player Component‚æ‚èæ‚É‚Â‚¯‚é
 	player->GetComponent<RigidBody>()->mass = 10.0f;
@@ -238,7 +228,6 @@ void SceneGame::PlayerInitialize()
 	player->AddComponent(new Player());
 
 	player->GetComponent<Transform>()->scale = { 0.06f, 0.06f, 0.06f };
-
 
 	player->AddComponent(new Health(30));
 
@@ -248,11 +237,6 @@ void SceneGame::PlayerInitialize()
 	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 	player->GetComponent<CapsuleCollider>("WireCapsule")->drawReleasePrimitive = true;
-
-	player->AddComponent(new SphereCollider("DebugSphere"));
-	player->GetComponent<SphereCollider>("DebugSphere")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
-	player->AddComponent(new CapsuleCollider("DebugCapsule"));
-	player->GetComponent<CapsuleCollider>("DebugCapsule")->debugColor = { 1.0f,0.5f,0.5f, 1.0f };
 
 	SpriteRenderer* spriteRenderer = new SpriteRenderer(L"./Resources/Sprite/AimTarget.png");
 	spriteRenderer->pivot = spriteRenderer->texSize * 0.5f;
@@ -269,15 +253,14 @@ void SceneGame::PlayerInitialize()
 		throwObj->AddComponent(new ModelRenderer("./Resources/Model/Object/cube.fbx"));
 		throwObj->GetComponent<Transform>()->pos = { 0.0f, 2.0f, -150.0f };
 		throwObj->GetComponent<Transform>()->scale = { 2.0f, 2.0f, 2.0f };
-#if _APPEND
+
 		SphereCollider* sphereCollider = new SphereCollider();
 		throwObj->AddComponent(sphereCollider);
 		sphereCollider->radius = 2.0f;
 		sphereCollider->useTransform = true;
 		sphereCollider->priority = Collider::Priority::Obstacle;
 		throwObj->AddComponent(new RigidBody());
-		throwObj->AddComponent(new ThrowObstacle());
-#endif
+		throwObj->AddComponent(new ThrowObstacle());//SphereCollider‚æ‚èŒã‚É‚Â‚¯‚é
 
 		throwObjects->AddChild(throwObj);
 	}
@@ -344,10 +327,7 @@ void SceneGame::EnemyInitialize()
 		enemy->AddComponent(new SphereCollider("HandCollider"));
 		enemy->GetComponent<SphereCollider>("HandCollider")->SetEnable(false);
 		enemy->GetComponent<SphereCollider>("HandCollider")->type = Collider::Type::Offense;
-
-#if _APPEND
 		enemy->GetComponent<SphereCollider>("HandCollider")->priority = Collider::Priority::EnemyAttack;
-#endif
 
 		// ˆÚ“®Ý’è
 		enemy->AddComponent(new RigidBody());

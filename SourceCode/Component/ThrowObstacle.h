@@ -1,7 +1,5 @@
 #pragma once
 
-#if _APPEND
-
 #include <SimpleMath.h>
 
 #include "Component.h"
@@ -40,5 +38,3 @@ private:
 	float floorPos = 2.0f;
 	float airResistance = 10.0f;
 };
-
-#endif

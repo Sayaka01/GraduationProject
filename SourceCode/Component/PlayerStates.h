@@ -93,9 +93,8 @@ namespace PlayerState
 		//移動ベクトルに応じたY軸回転
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
 		//一番近い敵を取得
-#if _APPEND
 		SphereCollider* SearchNearEnemy();
-#endif
+
 		//アニメーションスピードを取得
 		float GetAnimationSpeed(int index);
 		//アニメーションスピードの設定
@@ -495,15 +494,12 @@ namespace PlayerState
 		void Exit()override;
 		//ステート変更するかどうか
 		std::string GetNext()override;
-
-#if _APPEND
 		//IMGUI
 		void DebugGui() override;
-#endif
-#if _APPEND
+
 		//ワイヤーの長さを振り回しながら調整する
 		void CorWireLength();
-#endif
+
 	private:
 		enum State
 		{
@@ -512,7 +508,7 @@ namespace PlayerState
 			Throw,
 		};
 		int state = Thrust;
-#if _APPEND
+
 		//-----< Thrustで使用 >-----//
 		float maxThrustInterval = 24.0f;
 		float maxThrustTime = 0.5f;
@@ -543,6 +539,5 @@ namespace PlayerState
 		float throwSpeed = 0.0f;
 		bool throwFlag = false;
 		DirectX::SimpleMath::Vector3 throwVelocity{};
-#endif
 	};
 }

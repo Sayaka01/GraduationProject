@@ -67,9 +67,7 @@ void CapsuleCollider::CalcCapsuleParam()
 	float dot = DotFloat3(oldVec, vec);
 
 	float rad = acosf(dot);
-#if _APPEND
 	if (fabsf(rad) < DirectX::XMConvertToRadians(1.0f))return;
-#endif
 
 	////ƒJƒƒ‰‚ÌŽæ“¾
 	//Camera* camera = parent->GetParent()->GetChild("CameraController")->GetComponent<Camera>();

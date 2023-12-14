@@ -180,7 +180,6 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
-#if _APPEND
 SphereCollider* PlayerState::Default::SearchNearEnemy()
 {
 	SphereCollider* collider = nullptr;
@@ -222,7 +221,6 @@ SphereCollider* PlayerState::Default::SearchNearEnemy()
 	//GameObject* enemy = parent->GetParent()->GetChild("enemy");
 	//parameter = enemy->GetComponent<Transform>()->pos;
 }
-#endif
 float PlayerState::Default::GetAnimationSpeed(int index)
 {
 	return parent->GetComponent<Player>()->GetAnimationSpeed(index);
@@ -311,9 +309,7 @@ bool PlayerState::Default::JudgeWieldThrowState()
 
 void PlayerState::Default::SearchThrowObj()
 {
-#if _APPEND
 	if (name == "WieldThrow")return;
-#endif
 
 	//manager˜g‚ÌƒIƒuƒWƒFƒNƒg‚ðŽæ“¾
 	GameObject* throwObjects = parent->GetParent()->GetChild("throwObjects");
@@ -502,10 +498,6 @@ void Run::Update()
 	AddMoveVelocity(moveVelocity);
 	YAxisRotate(moveVelocity);
 
-	DirectX::XMFLOAT3 p = parent->GetComponent<Transform>()->pos;
-	p.y += 5.0f;
-	parent->GetComponent<SphereCollider>("DebugSphere")->center = p;
-
 	Default::Update();
 }
 void Run::Exit()
@@ -676,12 +668,9 @@ void Falling::Enter()
 	//ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒs[ƒh‚Ì’²®
 	parent->GetComponent<ModelRenderer>()->SetAnimationSpeed(GetAnimationSpeed((int)Animation::Falling));
 
-#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
-#endif
-
 
 }
 void Falling::Update()
@@ -832,11 +821,9 @@ void PunchRight::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
-#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
-#endif 
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -867,7 +854,6 @@ void PunchRight::Exit()
 }
 std::string PunchRight::GetNext()
 {
-
 	//ƒAƒjƒ[ƒVƒ‡ƒ“Ä¶‚ªI‚í‚Á‚½‚ç
 	if (parent->GetComponent<ModelRenderer>()->IsFinishAnimation())
 	{
@@ -917,11 +903,9 @@ void PunchLeft::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
-#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
-#endif 
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -1001,11 +985,9 @@ void Kick::Enter()
 	//ˆê”Ô‹ß‚¢“G‚ÌˆÊ’u‚ðparameter‚ÉŠi”[
 	SearchNearEnemy();
 
-#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	SetClearEnemyHitFlag();
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
-#endif
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);
@@ -1241,8 +1223,6 @@ void SwingWire::Update()
 	//Debug•`‰æ
 	pos.y += parent->GetComponent<Player>()->GetHeight();
 	parent->GetComponent<CapsuleCollider>("WireCapsule")->end = pos;
-
-	parent->GetComponent<SphereCollider>("DebugSphere")->center = pos;
 
 	//˜‚ÌˆÊ’u‚Ìƒ‚[ƒVƒ‡ƒ“‚É‚æ‚éˆÚ“®‚ð’âŽ~
 	parent->GetComponent<ModelRenderer>()->StopMotionVelocity("FallingHip");
@@ -1482,11 +1462,9 @@ void JumpAttack::Enter()
 	//UŒ‚’†‘‚¦‘±‚¯‚é
 	attackTimer = 0.0f;
 
-#if _APPEND
 	//“G‚Ö‚ÌUŒ‚ƒtƒ‰ƒO‚ðOFF
 	//parent->GetComponent<Player>()->SetIsHitAttackToEnemy(false);
 	SetClearEnemyHitFlag();
-#endif
 
 	//UŒ‚’†ƒtƒ‰ƒO‚ðtrue‚É
 	parent->GetComponent<Player>()->SetIsAttack(true);

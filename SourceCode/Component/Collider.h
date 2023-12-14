@@ -31,7 +31,6 @@ public:
 	};
 	Type type = Type::Deffense;
 
-#if _APPEND
 	enum class Priority
 	{
 		None = -1,
@@ -43,7 +42,6 @@ public:
 		PriorityCount,
 	};
 	Priority priority = Priority::None;//当たり判定の優先度（０が一番優先度高い）
-#endif
 
 	//-----< getter, setter >-----//
 
