@@ -266,7 +266,7 @@
     <ClCompile Include="SourceCode\Component\Health.cpp">
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Component\ThrowObject.cpp">
+    <ClCompile Include="SourceCode\Component\ThrowObstacle.cpp">
       <Filter>Sources\Component\Character</Filter>
     </ClCompile>
   </ItemGroup>

@@ -263,7 +263,7 @@
     <ClCompile Include="SourceCode\Component\SphereMeshRenderer.cpp" />
     <ClCompile Include="SourceCode\Component\SpriteData.cpp" />
     <ClCompile Include="SourceCode\Component\SpriteRenderer.cpp" />
-    <ClCompile Include="SourceCode\Component\ThrowObject.cpp" />
+    <ClCompile Include="SourceCode\Component\ThrowObstacle.cpp" />
     <ClCompile Include="SourceCode\Component\Transform.cpp" />
     <ClCompile Include="SourceCode\GameObject\CameraController.cpp" />
     <ClCompile Include="SourceCode\GameObject\GameObject.cpp" />
