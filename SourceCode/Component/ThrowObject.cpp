@@ -42,3 +42,11 @@ void ThrowObstacle::OnThrowFlag()
 	rigidBody->SetVelocity({ 0.0f,0.0f,0.0f });
 
 }
+
+void ThrowObstacle::Throw()
+{
+	//d—Í‚ðŽg—p
+	parent->GetComponent<RigidBody>()->useGravity = true;
+
+
+}

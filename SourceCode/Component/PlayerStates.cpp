@@ -166,9 +166,9 @@ void Default::YAxisRotate(DirectX::XMFLOAT3 moveVelocity)
 	parent->GetComponent<Transform>()->orientation = orientation;
 }
 #if _APPEND
-void PlayerState::Default::SearchNearEnemy(Transform* transform)
+Transform* PlayerState::Default::SearchNearEnemy()
 {
-	transform = nullptr;
+	Transform* transform = nullptr;
 
 	//今は敵が1体なのでこのやり方。後で頑張る
 	GameObject* enemyManager = parent->GetParent()->GetChild("enemyManager");
@@ -195,12 +195,14 @@ void PlayerState::Default::SearchNearEnemy(Transform* transform)
 					transform = enemyTransform;
 				}
 			}
-			return;
+			if (transform)return transform;
 		}
 	}
 
 	//敵が見つからない場合は自分自身の位置を入れる
 	parameter = playerPos;
+
+	return nullptr;
 
 	//GameObject* enemy = parent->GetParent()->GetChild("enemy");
 	//parameter = enemy->GetComponent<Transform>()->pos;
@@ -1814,7 +1816,7 @@ void WieldThrow::Update()
 
 			//誰に投げつけるか決める
 			enemyTransform = nullptr;
-			SearchNearEnemy(enemyTransform);//一番近い敵のTransformを取得
+			enemyTransform = SearchNearEnemy();//一番近い敵のTransformを取得
 			
 			if (enemyTransform != nullptr)
 			{
@@ -1828,6 +1830,24 @@ void WieldThrow::Update()
 				if (distance > searchRange)
 				{
 					enemyTransform = nullptr;
+				}
+				else
+				{
+					//敵の位置
+					Vector3 enePos = enemyTransform->pos;
+					//プレイヤーから敵へのベクトル
+					Vector3 plEneVec = enePos - pos;
+					plEneVec.y = 0.0f;
+					plEneVec.Normalize();
+					//回転軸
+					Vector3 axis = { 0.0f,1.0f,0.0f };
+					//プレイヤーの前方向ベクトル
+					Vector3 frontVec = parent->GetComponent<Transform>()->GetForward();
+					//回転角
+					addRotateSpeed = (frontVec.x * plEneVec.x) + (frontVec.z * plEneVec.z);
+					addRotateSpeed = acosf(addRotateSpeed) / (maxThrowTime / (samplingRate * GetAnimationSpeed((int)Animation::Throw)));
+
+					corRadian;
 				}
 			}
 
@@ -1908,8 +1928,33 @@ void WieldThrow::Update()
 				//回転角
 				float rot = (frontVec.x * plEneVec.x) + (frontVec.z * plEneVec.z);
 				rot = acosf(rot);
+				//左右判定
+				float cross = (frontVec.x * plEneVec.z) - (frontVec.z * plEneVec.x);
 				//オリエンテーションの取得
 				Quaternion orientation = parent->GetComponent<Transform>()->orientation;
+				Quaternion oldOrientation = orientation;
+
+				//回転速度
+				float speed = addRotateSpeed * SystemManager::Instance().GetElapsedTime();
+				if (speed > rot)speed = rot;
+				//クオータニオンの作成
+				if (cross < 0.0f)
+				{
+					Q = Quaternion::CreateFromAxisAngle(axis, speed);
+				}
+				else
+				{
+					Q = Quaternion::CreateFromAxisAngle(axis, -speed);
+				}
+				//プレイヤーの回転
+				orientation = orientation * Q;
+				orientation = Quaternion::Slerp(oldOrientation, orientation, rotateRatio);
+				parent->GetComponent<Transform>()->orientation = orientation;
+
+				//ワイヤーのベクトルも回転させる
+				//R = Matrix::CreateFromQuaternion(Q); 
+				//v = Float4MultiplyFloat4x4({ rotateVec.x,rotateVec.y,rotateVec.z,1.0f }, R);
+				//rotateVec = { v.x,v.y,v.z };
 
 			}
 
@@ -1943,7 +1988,8 @@ void WieldThrow::Update()
 			{
 				//オブジェクトの取得
 				GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
-				throwObj->GetComponent<RigidBody>()->useGravity = true;
+				
+				throwObj->GetComponent<ThrowObstacle>()->Throw();
 
 #if 0
 				//プレイヤーのtransform
@@ -2047,16 +2093,22 @@ void WieldThrow::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+
 		float degree = DirectX::XMConvertToDegrees(maxWieldRadian);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("maxWieldDegree", &degree);
 		maxWieldRadian = DirectX::XMConvertToRadians(degree);
 		
 		degree = DirectX::XMConvertToDegrees(maxThrowRadian);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("maxThrowDegree", &degree);
 		maxThrowRadian = DirectX::XMConvertToRadians(degree);
 		
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("minWireLength", &minWireLength);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("maxWireLength", &maxWireLength);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("maxPullRatio", &maxPullRatio);
 
 		ImGui::TreePop();

@@ -160,10 +160,15 @@ void Player::DebugGui()
 {
 	if (ImGui::TreeNode(name.c_str()))
 	{
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("runSpeed", &runSpeed);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("jumpSpeed", &jumpSpeed);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("knockBackSpeed", &knockBackSpeed);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::DragFloat("wireSpeed", &wireSpeed);
+		ImGui::SetNextItemWidth(100.0f);
 		ImGui::SliderInt("attackPhase", &attackPhase, 0, maxAttackPhase);
 		ImGui::Text(currentState->GetName().c_str());
 		
@@ -173,6 +178,7 @@ void Player::DebugGui()
 			for (int i = 0; i < (int)PlayerState::Animation::AnimNum; i++)
 			{
 				std::string str = magic_enum::enum_name((PlayerState::Animation)i).data();
+				ImGui::SetNextItemWidth(100.0f);
 				ImGui::DragFloat(str.c_str(), &(animationSpeed[i]));
 			}
 			ImGui::EndChild();

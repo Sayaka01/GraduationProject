@@ -105,7 +105,7 @@ namespace PlayerState
 		void YAxisRotate(DirectX::XMFLOAT3 moveVelocity);
 		//一番近い敵を取得
 #if _APPEND
-		void SearchNearEnemy(Transform* transform = nullptr);
+		Transform* SearchNearEnemy();
 #endif
 		//アニメーションスピードを取得
 		float GetAnimationSpeed(int index);
@@ -549,6 +549,8 @@ namespace PlayerState
 		Transform* enemyTransform = nullptr;
 		float accelRatio = 2.0f;
 		float oldWieldSpeed = 0.0f;
+		float corRadian = 0.0f;//回転補正値
+		float addRotateSpeed = 0.0f;
 		float throwSpeed = 0.0f;
 		bool throwFlag = false;
 		DirectX::SimpleMath::Vector3 throwVelocity{};

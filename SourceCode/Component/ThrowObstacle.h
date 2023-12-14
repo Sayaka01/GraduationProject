@@ -22,11 +22,12 @@ public:
 	//setter, getter
 	bool GetThrowFlag() { return throwFlag; }
 	void OnThrowFlag();
-
-	void SetThrowVec(DirectX::SimpleMath::Vector3 vec) { throwVec = vec; }
+	void Throw();
 
 private:
 	bool throwFlag = false;
 	DirectX::SimpleMath::Vector3 throwVec{};
+	float throwSpeed = 0.0f;
+	DirectX::SimpleMath::Vector3 targetPos{};
 	float floorPos = 2.0f;
 };
