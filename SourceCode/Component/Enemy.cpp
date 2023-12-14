@@ -78,7 +78,7 @@ void Enemy::Update()
 	DirectX::XMFLOAT3 pos = parent->GetComponent<Transform>()->pos;
 	pos -= forward * 1.5f;
 	parent->GetComponent<SphereCollider>("waist")->center = parent->GetComponent<Transform>()->pos;
-	parent->GetComponent<SphereCollider>("waist")->center.y += 7.0f;
+	parent->GetComponent<SphereCollider>("waist")->center.y += 6.0f;
 
 	// “–‚½‚èƒtƒ‰ƒO‚ğ‰Šú‰»‚³‚¹‚ÄEnter‚Ìˆ—
 	hitFlag = false;

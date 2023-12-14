@@ -456,6 +456,8 @@ void DieAction::Exit()
 ActionBase::State DamageAction::Run(float elapsedTime)
 {
     Enemy* enemy = owner->GetComponent<Enemy>();
+
+    //ノックバックする時間として使用
     float runTimer = enemy->GetRunTimer();
     runTimer -= elapsedTime;
     enemy->SetRunTimer(runTimer);
