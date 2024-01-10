@@ -1641,7 +1641,6 @@ WieldThrow::WieldThrow(GameObject* parent)
 }
 void WieldThrow::Enter()
 {
-#if _APPEND
 	//コンポーネントの取得
 	ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
 
@@ -1666,8 +1665,6 @@ void WieldThrow::Enter()
 	pull = true;
 
 	attackPower = 3.0f;
-
-#endif
 }
 void WieldThrow::Update()
 {
@@ -1675,7 +1672,6 @@ void WieldThrow::Update()
 	switch (state)
 	{
 	case Thrust:
-#if _APPEND
 	{
 		//オブジェクトの方を向く
 		GameObject* throwObj = parent->GetComponent<Player>()->GetThrowObj();
@@ -1761,9 +1757,7 @@ void WieldThrow::Update()
 
 		break;
 	}
-#endif
 	case Wield:
-#if _APPEND
 	{
 		//回転軸
 		const Vector3 axis = { 0.0f,1.0f,0.0f };
@@ -1863,9 +1857,7 @@ void WieldThrow::Update()
 
 		break;
 	}
-#endif
 	case Throw:
-#if _APPEND
 	{
 		//コンポーネントの取得
 		ModelRenderer* modelRenderer = parent->GetComponent<ModelRenderer>();
@@ -2031,7 +2023,6 @@ void WieldThrow::Update()
 
 		break;
 	}
-#endif
 	}
 
 	Default::Update();
@@ -2080,7 +2071,6 @@ void WieldThrow::DebugGui()
 		ImGui::TreePop();
 	}
 }
-#if _APPEND
 void WieldThrow::CorWireLength()
 {
 	//コンポーネントの取得
@@ -2129,4 +2119,3 @@ void WieldThrow::CorWireLength()
 	}
 
 }
-#endif

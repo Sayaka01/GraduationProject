@@ -101,9 +101,7 @@ void PunchAction::Enter()
 
     // Colliderのタイプを"攻め判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type= Collider::Type::Offense;
-#if _APPEND
     owner->GetComponent<SphereCollider>("waist")->priority = Collider::Priority::EnemyAttack;
-#endif
 
     //ステートの名前を設定
     enemy->SetStateName(Enemy::StateName::Punch);
@@ -127,9 +125,7 @@ void PunchAction::Exit()
 
     // Colliderのタイプを"守り判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
-#if _APPEND
     owner->GetComponent<SphereCollider>("waist")->priority = Collider::Priority::EnemyBody;
-#endif
 }
 
 // 重撃行動のアクション
@@ -211,9 +207,7 @@ void SkillAction::Enter()
 
     // Colliderのタイプを"攻め判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Offense;
-#if _APPEND
     owner->GetComponent<SphereCollider>("waist")->priority = Collider::Priority::EnemyAttack;
-#endif
 
     //ステートの名前を設定
     enemy->SetStateName(Enemy::StateName::Slash);
@@ -233,9 +227,7 @@ void SkillAction::Exit()
 
     // Colliderのタイプを"守り判定"に設定
     owner->GetComponent<SphereCollider>("waist")->type = Collider::Type::Deffense;
-#if _APPEND
     owner->GetComponent<SphereCollider>("waist")->priority = Collider::Priority::EnemyBody;
-#endif
 }
 
 // 休憩行動のアクション

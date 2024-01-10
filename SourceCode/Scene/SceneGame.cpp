@@ -233,7 +233,7 @@ void SceneGame::PlayerInitialize()
 
 	player->AddComponent(new CapsuleCollider("WireCapsule"));
 	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 0.05f;
-	player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 2.0f;
+	//player->GetComponent<CapsuleCollider>("WireCapsule")->radius = 2.0f;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->useHitEvent = false;
 	player->GetComponent<CapsuleCollider>("WireCapsule")->SetEnable(false);
 	player->GetComponent<CapsuleCollider>("WireCapsule")->drawReleasePrimitive = true;
